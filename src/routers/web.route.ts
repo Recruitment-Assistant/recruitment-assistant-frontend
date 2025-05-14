@@ -9,6 +9,18 @@ interface RouteType {
 
 export const webRoutes: RouteType[] = [
 	{
+		path: '/landing',
+		name: 'Landing',
+		component: () => import('@/layouts/PlainLayout.vue'),
+		children: [
+			{
+				path: '',
+				name: 'Landing Page',
+				component: () => import('@/pages/LandingPage.vue'),
+			},
+		],
+	},
+	{
 		path: '/auth',
 		name: 'Auth',
 		redirect: '/auth/login',
@@ -70,14 +82,24 @@ export const webRoutes: RouteType[] = [
 				component: () => import('@/pages/jobs/index.vue'),
 			},
 			{
-				path: 'applicants',
-				name: 'Applicants',
-				component: () => import('@/pages/applicants/index.vue'),
+				path: 'candidates',
+				name: 'Candidates',
+				component: () => import('@/pages/candidates/index.vue'),
+			},
+			{
+				path: 'interviews',
+				name: 'Interviews',
+				component: () => import('@/pages/interviews/index.vue'),
 			},
 			{
 				path: 'talent-pool',
 				name: 'Talent Pool',
 				component: () => import('@/pages/talent-pool/index.vue'),
+			},
+			{
+				path: 'settings',
+				name: 'Settings',
+				component: () => import('@/pages/settings/index.vue'),
 			},
 			{
 				path: '/test',

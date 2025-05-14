@@ -102,7 +102,7 @@ const recentActivities = [
 	},
 	{
 		date: 'May 11, 2025',
-		description: 'First interview with Sarah Williams for UX Designer position',
+		description: 'First interviews with Sarah Williams for UX Designer position',
 		status: 'Completed',
 	},
 	{

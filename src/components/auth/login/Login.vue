@@ -12,6 +12,7 @@ import { loginSchema } from './LoginSchema';
 import CallApiButton from '@/components/common/CallApiButton.vue';
 import { useAuthStore } from '@/stores/auth.store';
 import { ref } from 'vue';
+import { Lock, Mail } from 'lucide-vue-next';
 
 const authStore = useAuthStore();
 
@@ -36,7 +37,7 @@ const onSubmit = handleSubmit(async (values) => {
 </script>
 <template>
 	<div class="flex flex-col items-center gap-4">
-		<Title class="text-2xl">Welcome to Lutech!</Title>
+		<Title class="text-2xl">Welcome to Recruitment Assistant!</Title>
 		<Description class="self-start text-sm">Login with your email and password.</Description>
 
 		<form @submit="onSubmit" class="w-full" autocomplete="off">
@@ -44,7 +45,7 @@ const onSubmit = handleSubmit(async (values) => {
 				name="email"
 				label="Email"
 				class="w-full"
-				:icon="Letter"
+				:icon="Mail"
 				:required="true"
 				placeholder="Enter your email address" />
 			<FormInput
@@ -86,7 +87,7 @@ const onSubmit = handleSubmit(async (values) => {
 
 		<div class="flex items-center gap-1 text-sm">
 			<p>Don't have an account.</p>
-			<Button variant="link" class="text-blue-500 p-0">Sign up</Button>
+			<RouterLink class="text-blue-500 p-0" to="/register"> Register </RouterLink>
 		</div>
 	</div>
 </template>

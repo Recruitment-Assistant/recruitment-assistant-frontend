@@ -5,8 +5,8 @@ import Button from '@/components/ui/button/Button.vue';
 import router from '@/routers';
 import { onUnmounted, ref } from 'vue';
 import PinInput from './PinInput.vue';
-import IconFromSvg from '@/components/common/IconFromSvg.vue';
 import { useAuthStore } from '@/stores/auth.store';
+import { Left } from 'lucide-vue-next';
 
 const authStore = useAuthStore();
 
@@ -60,14 +60,12 @@ const navigateResetPasword = async () => {
 <template>
 	<div>
 		<Button @click="navigateBack" variant="ghost" class="text-slate-600 items-center p-2">
-			<IconFromSvg :icon="Left" />
+			<Left />
 		</Button>
 	</div>
 	<div class="flex flex-col items-center gap-4 mt-4">
 		<Title class="font-semibold">Enter OTP</Title>
-		<Description>
-			We have send a code to your registered email address songquynh@lutech.ltd
-		</Description>
+		<Description> We have send a code to your registered email address </Description>
 		<div>
 			<PinInput @update:data="handleOTP" />
 		</div>

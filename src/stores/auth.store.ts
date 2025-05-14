@@ -6,17 +6,23 @@ import { axiosConfig } from '@/plugins/axiosConfig.ts';
 import { AUTH_API } from '@/constants/api/auth.api';
 
 export const useAuthStore = defineStore('auth-store', () => {
-	//defineState
+	/**
+	 *  define state
+	 */
 	const isLoading = ref(false);
 	const access_token = ref<string>(localStorage.getItem(axiosConfig.key.accessToken) || '');
 	const refresh_token = ref<string>(localStorage.getItem(axiosConfig.key.refreshToken) || '');
 	const forgot_password_token = ref<string | undefined>();
 
-	//defineGetters
+	/**
+	 *  define getter
+	 */
 	const isLoggedIn = computed(() => access_token.value !== '' && refresh_token.value !== '');
 	const isForgotPassword = computed(() => forgot_password_token.value !== undefined);
 
-	//defineActions
+	/**
+	 *  define action
+	 */
 	const login = async (payload: { email: string; password: string }, remember?: boolean) => {
 		isLoading.value = true;
 		const { data, status } = await axiosClient.post<IApiResponseV1<ITokenResponse>>(

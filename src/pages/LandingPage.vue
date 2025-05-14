@@ -1,3 +1,25 @@
+<script setup lang="ts">
+import { Button } from '@/components/ui/button';
+import { BarChart3, Clock, Users } from 'lucide-vue-next';
+
+const features = [
+	{
+		title: 'Candidate Management',
+		description: 'Easily organize and track candidates throughout your hiring pipeline.',
+		icon: Users,
+	},
+	{
+		title: 'Streamlined Process',
+		description: 'Reduce time-to-hire with automated workflows and scheduling tools.',
+		icon: Clock,
+	},
+	{
+		title: 'Data-Driven Hiring',
+		description: 'Make better decisions with powerful analytics and reporting.',
+		icon: BarChart3,
+	},
+];
+</script>
 <template>
 	<div class="container mx-auto px-4 py-12 md:py-24">
 		<div class="flex flex-col gap-8 max-w-5xl mx-auto">
@@ -11,7 +33,7 @@
 				</p>
 				<div class="pt-4 flex gap-4 justify-center">
 					<Button size="lg" as-child>
-						<router-link to="/dashboard">Get Started</router-link>
+						<router-link to="/auth/login">Get Started</router-link>
 					</Button>
 					<Button size="lg" variant="outline">Learn More</Button>
 				</div>
@@ -46,33 +68,10 @@
 						recruitment.
 					</p>
 					<Button size="lg" as-child>
-						<router-link to="/dashboard">Try for Free</router-link>
+						<router-link to="/auth/login">Try for Free</router-link>
 					</Button>
 				</div>
 			</div>
 		</div>
 	</div>
 </template>
-
-<script setup lang="ts">
-import { Button } from '@/components/ui/button.vue';
-import { BarChart3, Clock, Users } from 'lucide-vue-next';
-
-const features = [
-	{
-		title: 'Candidate Management',
-		description: 'Easily organize and track candidates throughout your hiring pipeline.',
-		icon: Users,
-	},
-	{
-		title: 'Streamlined Process',
-		description: 'Reduce time-to-hire with automated workflows and scheduling tools.',
-		icon: Clock,
-	},
-	{
-		title: 'Data-Driven Hiring',
-		description: 'Make better decisions with powerful analytics and reporting.',
-		icon: BarChart3,
-	},
-];
-</script>
