@@ -4,6 +4,7 @@ import { useAppStore } from '@/stores/app.store';
 import { PanelRightClose, PanelRightOpen, Search } from 'lucide-vue-next';
 import NotificationPopover from './NotificationPopover.vue';
 import UserDropdownMenu from './UserDropdownMenu.vue';
+import ThemeToggle from '@/components/ThemeToggle.vue';
 
 const appStore = useAppStore();
 
@@ -19,11 +20,12 @@ const handleSidebar = () => {
 				<PanelRightOpen v-if="!appStore.isSmallSidebar" :size="18" />
 				<PanelRightClose v-else :size="18" />
 			</button>
-			<InputWithIcon :icon="Search" placeholder="Search..." class="rounded-full w-[450px]" />
+			<InputWithIcon :icon="Search" class="rounded-full w-[450px]" placeholder="Search..." />
 		</div>
 
 		<div class="flex gap-4 items-center">
 			<NotificationPopover />
+			<ThemeToggle />
 			<UserDropdownMenu />
 		</div>
 	</header>

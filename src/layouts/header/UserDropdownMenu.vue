@@ -28,9 +28,9 @@ const handleLogout = async () => {
 	<DropdownMenu>
 		<DropdownMenuTrigger as-child>
 			<Button class="border-none hover:bg-white h-auto gap-4 p-0" variant="outline">
-				<UserAvatar class="w-12 h-12" />
+				<UserAvatar :url="authStore.account?.avatar" class="w-12 h-12" />
 				<div>
-					<p class="text-start text-base font-medium">User01</p>
+					<p class="text-start text-base font-medium">{{ authStore.account?.name }}</p>
 					<p class="text-start text-sm font-normal text-slate-600">HR Manager</p>
 				</div>
 				<ChevronDown />

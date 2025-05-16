@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import SpinnerLoad from '@/components/common/SpinnerLoad.vue';
 import Header from './header/Header.vue';
 import Sidebar from './sidebar/Sidebar.vue';

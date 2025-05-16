@@ -13,7 +13,7 @@ import ContentWrapper from '@/components/common/ContentWrapper.vue';
 			</div>
 		</ContentWrapper>
 		<div class="col-span-3 overflow-hidden rounded-3xl">
-			<img alt="" class="h-full w-full object-cover" />
+			<img alt="" class="h-full w-full object-cover" src="@/assets/images/ra.jpg" />
 		</div>
 	</main>
 </template>

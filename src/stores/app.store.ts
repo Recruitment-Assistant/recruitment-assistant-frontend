@@ -27,6 +27,15 @@ export const useAppStore = defineStore('app-store', () => {
 			name: 'Jobs',
 			icon: BriefcaseBusiness,
 			activeIcon: BriefcaseBusiness,
+			children: [
+				{
+					id: '20001',
+					path: 'screening',
+					name: 'Screening',
+					icon: Calendar,
+					activeIcon: Calendar,
+				},
+			],
 		},
 		{
 			id: '30000',

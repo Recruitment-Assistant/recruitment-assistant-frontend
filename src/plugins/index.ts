@@ -1,16 +1,17 @@
 import axios from 'axios';
-import { axiosConfig } from '@/plugins/axiosConfig.ts';
+import { Config } from '@/plugins/config.ts';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
 import { useAuthStore } from '@/stores/auth.store';
 import router from '@/routers';
-import type { IApiResponseV1, ITokenResponse } from '@/types';
+import type { ITokenResponse } from '@/types';
 import { useCustomToast } from '@/lib/customToast';
+import type { IApiResponseV1 } from '@/types/api.ts';
 
 NProgress.configure({ showSpinner: false });
 
 const axiosClient = axios.create({
-	baseURL: axiosConfig.baseURL,
+	baseURL: Config.baseURL,
 });
 
 axiosClient.interceptors.request.use(
@@ -20,7 +21,7 @@ axiosClient.interceptors.request.use(
 		config.headers['Accept'] = 'application/json';
 		config.headers['Access-Control-Allow-Origin'] = '*';
 
-		const accessToken = localStorage.getItem(axiosConfig.key.accessToken);
+		const accessToken = localStorage.getItem(Config.key.accessToken);
 		if (accessToken) {
 			config.headers.Authorization = `Bearer ${accessToken}`;
 		}
@@ -35,7 +36,7 @@ const isAllowRefreshToken = (error: any) => {
 	return (
 		error.response &&
 		!error.config._retry &&
-		axiosConfig.retryStatusCodes.includes(error.response.status) &&
+		Config.retryStatusCodes.includes(error.response.status) &&
 		!error.config?.url?.includes('/login') &&
 		!error.config?.url?.includes('/refresh-token')
 	);
@@ -43,10 +44,10 @@ const isAllowRefreshToken = (error: any) => {
 
 const refreshToken = async () => {
 	const authStore = useAuthStore();
-	const refresh_token = localStorage.getItem(axiosConfig.key.refreshToken);
+	const refresh_token = localStorage.getItem(Config.key.refreshToken);
 
 	const { data, status } = await axiosClient.post<IApiResponseV1<ITokenResponse>>(
-		axiosConfig.path.refreshToken,
+		Config.path.refreshToken,
 		{
 			refresh_token,
 		},

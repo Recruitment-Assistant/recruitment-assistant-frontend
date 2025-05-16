@@ -1,22 +1,29 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Toaster } from 'vue-sonner';
+import { useColorMode } from '@vueuse/core';
+import { computed } from 'vue';
+
+const model = useColorMode();
+const isDarkModel = computed(() => model.store.value === 'dark');
 </script>
 
 <template>
-	<Toaster
-		position="bottom-right"
-		:toast-options="{
-			actionButtonStyle: {
-				backgroundColor: 'inherit',
-				color: '#0e6eed',
-				fontWeight: 500,
-			},
-		}" />
-	<router-view v-slot="{ Component }">
-		<transition name="slide">
-			<component :is="Component" />
-		</transition>
-	</router-view>
+	<div :class="{ dark: isDarkModel }">
+		<Toaster
+			:toast-options="{
+				actionButtonStyle: {
+					backgroundColor: 'inherit',
+					color: '#0e6eed',
+					fontWeight: 500,
+				},
+			}"
+			position="bottom-right" />
+		<router-view v-slot="{ Component }">
+			<transition name="slide">
+				<component :is="Component" />
+			</transition>
+		</router-view>
+	</div>
 </template>
 <style>
 .slide-enter-active {

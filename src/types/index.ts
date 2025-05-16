@@ -1,9 +1,15 @@
 import type { HTMLAttributes } from 'vue';
 
-export interface IApiResponseV1<T> {
-	status: boolean;
-	statusCode: number;
-	data: T;
+export * from './api.ts';
+export * from './exception.ts';
+export * from './organization.ts';
+export * from './user.ts';
+
+export interface IBaseResponse {
+	id: string;
+	created_at: string;
+	updated_at: string;
+	deleted_at: string | null;
 }
 
 export interface ITokenResponse {
@@ -58,4 +64,13 @@ export interface ActionGroupType {
 	label: string;
 	icon: any;
 	style?: string;
+}
+
+export interface IPaging {
+	has_next_page: boolean;
+	has_previous_page: boolean;
+	limit: number;
+	current_page: number;
+	total_pages: number;
+	total_records: number;
 }
