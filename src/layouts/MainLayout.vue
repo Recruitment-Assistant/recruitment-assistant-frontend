@@ -14,7 +14,7 @@ router.beforeEach((to, from, next) => {
 	setTimeout(() => {
 		isLoading.value = false;
 		next();
-	}, 500);
+	}, 300);
 });
 </script>
 <template>

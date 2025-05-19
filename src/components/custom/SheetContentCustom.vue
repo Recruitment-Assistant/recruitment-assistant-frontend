@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { cn } from '@/lib/utils';
 import {
 	DialogClose,
@@ -11,7 +11,7 @@ import {
 } from 'reka-ui';
 import { computed, type HTMLAttributes } from 'vue';
 import { sheetVariants, type SheetVariants } from '../ui/sheet';
-import IconFromSvg from '../common/IconFromSvg.vue';
+import { ArrowRight } from 'lucide-vue-next';
 
 interface SheetContentProps extends DialogContentProps {
 	class?: HTMLAttributes['class'];
@@ -43,7 +43,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits);
 			:class="cn(sheetVariants({ side }), props.class)"
 			v-bind="{ ...forwarded, ...$attrs }">
 			<DialogClose class="w-10 h-10 border rounded-full grid place-items-center">
-				<IconFromSvg :icon="Right" />
+				<ArrowRight />
 			</DialogClose>
 			<slot />
 		</DialogContent>

@@ -1,10 +1,9 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Button } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
 import ScrollArea from '@/components/ui/scroll-area/ScrollArea.vue';
 import Separator from '@/components/ui/separator/Separator.vue';
-import { X } from 'lucide-vue-next';
-import IconFromSvg from '@/components/common/IconFromSvg.vue';
+import { ListFilter, X } from 'lucide-vue-next';
 import {
 	Accordion,
 	AccordionContent,
@@ -131,22 +130,22 @@ onMounted(() => {
 <template>
 	<Popover :open="isOpen" @update:open="handleOpen">
 		<PopoverTrigger as-child>
-			<Button variant="outline" class="rounded-full gap-1">
-				<IconFromSvg :icon="FilterIcon" />
+			<Button class="rounded-full gap-1" variant="outline">
+				<ListFilter />
 				Filter
 			</Button>
 		</PopoverTrigger>
 		<PopoverContent
-			class="w-80 p-4 pr-0 text-sm rounded-3xl border-none"
+			:side-offset="-42"
 			align="end"
-			:side-offset="-42">
+			class="w-80 p-4 pr-0 text-sm rounded-3xl border-none">
 			<div class="pr-4">
 				<div class="flex justify-between">
 					<div class="flex gap-2 items-center">
-						<IconFromSvg :icon="FilterIcon" />
+						<ListFilter />
 						Filter
 					</div>
-					<Button variant="ghost" class="p-0 h-fit" @click="handleClose">
+					<Button class="p-0 h-fit" variant="ghost" @click="handleClose">
 						<X />
 					</Button>
 				</div>
@@ -164,9 +163,9 @@ onMounted(() => {
 							<Badge
 								v-for="(item1, index1) in item"
 								:key="index1"
-								variant="outline"
-								class="text-xs font-normal py-1 flex gap-2"
 								:class="['bg-blue-500 hover:bg-blue-500 text-white']"
+								class="text-xs font-normal py-1 flex gap-2"
+								variant="outline"
 								>{{ item1.label }}
 								<button @click="() => handleRemoveFilter(key, item1)">
 									<X :size="14" />
@@ -176,7 +175,7 @@ onMounted(() => {
 					</div>
 					<Separator class="mt-4" />
 				</div>
-				<Accordion type="multiple" class="w-full" collapsible>
+				<Accordion class="w-full" collapsible type="multiple">
 					<AccordionItem
 						v-for="(item, index) in list"
 						:key="index"
@@ -184,7 +183,7 @@ onMounted(() => {
 						class="border-none">
 						<AccordionTrigger class="hover:no-underline">
 							<div class="flex gap-2 items-center font-normal text-slate-600">
-								<IconFromSvg :icon="item.icon" />
+								<component :is="item.icon" />
 								{{ item.title }}
 							</div>
 						</AccordionTrigger>
@@ -195,8 +194,6 @@ onMounted(() => {
 								<Badge
 									v-for="(i, index) in item.items"
 									:key="index"
-									variant="outline"
-									class="text-xs font-normal hover:cursor-pointer py-1"
 									:class="[
 										selectedFilter[item.value]?.some(
 											(filter) => filter.value === i.value,
@@ -204,6 +201,8 @@ onMounted(() => {
 											? 'bg-blue-500 hover:bg-blue-500 text-white'
 											: '',
 									]"
+									class="text-xs font-normal hover:cursor-pointer py-1"
+									variant="outline"
 									@click="() => handleAddFilter(item.value, i)"
 									>{{ i.label }}
 								</Badge>
@@ -211,8 +210,8 @@ onMounted(() => {
 							<div v-if="item.type === 'numberSlider'" class="pt-2">
 								<SliderCustom
 									v-model="sliderList[item.value]"
-									:min="item.min"
 									:max="item.max"
+									:min="item.min"
 									:step="item.step"
 									class=""
 									@update:model-value="
@@ -231,7 +230,7 @@ onMounted(() => {
 				</Accordion>
 			</ScrollArea>
 			<div class="flex justify-center gap-4 items-center pt-4 pr-4">
-				<Button variant="outline" class="rounded-2xl h-auto py-3 px-8" @click="handleReset">
+				<Button class="rounded-2xl h-auto py-3 px-8" variant="outline" @click="handleReset">
 					Reset
 				</Button>
 				<Button

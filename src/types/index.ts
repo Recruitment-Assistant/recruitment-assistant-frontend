@@ -4,6 +4,9 @@ export * from './api.ts';
 export * from './exception.ts';
 export * from './organization.ts';
 export * from './user.ts';
+export * from './jobs';
+export * from './department.ts';
+export * from './position.ts';
 
 export interface IBaseResponse {
 	id: string;

@@ -9,5 +9,7 @@ interface Prop {
 const props = defineProps<Prop>();
 </script>
 <template>
-	<h3 :class="cn('text-[22px] font-semibold', props.class)"><slot /></h3>
+	<h3 :class="cn('text-[22px] font-semibold text-accent-foreground', props.class)">
+		<slot />
+	</h3>
 </template>

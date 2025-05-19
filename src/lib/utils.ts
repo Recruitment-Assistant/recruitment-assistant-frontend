@@ -58,3 +58,13 @@ export const formatFileSize = (bytes: number, decimals = 2): string => {
 
 	return `${size} ${sizes[i]}`;
 };
+
+export function debounce(func: Function, delay = 500) {
+	let timer: any;
+	return function (...args: any) {
+		clearTimeout(timer);
+
+		// @ts-ignore
+		timer = setTimeout(() => func.apply(this, args), delay);
+	};
+}

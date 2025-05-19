@@ -1,66 +1,30 @@
-interface RouteType {
-	path: string;
-	name: string;
-	component?: any;
-	redirect?: any;
-	children?: any;
-	meta?: any;
-}
+import { jobRoute } from '@/routers/modules/job.ts';
+import type { RouteRecordRaw } from 'vue-router';
+import { authRoute } from '@/routers/modules/auth.ts';
+import { landingRoute } from '@/routers/modules/landing.ts';
 
-export const webRoutes: RouteType[] = [
+export const webRoutes: RouteRecordRaw[] = [
 	{
 		path: '/landing',
 		name: 'Landing',
 		component: () => import('@/layouts/PlainLayout.vue'),
-		children: [
-			{
-				path: '',
-				name: 'Landing Page',
-				component: () => import('@/pages/LandingPage.vue'),
-			},
-		],
+		children: landingRoute,
 	},
 	{
 		path: '/auth',
-		name: 'Auth',
-		redirect: '/auth/login',
+		component: () => import('@/layouts/PlainLayout.vue'),
+		children: authRoute,
+	},
+	{
+		path: '/auth',
 		component: () => import('@/pages/auth/index.vue'),
-		children: [
-			{
-				path: 'login',
-				name: 'Login',
-				component: () => import('@/components/auth/login/Login.vue'),
-			},
-			{
-				path: 'forgot-password',
-				name: 'Forgot Password',
-				children: [
-					{
-						path: '',
-						name: 'Enter email',
-						component: () =>
-							import('@/components/auth/forgot-password/ForgotPassword.vue'),
-					},
-					{
-						path: 'enter-otp',
-						name: 'Enter otp',
-						meta: {
-							requiresForgotPassword: true,
-						},
-						component: () => import('@/components/auth/forgot-password/EnterOTP.vue'),
-					},
-					{
-						path: 'reset-password',
-						name: 'Reset password',
-						meta: {
-							requiresForgotPassword: true,
-						},
-						component: () =>
-							import('@/components/auth/forgot-password/ResetPassword.vue'),
-					},
-				],
-			},
-		],
+		children: authRoute,
+	},
+	{
+		path: '/jobs',
+		name: 'Jobs',
+		component: () => import('@/layouts/MainLayout.vue'),
+		children: jobRoute,
 	},
 	{
 		path: '/',
@@ -75,11 +39,6 @@ export const webRoutes: RouteType[] = [
 				path: '/dashboard',
 				name: 'Dashboard',
 				component: () => import('@/pages/dashboard/index.vue'),
-			},
-			{
-				path: 'jobs',
-				name: 'Jobs',
-				component: () => import('@/pages/jobs/index.vue'),
 			},
 			{
 				path: 'candidates',

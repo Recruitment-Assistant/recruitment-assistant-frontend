@@ -6,7 +6,7 @@ import { Eye, EyeClosed } from 'lucide-vue-next';
 
 const props = defineProps<{
 	defaultValue?: string | number;
-	modelValue?: string | number;
+	modelValue: string | number;
 	class?: HTMLAttributes['class'];
 	placeholder?: string;
 	icon?: any;
@@ -21,7 +21,7 @@ const showPassword = ref(false);
 
 const modelValue = useVModel(props, 'modelValue', emits, {
 	passive: true,
-	defaultValue: props.defaultValue,
+	defaultValue: props?.defaultValue,
 });
 
 const handleShowPassword = () => {
@@ -43,8 +43,8 @@ const handleShowPassword = () => {
 			class="text-gray-300"
 			type="button"
 			@click="handleShowPassword">
-			<component v-if="!showPassword" :icon="EyeClosed" />
-			<component v-else :icon="Eye" />
+			<component :is="EyeClosed" v-if="!showPassword" />
+			<component :is="Eye" v-else />
 		</button>
 	</div>
 </template>

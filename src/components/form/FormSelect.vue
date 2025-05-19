@@ -11,9 +11,8 @@ import {
 import { cn } from '@/lib/utils';
 import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import type { ComboboxType, FormFieldCommon } from '@/types';
-import { Check } from 'lucide-vue-next';
+import { Check, ChevronDown } from 'lucide-vue-next';
 import { ref } from 'vue';
-import IconFromSvg from '../common/IconFromSvg.vue';
 import Button from '../ui/button/Button.vue';
 import FormErrorCustom from './FormErrorCustom.vue';
 import ComboboxInput from '../ui/combobox/ComboboxInput.vue';
@@ -57,7 +56,7 @@ const handleOpen = (value: boolean) => {
 };
 </script>
 <template>
-	<FormField v-slot="{ errors, field }" :name="name" :model-value="modelValue">
+	<FormField v-slot="{ errors, field }" :model-value="modelValue" :name="name">
 		<FormItem class="flex flex-col">
 			<FormLabel>{{ label }} <span v-if="!required">(optional)</span></FormLabel>
 
@@ -72,7 +71,7 @@ const handleOpen = (value: boolean) => {
 							class="relative w-full max-w-sm items-center text-gray-200">
 							<span
 								class="absolute start-0 flex items-center justify-center px-3 h-full">
-								<IconFromSvg v-if="icon" :icon="icon" />
+								<component v-if="icon" :icon="icon" />
 							</span>
 							<ComboboxInput
 								:class="
@@ -86,20 +85,17 @@ const handleOpen = (value: boolean) => {
 								:placeholder="comboboxInput" />
 							<ComboboxTrigger
 								class="absolute end-0 inset-y-0 flex items-center justify-center px-3">
-								<IconFromSvg
-									:icon="Down"
-									class="transition-all duration-200"
-									:class="open ? 'rotate-180' : 'rotate-0'" />
+								<ChevronDown
+									:class="open ? 'rotate-180' : 'rotate-0'"
+									class="transition-all duration-200" />
 							</ComboboxTrigger>
 						</div>
 						<ComboboxTrigger v-else class="relative w-full items-center">
 							<span
 								class="absolute start-0 inset-y-0 flex items-center justify-center ml-3 text-gray-200">
-								<IconFromSvg v-if="icon" :icon="icon" />
+								<component :is="icon" v-if="icon" />
 							</span>
 							<Button
-								type="button"
-								variant="outline"
 								:class="[
 									cn(
 										'rounded-2xl p-3 w-full font-normal border justify-start h-auto focus:border-blue-100 text-gray-200 hover:text-gray-200',
@@ -110,15 +106,14 @@ const handleOpen = (value: boolean) => {
 										? 'text-slate-600 hover:text-slate-600'
 										: '',
 									errors.length > 0 && 'border-destructive',
-								]">
+								]"
+								type="button"
+								variant="outline">
 								{{ comboboxInput }}
 							</Button>
 							<span
 								class="absolute end-0 inset-y-0 flex items-center justify-center px-3">
-								<IconFromSvg
-									:icon="Down"
-									class="transition-all duration-200"
-									:class="open ? 'rotate-180' : 'rotate-0'" />
+								<ChevronDown :class="open ? 'rotate-180' : 'rotate-0'" />
 							</span>
 						</ComboboxTrigger>
 					</ComboboxAnchor>

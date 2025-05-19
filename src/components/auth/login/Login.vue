@@ -24,7 +24,7 @@ const navigateForgotPassword = () => {
 
 const formSchema = toTypedSchema(loginSchema);
 
-const { handleSubmit } = useForm({
+const { handleSubmit, values } = useForm({
 	validationSchema: formSchema,
 });
 
@@ -40,22 +40,25 @@ const onSubmit = handleSubmit(async (values) => {
 		<Title class="text-2xl">Welcome to Recruitment Assistant!</Title>
 		<Description class="self-start text-sm">Login with your email and password.</Description>
 
-		<form @submit="onSubmit" class="w-full" autocomplete="off">
+		<form autocomplete="off" class="w-full" @submit="onSubmit">
 			<FormInput
-				name="email"
-				label="Email"
-				class="w-full"
 				:icon="Mail"
+				:model-value="values.email"
 				:required="true"
-				placeholder="Enter your email address" />
-			<FormInput
-				type="password"
-				name="password"
-				label="Password"
 				class="w-full"
+				label="Email"
+				name="email"
+				placeholder="Enter your email address"
+				type="text" />
+			<FormInput
 				:icon="Lock"
+				:model-value="values.password"
 				:required="true"
-				placeholder="Enter your password" />
+				class="w-full"
+				label="Password"
+				name="password"
+				placeholder="Enter your password"
+				type="password" />
 
 			<div class="self-start w-full flex justify-between px-2">
 				<div class="flex items-center space-x-2 text-gray-400">
@@ -64,30 +67,30 @@ const onSubmit = handleSubmit(async (values) => {
 						v-model="remember"
 						class="data-[state=checked]:bg-blue-500 data-[state=checked]:border-blue-500" />
 					<Label
-						for="remember"
-						class="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">
+						class="text-sm font-normal leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+						for="remember">
 						Remember me
 					</Label>
 				</div>
 				<Button
-					type="button"
-					@click="navigateForgotPassword"
 					class="text-blue-500 p-0 text-sm"
-					variant="link">
+					type="button"
+					variant="link"
+					@click="navigateForgotPassword">
 					Forgot password?
 				</Button>
 			</div>
 
 			<CallApiButton
-				class="w-full rounded-xl bg-blue-500 hover:bg-blue-600 h-auto p-3"
-				:is-loading="authStore.isLoading">
+				:is-loading="authStore.isLoading"
+				class="w-full rounded-xl bg-blue-500 hover:bg-blue-600 h-auto p-3">
 				Login
 			</CallApiButton>
 		</form>
 
 		<div class="flex items-center gap-1 text-sm">
 			<p>Don't have an account.</p>
-			<RouterLink class="text-blue-500 p-0" to="/register"> Register </RouterLink>
+			<RouterLink class="text-blue-500 p-0" to="/register"> Register</RouterLink>
 		</div>
 	</div>
 </template>

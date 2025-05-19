@@ -43,10 +43,10 @@ router.beforeEach(async (to, from, next) => {
 		return;
 	}
 
-	if (isLoggedIn && !isAuthRoute) {
-		next('/');
-		return;
-	}
+	// if (isLoggedIn && !isAuthRoute) {
+	// 	next('/');
+	// 	return;
+	// }
 
 	next();
 });

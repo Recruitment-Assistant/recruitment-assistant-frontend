@@ -26,15 +26,11 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 });
 </script>
 <template>
-	<FormField :model-value="modelValue" v-slot="{ componentField, errors }" :name="name">
+	<FormField v-slot="{ componentField, errors }" :model-value="modelValue" :name="name">
 		<FormItem class="flex flex-col">
 			<FormLabel>{{ label }} <span v-if="!required">(optional)</span></FormLabel>
 			<FormControl>
 				<InputWithIcon
-					:type="type"
-					:model-value="modelValue"
-					:placeholder="placeholder"
-					:icon="icon"
 					:class="
 						cn(
 							props.class,
@@ -43,6 +39,10 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 								: 'focus-within:border-blue-100 ',
 						)
 					"
+					:icon="icon"
+					:model-value="modelValue"
+					:placeholder="placeholder"
+					:type="type"
 					v-bind="componentField" />
 			</FormControl>
 

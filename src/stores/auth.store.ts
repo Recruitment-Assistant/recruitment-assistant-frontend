@@ -7,7 +7,7 @@ import { AUTH_API } from '@/constants/api/auth.api';
 import type { IApiResponseV1 } from '@/types/api.ts';
 import type { User } from '@/types/user.ts';
 import { USER_API } from '@/constants/api/user.api.ts';
-import { getMyOrganization, switchOrganization } from '@/services/organization.ts';
+import { getMyOrganization, switchOrganization } from '@/services/organization.service.ts';
 
 export const useAuthStore = defineStore('auth-store', () => {
 	/**

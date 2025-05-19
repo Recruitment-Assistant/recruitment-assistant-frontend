@@ -5,7 +5,14 @@ export const STATUS_STYLE: Record<string, string> = {
 	Canceled: 'bg-gray-50 text-slate-600 hover:bg-gray-50 hover:text-gray-500',
 };
 
+export const DEFAULT_PAGE = 1;
+export const DEFAULT_PAGE_SIZE = 20;
 export const ROWS_PER_PAGE = [20, 50, 70, 120, 190];
+
+export enum ORDER {
+	DESC = 'DESC',
+	ASC = 'ASC',
+}
 
 export const ATTENDANCE_STYLE: Record<string, string> = {
 	'Late Arrival': 'bg-yellow-50 text-yellow-500 hover:bg-yellow-50 hover:text-yellow-500',
