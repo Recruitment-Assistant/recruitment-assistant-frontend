@@ -55,12 +55,13 @@ const refreshToken = async () => {
 
 	if (status >= 400) {
 		authStore.clearLocalStorage();
-		router.push('/auth');
+		router.push('/auth/login');
 		return false;
 	}
 
 	const token = data.data;
 	authStore.setToken(token.access_token, token.refresh_token);
+	await authStore.setupOrganization();
 	return true;
 };
 

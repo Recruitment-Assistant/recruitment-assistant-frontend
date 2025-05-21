@@ -151,5 +151,6 @@ export const useAuthStore = defineStore('auth-store', () => {
 		forgotPassword,
 		verifyCode,
 		resetPassword,
+		setupOrganization,
 	};
 });

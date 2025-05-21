@@ -30,7 +30,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 </script>
 
 <template>
-	<FormField v-slot="{ componentField, errors }" :model-value="modelValue" :name="name">
+	<FormField v-slot="{ componentField }" :model-value="modelValue" :name="name">
 		<FormItem class="flex flex-col">
 			<FormLabel>{{ label }} <span v-if="!required">(optional)</span></FormLabel>
 			<FormControl>

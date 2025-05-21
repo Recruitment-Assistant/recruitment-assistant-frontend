@@ -19,7 +19,7 @@ const authStore = useAuthStore();
 const handleLogout = async () => {
 	const status = await authStore.logout();
 	if (status === 204) {
-		router.push('/auth');
+		router.push('/auth/login');
 	}
 };
 </script>

@@ -1,7 +1,8 @@
-import type { IBaseResponse, IFilterRequest, IPaging } from '@/types';
+import type { BaseUser, Department, IBaseResponse, IFilterRequest, IPaging, Position } from '@/types';
 import { EMPLOYMENT_TYPE, type JOB_STATUS } from '@/constants/job.constant.ts';
 
-export interface IJobFilter extends IFilterRequest {}
+export interface IJobFilter extends IFilterRequest {
+}
 
 export interface Job extends IBaseResponse {
 	job_code: string;
@@ -16,7 +17,7 @@ export interface Job extends IBaseResponse {
 	quantity: number;
 	remote_eligible: boolean;
 	employment_type: EMPLOYMENT_TYPE;
-	salary_range: {
+	salary_range?: {
 		min: number;
 		max: number;
 		currency: string;
@@ -24,10 +25,13 @@ export interface Job extends IBaseResponse {
 		bonus_eligible: boolean;
 		equity_offered: boolean;
 	};
-	department_id: string;
+	department_id?: string;
 	position_id: string;
 	organization_id: string;
 	created_by: string;
+	position?: Position;
+	department?: Department;
+	created_by_user?: BaseUser;
 }
 
 export interface JobState {

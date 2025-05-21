@@ -10,7 +10,7 @@ import {
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { defineProps } from 'vue';
-import { Job } from '@/types';
+import type { Job } from '@/types';
 import { useRouter } from 'vue-router';
 
 interface Props {
@@ -64,21 +64,11 @@ const viewDetail = () => {
 		<CardContent>
 			<div class="space-y-4">
 				<div>
-					<h3 class="text-lg font-semibold text-gray-800">Description</h3>
-					<p class="text-gray-600">{{ job.description || 'No description provided' }}</p>
-				</div>
-				<div>
-					<h3 class="text-lg font-semibold text-gray-800">Requirements</h3>
-					<p class="text-gray-600">
-						{{ job.requirements || 'No requirements specified' }}
-					</p>
-				</div>
-				<div>
 					<h3 class="text-lg font-semibold text-gray-800">Salary Range</h3>
 					<p class="text-gray-600">
 						{{ formatSalary(job.salary_range) }}
-						<span v-if="job.salary_range.bonus_eligible"> • Bonus Eligible</span>
-						<span v-if="job.salary_range.equity_offered"> • Equity Offered</span>
+						<span v-if="job?.salary_range?.bonus_eligible"> • Bonus Eligible</span>
+						<span v-if="job?.salary_range?.equity_offered"> • Equity Offered</span>
 					</p>
 				</div>
 				<div>
