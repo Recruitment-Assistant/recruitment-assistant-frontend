@@ -23,6 +23,7 @@ import { useDepartment } from '@/composables/department.ts';
 import { usePosition } from '@/composables/position.ts';
 import type { ComboboxType } from '@/types';
 import { computed } from 'vue';
+import FormTagsInput from '@/components/form/FormTagsInput.vue';
 
 interface Props {
 	modelValue: boolean;
@@ -62,7 +63,9 @@ const { handleSubmit, values } = useForm({
 	validationSchema: formSchema,
 });
 
-const onSubmit = handleSubmit(async (values: JobPayloadType) => {});
+const onSubmit = handleSubmit(async (values: JobPayloadType) => {
+	console.log(values);
+});
 
 const handleOpen = (open: boolean) => {
 	emit('update:open', open);
@@ -101,7 +104,7 @@ const handleOpen = (open: boolean) => {
 							placeholder="Enter job code" />
 
 						<FormInput
-							:model-value="data?.location"
+							:modelValue="data?.location"
 							:required="true"
 							class="w-full"
 							label="Location"
@@ -143,7 +146,15 @@ const handleOpen = (open: boolean) => {
 							list-size="md"
 							name="position_id"
 							placeholder="Select position" />
+
+						<FormTagsInput
+							:modelValue="data?.tags"
+							:required="true"
+							label="Tags"
+							name="tags"
+							placeholder="Tags" />
 					</div>
+
 					<div class="mt-6 grid gap-4">
 						<FormMarkdown
 							:model-value="data?.description"

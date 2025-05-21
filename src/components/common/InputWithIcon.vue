@@ -6,7 +6,7 @@ import { Eye, EyeClosed } from 'lucide-vue-next';
 
 const props = defineProps<{
 	defaultValue?: string | number;
-	modelValue: string | number;
+	modelValue?: string | number;
 	class?: HTMLAttributes['class'];
 	placeholder?: string;
 	icon?: any;

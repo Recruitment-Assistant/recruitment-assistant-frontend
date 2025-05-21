@@ -4,12 +4,12 @@ import Quill from 'quill';
 import 'quill/dist/quill.snow.css';
 
 const props = defineProps<{
-	modelValue?: string[];
+	modelValue?: string[] | string;
 	placeholder: string;
 }>();
 
 const emit = defineEmits<{
-	(e: 'update:modelValue', value: string[] | undefined): void;
+	(e: 'update:modelValue', value: string[] | undefined | string): void;
 }>();
 
 const editorRef = ref();
@@ -29,7 +29,8 @@ onMounted(() => {
 	});
 
 	quill.on('text-change', () => {
-		const data = quill.getText().trim().split('\n');
+		const delta = quill.getContents();
+		const data = JSON.stringify(delta);
 		if (data[0] === '') {
 			emit('update:modelValue', undefined);
 			return;

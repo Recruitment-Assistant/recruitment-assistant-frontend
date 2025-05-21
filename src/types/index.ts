@@ -43,8 +43,8 @@ export interface FormFieldCommon {
 	class?: HTMLAttributes['class'];
 	icon?: any;
 	required?: boolean;
-	modelValue?: string | number;
-	defaultValue?: string | number;
+	modelValue?: string | number | string[];
+	defaultValue?: string | number | string[];
 }
 
 export interface FilterAccordion {
