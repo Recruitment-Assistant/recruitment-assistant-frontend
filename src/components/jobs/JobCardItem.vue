@@ -8,7 +8,6 @@ import {
 	CardTitle,
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
 import { defineProps } from 'vue';
 import type { Job } from '@/types';
 import { useRouter } from 'vue-router';
@@ -38,7 +37,7 @@ const formatDate = (dateString: string) => {
 const router = useRouter();
 
 const viewDetail = () => {
-	router.push({ name: 'job-detail', params: { id: props.job.id } });
+	router.push({ name: 'Job Detail', params: { id: props.job.id } });
 };
 </script>
 
@@ -92,7 +91,12 @@ const viewDetail = () => {
 			</div>
 		</CardContent>
 		<CardFooter class="flex justify-end">
-			<Button class="bg-blue-500 hover:bg-blue-600" @click="viewDetail">View details</Button>
+			<router-link
+				:to="`/jobs/${job.id}`"
+				class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors">
+				View details
+			</router-link>
+			<!--			<Button class="bg-blue-500 hover:bg-blue-600" @click="viewDetail">View details</Button>-->
 		</CardFooter>
 	</Card>
 </template>

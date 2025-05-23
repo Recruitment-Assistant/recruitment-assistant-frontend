@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Button } from '@/components/ui/button';
 import { BarChart3, Clock, Users } from 'lucide-vue-next';
 
@@ -32,7 +32,10 @@ const features = [
 					Modern recruitment assistant that helps teams hire better candidates, faster.
 				</p>
 				<div class="pt-4 flex gap-4 justify-center">
-					<Button size="lg" as-child>
+					<Button
+						as-child
+						class="bg-blue-500 hover:bg-blue-400 rounded-2xl h-auto py-3.5 px-10 text-white"
+						size="lg">
 						<router-link to="/auth/login">Get Started</router-link>
 					</Button>
 					<Button size="lg" variant="outline">Learn More</Button>
@@ -67,7 +70,10 @@ const features = [
 						Join thousands of companies that use our platform to streamline their
 						recruitment.
 					</p>
-					<Button size="lg" as-child>
+					<Button
+						as-child
+						class="bg-blue-500 hover:bg-blue-400 rounded-2xl h-auto py-3.5 px-10 text-white"
+						size="lg">
 						<router-link to="/auth/login">Try for Free</router-link>
 					</Button>
 				</div>

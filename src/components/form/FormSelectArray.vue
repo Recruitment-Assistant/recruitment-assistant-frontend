@@ -3,9 +3,7 @@ import { cn } from '@/lib/utils';
 import type { ComboboxType, FormFieldCommon } from '@/types';
 import { FieldArray } from 'vee-validate';
 import { Button } from '../ui/button';
-import { FormControl, FormField } from '../ui/form';
-import FormItem from '../ui/form/FormItem.vue';
-import FormLabel from '../ui/form/FormLabel.vue';
+import { FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import {
 	Combobox,
 	ComboboxAnchor,
@@ -17,7 +15,7 @@ import {
 	ComboboxList,
 	ComboboxTrigger,
 } from '@/components/ui/combobox';
-import { Check } from 'lucide-vue-next';
+import { Check, ChevronDown, CirclePlus, X } from 'lucide-vue-next';
 import IconFromSvg from '../common/IconFromSvg.vue';
 import FormErrorCustom from './FormErrorCustom.vue';
 
@@ -49,18 +47,18 @@ const handleSelect = (fieldName: string, data: string) => {
 								<div class="relative w-full flex items-center gap-2">
 									<ComboboxInput
 										:display-value="(val) => val?.label ?? ''"
-										class="h-12 rounded-2xl focus-visible:border-blue-100 focus-visible:ring-0 focus-visible:ring-offset-0"
-										:placeholder="placeholder ?? 'Select...'" />
+										:placeholder="placeholder ?? 'Select...'"
+										class="h-12 rounded-2xl focus-visible:border-blue-100 focus-visible:ring-0 focus-visible:ring-offset-0" />
 									<ComboboxTrigger
 										class="absolute end-12 inset-y-0 flex items-center justify-center px-3">
-										<IconFromSvg :icon="Down" />
+										<IconFromSvg :icon="ChevronDown" />
 									</ComboboxTrigger>
 									<Button
+										class="p-2"
 										type="button"
 										variant="ghost"
-										class="p-2"
 										@click="remove(index)">
-										<IconFromSvg :icon="Close" />
+										<IconFromSvg :icon="X" />
 									</Button>
 								</div>
 							</ComboboxAnchor>
@@ -105,11 +103,11 @@ const handleSelect = (fieldName: string, data: string) => {
 		</div>
 
 		<Button
+			class="text-sm w-full rounded-2xl h-12 mt-2 !text-slate-600"
 			type="button"
 			variant="outline"
-			class="text-sm w-full rounded-2xl h-12 mt-2 !text-slate-600"
 			@click="push({ value: '' })">
-			<IconFromSvg :icon="AddCircle" />
+			<IconFromSvg :icon="CirclePlus" />
 			{{ button_label ?? 'Add' }}
 		</Button>
 	</FieldArray>

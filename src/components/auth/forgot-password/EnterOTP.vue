@@ -6,7 +6,7 @@ import router from '@/routers';
 import { onUnmounted, ref } from 'vue';
 import PinInput from './PinInput.vue';
 import { useAuthStore } from '@/stores/auth.store';
-import { Left } from 'lucide-vue-next';
+import { MoveLeft } from 'lucide-vue-next';
 
 const authStore = useAuthStore();
 
@@ -59,13 +59,13 @@ const navigateResetPasword = async () => {
 </script>
 <template>
 	<div>
-		<Button @click="navigateBack" variant="ghost" class="text-slate-600 items-center p-2">
-			<Left />
+		<Button class="text-slate-600 items-center p-2" variant="ghost" @click="navigateBack">
+			<MoveLeft />
 		</Button>
 	</div>
 	<div class="flex flex-col items-center gap-4 mt-4">
 		<Title class="font-semibold">Enter OTP</Title>
-		<Description> We have send a code to your registered email address </Description>
+		<Description> We have send a code to your registered email address</Description>
 		<div>
 			<PinInput @update:data="handleOTP" />
 		</div>
@@ -78,10 +78,10 @@ const navigateResetPasword = async () => {
 		<div class="flex items-center gap-2">
 			<p class="text-sm">Didn't get the code.</p>
 			<Button
-				@click="resendOTP"
+				:disabled="isDisabled"
 				class="p-0 text-blue-500 gap-1"
 				variant="link"
-				:disabled="isDisabled">
+				@click="resendOTP">
 				Resend<span v-if="countdown > 0" class="text-sm">({{ countdown }})</span>
 			</Button>
 		</div>

@@ -1,9 +1,6 @@
 <script lang="ts" setup>
 import type { FormFieldCommon } from '@/types';
-import { FormField } from '../ui/form';
-import FormControl from '../ui/form/FormControl.vue';
-import FormItem from '../ui/form/FormItem.vue';
-import FormLabel from '../ui/form/FormLabel.vue';
+import { FormControl, FormField, FormItem, FormLabel } from '../ui/form';
 import FormErrorCustom from './FormErrorCustom.vue';
 import IconFromSvg from '../common/IconFromSvg.vue';
 import { ref } from 'vue';
@@ -11,6 +8,7 @@ import { useCustomToast } from '@/lib/customToast';
 import ProgressCircle from '../common/ProgressCircle.vue';
 import Button from '../ui/button/Button.vue';
 import UserAvatar from '../common/UserAvatar.vue';
+import { CircleCheck, CircleX, RotateCcw, Upload, X } from 'lucide-vue-next';
 
 interface Prop extends FormFieldCommon {
 	type?: 'file' | 'photo';
@@ -100,27 +98,27 @@ const handleDragLeave = (event: DragEvent) => {
 		<FormItem class="flex flex-col gap-2">
 			<h6 class="text-sm font-medium">{{ label }}</h6>
 			<div v-if="error" class="flex gap-2 items-center px-4 py-2 bg-red-50 rounded-2xl">
-				<IconFromSvg :icon="DangerCircle" class="text-red-500" />
+				<IconFromSvg :icon="CircleX" class="text-red-500" />
 				<div class="flex-1 flex flex-col gap-1">
 					<p class="text-sm text-black">{{ selectedFile?.name }}</p>
 					<p class="text-sm text-red-500">Failed</p>
 				</div>
-				<Button type="button" variant="ghost" class="p-0 hover:bg-red-50">
-					<IconFromSvg :icon="Restart" class="text-red-500" />
+				<Button class="p-0 hover:bg-red-50" type="button" variant="ghost">
+					<IconFromSvg :icon="RotateCcw" class="text-red-500" />
 				</Button>
 			</div>
 			<div
 				v-else-if="selectedFile && uploadProgress === 0"
 				class="flex gap-2 items-center px-4 py-2 rounded-2xl border">
-				<IconFromSvg :icon="CheckCircle" class="text-green-500" />
+				<IconFromSvg :icon="CircleCheck" class="text-green-500" />
 				<UserAvatar v-if="type === 'photo'" class="w-10 h-10 rounded-xl" />
 				<p class="text-sm text-black flex-1">{{ selectedFile?.name }}</p>
 				<Button
+					class="p-0 hover:bg-white"
 					type="button"
 					variant="ghost"
-					class="p-0 hover:bg-white"
 					@click="handleRemoveFile">
-					<IconFromSvg :icon="Close" />
+					<IconFromSvg :icon="X" />
 				</Button>
 			</div>
 			<div v-if="selectedFile && uploadProgress === 0" class="text-center !mt-0">or</div>
@@ -132,8 +130,8 @@ const handleDragLeave = (event: DragEvent) => {
 			<FormLabel
 				v-else
 				class="!mt-0 hover:cursor-pointer !text-slate-600"
-				@dragover="handleDragOver"
 				@dragleave="handleDragLeave"
+				@dragover="handleDragOver"
 				@drop="handleDrop">
 				<div
 					class="border border-dashed h-36 rounded-2xl grid place-items-center hover:bg-slate-50 hover:border-blue-100">
@@ -158,7 +156,7 @@ const handleDragLeave = (event: DragEvent) => {
 				</div>
 			</FormLabel>
 			<FormControl>
-				<input type="file" class="hidden" @change="handleFileUpload" />
+				<input class="hidden" type="file" @change="handleFileUpload" />
 			</FormControl>
 			<FormErrorCustom />
 		</FormItem>

@@ -17,8 +17,12 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(
 	function (config) {
 		NProgress.start();
-		config.headers['Content-Type'] = 'application/json';
-		config.headers['Accept'] = 'application/json';
+		// config.headers['Content-Type'] = 'application/json';
+		// config.headers['Accept'] = 'application/json';
+		if (!(config.data instanceof FormData)) {
+			config.headers['Content-Type'] = 'application/json';
+			config.headers['Accept'] = 'application/json';
+		}
 		config.headers['Access-Control-Allow-Origin'] = '*';
 
 		const accessToken = localStorage.getItem(Config.key.accessToken);

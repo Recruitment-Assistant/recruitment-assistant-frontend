@@ -27,7 +27,7 @@ const handleLogout = async () => {
 <template>
 	<DropdownMenu>
 		<DropdownMenuTrigger as-child>
-			<Button class="border-none hover:bg-white h-auto gap-4 p-0" variant="outline">
+			<Button class="border-none hover:bg-muted/50 h-auto gap-4 p-0" variant="outline">
 				<UserAvatar :url="authStore.account?.avatar" class="w-12 h-12" />
 				<div>
 					<p class="text-start text-base font-medium">{{ authStore.account?.name }}</p>
@@ -36,17 +36,17 @@ const handleLogout = async () => {
 				<ChevronDown />
 			</Button>
 		</DropdownMenuTrigger>
-		<DropdownMenuContent align="end" class="w-56 bg-white border-slate-200">
+		<DropdownMenuContent align="end" class="w-56 bg-background border-slate-200">
 			<DropdownMenuLabel>My Account</DropdownMenuLabel>
 			<DropdownMenuSeparator />
 			<DropdownMenuGroup>
-				<DropdownMenuItem>
+				<DropdownMenuItem class="cursor-pointer">
 					<User class="mr-2 h-4 w-4" />
 					<span>Profile</span>
 				</DropdownMenuItem>
 			</DropdownMenuGroup>
 			<DropdownMenuSeparator />
-			<DropdownMenuItem @click="handleLogout">
+			<DropdownMenuItem class="cursor-pointer" @click="handleLogout">
 				<LogOut class="mr-2 h-4 w-4" />
 				<span>Log out</span>
 			</DropdownMenuItem>

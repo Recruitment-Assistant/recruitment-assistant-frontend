@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import Description from '@/components/common/Description.vue';
-import IconFromSvg from '@/components/common/IconFromSvg.vue';
 import Title from '@/components/common/Title.vue';
 import FormInput from '@/components/form/FormInput.vue';
 import Button from '@/components/ui/button/Button.vue';
@@ -10,6 +9,7 @@ import { useAuthStore } from '@/stores/auth.store';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
 import { z } from 'zod';
+import { LockKeyhole, MoveLeft } from 'lucide-vue-next';
 
 const authStore = useAuthStore();
 
@@ -43,8 +43,8 @@ const navigateEnterOTP = () => {
 </script>
 <template>
 	<div>
-		<Button @click="navigateBack" variant="ghost" class="text-slate-600 items-center p-2">
-			<IconFromSvg :icon="Left" />
+		<Button class="text-slate-600 items-center p-2" variant="ghost" @click="navigateBack">
+			<MoveLeft />
 		</Button>
 	</div>
 	<form class="flex flex-col items-center gap-4 mt-4" @submit="onSubmit">
@@ -55,24 +55,24 @@ const navigateEnterOTP = () => {
 
 		<div class="w-full">
 			<FormInput
-				type="password"
+				:icon="LockKeyhole"
+				:required="true"
+				class="w-full"
 				label="Password"
 				name="password"
-				:icon="Lock"
-				:required="true"
 				placeholder="Enter your password"
-				class="w-full" />
+				type="password" />
 		</div>
 
 		<div class="w-full">
 			<FormInput
-				type="password"
+				:icon="LockKeyhole"
+				:required="true"
+				class="w-full"
 				label="Confirm password"
 				name="confirm_password"
-				:icon="Lock"
-				:required="true"
 				placeholder="Enter your confirm password"
-				class="w-full" />
+				type="password" />
 		</div>
 
 		<Button class="w-full rounded-xl bg-blue-500 hover:bg-blue-600 h-auto p-3">

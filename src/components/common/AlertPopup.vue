@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -14,6 +14,7 @@ defineProps<{
 	open: boolean;
 	title?: string;
 	description?: string;
+	img?: string;
 }>();
 
 const emit = defineEmits<{
@@ -33,7 +34,7 @@ const handleConfirm = () => {
 <template>
 	<AlertDialog :open="open" @update:open="handleOpen">
 		<AlertDialogContent class="flex flex-col gap-2 items-center w-[450px]">
-			<div class="w-36">
+			<div v-if="img" class="w-36">
 				<img :src="img" alt="" class="w-full" />
 			</div>
 			<AlertDialogHeader class="flex flex-col gap-1 items-center">
@@ -46,13 +47,13 @@ const handleConfirm = () => {
 			</AlertDialogHeader>
 			<AlertDialogFooter class="w-full flex mt-4">
 				<AlertDialogCancel
-					@click="() => handleOpen(false)"
-					class="w-full rounded-2xl h-auto p-3">
+					class="w-full rounded-2xl h-auto p-3"
+					@click="() => handleOpen(false)">
 					Cancel
 				</AlertDialogCancel>
 				<AlertDialogAction
-					@click="handleConfirm"
-					class="w-full rounded-2xl h-auto p-3 bg-red-500 hover:bg-red-600 text-white">
+					class="w-full rounded-2xl h-auto p-3 bg-red-500 hover:bg-red-600 text-white"
+					@click="handleConfirm">
 					Continue
 				</AlertDialogAction>
 			</AlertDialogFooter>

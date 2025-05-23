@@ -15,6 +15,14 @@ export const getAllJobs = async (filter?: IJobFilter) => {
 	return data;
 };
 
+export const getJob = async (id: string) => {
+	const { data, status } = await axiosClient.get<IApiResponseV1<Job>>(`${JOB_API.BASE}/${id}`);
+	if (status >= 400) {
+		throw new Error();
+	}
+	return data;
+};
+
 export const createJob = async (payload: JobPayloadType) => {
 	const { data, status } = await axiosClient.post(JOB_API.BASE, payload);
 	if (status >= 400) {
@@ -39,13 +47,19 @@ export const deleteJob = async (id: string) => {
 	return data;
 };
 
-export const uploadApplicantForJob = async (job_id: string, file: File) => {
+export const uploadApplicantForJob = async (job_id: string, file: File, id: string) => {
 	const formData = new FormData();
 	formData.append('file', file);
+	formData.append('analysisId', id);
 
 	const { data, status } = await axiosClient.post(
 		createApiEndpoint(JOB_API.UPLOAD_APPLICANT_FOR_JOB, job_id),
 		formData,
+		{
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		},
 	);
 
 	if (status >= 400) {

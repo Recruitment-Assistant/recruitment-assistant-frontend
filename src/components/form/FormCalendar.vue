@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Button } from '@/components/ui/button';
 import { FormControl, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
@@ -9,6 +9,7 @@ import IconFromSvg from '../common/IconFromSvg.vue';
 import CalendarCustom from '../custom/CalendarCustom.vue';
 import type { FormFieldCommon } from '@/types';
 import FormErrorCustom from './FormErrorCustom.vue';
+import { Calendar, ChevronDown } from 'lucide-vue-next';
 
 interface Prop extends FormFieldCommon {
 	class?: HTMLAttributes['class'];
@@ -41,7 +42,6 @@ const handleOpen = (open: boolean) => {
 				<PopoverTrigger as-child>
 					<FormControl>
 						<Button
-							variant="outline"
 							:class="
 								cn(
 									'w-[240px] gap-3 ps-3 p-3 h-auto text-start font-normal rounded-2xl border justify-start focus:border-blue-200',
@@ -49,8 +49,9 @@ const handleOpen = (open: boolean) => {
 									errors.length > 0 && 'border-destructive',
 									props.class,
 								)
-							">
-							<IconFromSvg :icon="CalendarIcon" class="text-gray-200" />
+							"
+							variant="outline">
+							<IconFromSvg :icon="Calendar" class="text-gray-200" />
 							<span
 								:class="[
 									value ? 'text-slate-600' : 'text-gray-200',
@@ -62,8 +63,8 @@ const handleOpen = (open: boolean) => {
 							>
 							<span>
 								<IconFromSvg
-									:icon="Down"
-									:class="[isOpen ? 'rotate-180' : 'rotate-0', 'duration-200']" />
+									:class="[isOpen ? 'rotate-180' : 'rotate-0', 'duration-200']"
+									:icon="ChevronDown" />
 							</span>
 						</Button>
 						<input hidden />
@@ -71,8 +72,8 @@ const handleOpen = (open: boolean) => {
 				</PopoverTrigger>
 				<PopoverContent class="w-auto p-0 rounded-2xl">
 					<CalendarCustom
-						v-model:placeholder="placeholder"
 						v-model="value"
+						v-model:placeholder="placeholder"
 						calendar-label="Date of birth"
 						initial-focus
 						@update:model-value="handlePick(field.name)" />

@@ -1,9 +1,7 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { cn, formatDateValueToLocalDate } from '@/lib/utils';
-
 import { Button, buttonVariants } from '@/components/ui/button';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-
 import {
 	RangeCalendarCell,
 	RangeCalendarCellTrigger,
@@ -14,7 +12,7 @@ import {
 	RangeCalendarHeadCell,
 } from '@/components/ui/range-calendar';
 import { CalendarDate, type DateValue, isEqualMonth } from '@internationalized/date';
-import { ChevronLeft, ChevronRight } from 'lucide-vue-next';
+import { Calendar, ChevronLeft, ChevronRight } from 'lucide-vue-next';
 import { type DateRange, RangeCalendarRoot, useDateFormatter } from 'reka-ui';
 import { createMonth, type Grid, toDate } from 'reka-ui/date';
 import { type Ref, ref, watch } from 'vue';
@@ -90,14 +88,14 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
 	<Popover>
 		<PopoverTrigger as-child>
 			<Button
-				variant="outline"
 				:class="
 					cn(
 						'w-[250px] justify-start text-left gap-3 font-normal rounded-2xl',
 						!value && 'text-muted-foreground',
 					)
-				">
-				<IconFromSvg :icon="CalendarIcon" />
+				"
+				variant="outline">
+				<IconFromSvg :icon="Calendar" />
 				<template v-if="value.start && value.end">
 					{{ formatDateValueToLocalDate(value.start) }} -
 					{{ formatDateValueToLocalDate(value.end) }}
@@ -105,7 +103,7 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
 				<template v-else> Pick a date</template>
 			</Button>
 		</PopoverTrigger>
-		<PopoverContent class="w-auto p-0 rounded-2xl" align="end">
+		<PopoverContent align="end" class="w-auto p-0 rounded-2xl">
 			<RangeCalendarRoot
 				v-slot="{ weekDays }"
 				v-model="value"
@@ -155,14 +153,14 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
 									:key="`weekDate-${index}`"
 									class="mt-2 w-full">
 									<RangeCalendarCell
-										class="first:[&:has([data-selected])]:rounded-l-full last:[&:has([data-selected])]:rounded-r-full [&:has([data-selected][data-selection-end])]:rounded-r-full [&:has([data-selected][data-selection-start])]:rounded-l-full"
 										v-for="weekDate in weekDates"
 										:key="weekDate.toString()"
-										:date="weekDate">
+										:date="weekDate"
+										class="first:[&:has([data-selected])]:rounded-l-full last:[&:has([data-selected])]:rounded-r-full [&:has([data-selected][data-selection-end])]:rounded-r-full [&:has([data-selected][data-selection-start])]:rounded-l-full">
 										<RangeCalendarCellTrigger
-											class="rounded-full data-[selection-start]:focus:bg-blue-500 data-[selection-end]:focus:bg-blue-500 data-[selection-start]:bg-blue-500 data-[selection-start]:hover:bg-blue-500 data-[selection-end]:bg-blue-500 data-[selection-end]:hover:bg-blue-500"
 											:day="weekDate"
-											:month="firstMonth.value" />
+											:month="firstMonth.value"
+											class="rounded-full data-[selection-start]:focus:bg-blue-500 data-[selection-end]:focus:bg-blue-500 data-[selection-start]:bg-blue-500 data-[selection-start]:hover:bg-blue-500 data-[selection-end]:bg-blue-500 data-[selection-end]:hover:bg-blue-500" />
 									</RangeCalendarCell>
 								</RangeCalendarGridRow>
 							</RangeCalendarGridBody>
@@ -213,13 +211,13 @@ watch(secondMonthPlaceholder, (_secondMonthPlaceholder) => {
 									class="mt-2 w-full">
 									<RangeCalendarCell
 										v-for="weekDate in weekDates"
-										class="first:[&:has([data-selected])]:rounded-l-full last:[&:has([data-selected])]:rounded-r-full [&:has([data-selected][data-selection-end])]:rounded-r-full [&:has([data-selected][data-selection-start])]:rounded-l-full"
 										:key="weekDate.toString()"
-										:date="weekDate">
+										:date="weekDate"
+										class="first:[&:has([data-selected])]:rounded-l-full last:[&:has([data-selected])]:rounded-r-full [&:has([data-selected][data-selection-end])]:rounded-r-full [&:has([data-selected][data-selection-start])]:rounded-l-full">
 										<RangeCalendarCellTrigger
-											class="rounded-full data-[selection-start]:focus:bg-blue-500 data-[selection-end]:focus:bg-blue-500 data-[selection-start]:bg-blue-500 data-[selection-start]:hover:bg-blue-500 data-[selection-end]:bg-blue-500 data-[selection-end]:hover:bg-blue-500"
 											:day="weekDate"
-											:month="secondMonth.value" />
+											:month="secondMonth.value"
+											class="rounded-full data-[selection-start]:focus:bg-blue-500 data-[selection-end]:focus:bg-blue-500 data-[selection-start]:bg-blue-500 data-[selection-start]:hover:bg-blue-500 data-[selection-end]:bg-blue-500 data-[selection-end]:hover:bg-blue-500" />
 									</RangeCalendarCell>
 								</RangeCalendarGridRow>
 							</RangeCalendarGridBody>

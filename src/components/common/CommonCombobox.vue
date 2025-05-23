@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import { Button } from '@/components/ui/button';
 import {
 	Combobox,
@@ -13,7 +13,7 @@ import {
 } from '@/components/ui/combobox';
 import { cn } from '@/lib/utils';
 import type { ComboboxType } from '@/types';
-import { Check, Search } from 'lucide-vue-next';
+import { Check, ChevronDown, Search } from 'lucide-vue-next';
 import { type HTMLAttributes, ref, watch } from 'vue';
 import ScrollArea from '../ui/scroll-area/ScrollArea.vue';
 import IconFromSvg from './IconFromSvg.vue';
@@ -60,40 +60,40 @@ watch(
 <template>
 	<Combobox
 		v-model="selectedValue"
+		:multiple="multiple"
 		:open="open"
 		by="label"
 		@update:model-value="handleSelect"
-		@update:open="handleOpen"
-		:multiple="multiple">
+		@update:open="handleOpen">
 		<ComboboxAnchor as-child>
 			<ComboboxTrigger as-child>
 				<Button
 					v-if="multiple"
+					:class="cn('justify-start text-sm text-slate-600', props.class)"
 					variant="outline"
-					@click.stop
-					:class="cn('justify-start text-sm text-slate-600', props.class)">
+					@click.stop>
 					<IconFromSvg v-if="icon" :icon="icon" />
 					<span class="flex-1 text-start">{{
 						selectedValue && (selectedValue as ComboboxType[]).length > 0
 							? `${(selectedValue as ComboboxType[]).length} selected`
 							: label
 					}}</span>
-					<IconFromSvg
-						:icon="Down"
-						class="duration-200"
-						:class="open ? 'rotate-180' : 'rotate-0'" />
+					<component
+						:class="open ? 'rotate-180' : 'rotate-0'"
+						:icon="ChevronDown"
+						class="duration-200" />
 				</Button>
 				<Button
 					v-else
+					:class="cn('justify-between text-sm text-slate-600', props.class)"
 					variant="outline"
-					@click.stop
-					:class="cn('justify-between text-sm text-slate-600', props.class)">
+					@click.stop>
 					<IconFromSvg v-if="icon" :icon="icon" />
 					{{ (selectedValue as ComboboxType)?.label ?? label }}
 					<IconFromSvg
-						:icon="Down"
-						class="duration-200"
-						:class="open ? 'rotate-180' : 'rotate-0'" />
+						:class="open ? 'rotate-180' : 'rotate-0'"
+						:icon="ChevronDown"
+						class="duration-200" />
 				</Button>
 			</ComboboxTrigger>
 		</ComboboxAnchor>
@@ -109,8 +109,8 @@ watch(
 			">
 			<div v-if="isSearch" class="relative w-full max-w-sm items-center">
 				<ComboboxInput
-					class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10"
-					:placeholder="`Search ${label}...`" />
+					:placeholder="`Search ${label}...`"
+					class="pl-9 focus-visible:ring-0 border-0 border-b rounded-none h-10" />
 				<span class="absolute start-0 inset-y-0 flex items-center justify-center px-3">
 					<Search class="size-4 text-muted-foreground" />
 				</span>

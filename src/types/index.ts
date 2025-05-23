@@ -7,6 +7,8 @@ export * from './user.ts';
 export * from './jobs';
 export * from './department.ts';
 export * from './position.ts';
+export * from './file.ts';
+export * from './applications';
 
 export interface IBaseResponse {
 	id: string;

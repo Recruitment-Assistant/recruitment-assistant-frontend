@@ -1,4 +1,4 @@
-<script setup lang="ts">
+<script lang="ts" setup>
 import {
 	Breadcrumb,
 	BreadcrumbItem,
@@ -13,19 +13,19 @@ const route = useRoute();
 </script>
 
 <template>
-	<Breadcrumb class="hidden md:flex pb-4">
+	<Breadcrumb class="hidden md:flex pb-1">
 		<BreadcrumbList>
 			<template v-for="(router, index) in route.matched" :key="index">
 				<BreadcrumbItem v-if="router.name">
 					<BreadcrumbLink
-						class="font-normal"
 						v-if="route.fullPath !== router.path"
-						as-child>
+						as-child
+						class="font-normal">
 						<RouterLink :to="router.path">{{ router.name }}</RouterLink>
 					</BreadcrumbLink>
-					<BreadcrumbPage class="text-blue-500 font-medium" v-else>
-						{{ router.name }}</BreadcrumbPage
-					>
+					<BreadcrumbPage v-else class="text-blue-500 font-medium">
+						{{ router.name }}
+					</BreadcrumbPage>
 				</BreadcrumbItem>
 				<BreadcrumbSeparator v-if="index + 1 < route.matched.length" />
 			</template>

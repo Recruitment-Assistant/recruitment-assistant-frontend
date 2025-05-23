@@ -37,16 +37,16 @@ const fetchJobs = async () => {
 const createJob = () => {
 	/* navigate to job creation */
 };
-const editJob = (id) => {
+const editJob = (id: string) => {
 	/* edit logic */
 };
-const viewApplicants = (id) => {
+const viewApplicants = (id: string) => {
 	/* navigate to applicant list */
 };
-const duplicateJob = (id) => {
+const duplicateJob = (id: string) => {
 	/* duplicate logic */
 };
-const deleteJob = (id) => {
+const deleteJob = (id: string) => {
 	/* delete logic */
 };
 const onPageChange = (page: number) => {

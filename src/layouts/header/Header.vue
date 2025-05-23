@@ -16,7 +16,7 @@ const handleSidebar = () => {
 </script>
 <template>
 	<header
-		class="bg-white h-20 shadow-sm sticky top-0 flex gap-4 items-center justify-between px-8 z-50">
+		class="bg-background h-20 shadow-sm sticky top-0 flex gap-4 items-center justify-between px-8 z-50">
 		<div class="flex gap-4 items-center">
 			<button class="p-2 border rounded" @click="handleSidebar">
 				<PanelRightOpen v-if="!appStore.isSmallSidebar" :size="18" />
@@ -25,7 +25,7 @@ const handleSidebar = () => {
 			<InputWithIcon
 				:icon="Search"
 				:model-value="search"
-				class="rounded-full w-[450px]"
+				class="rounded-full w-[450px] text-accent-foreground"
 				placeholder="Search..." />
 		</div>
 

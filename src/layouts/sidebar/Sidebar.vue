@@ -9,7 +9,7 @@ const appStore = useAppStore();
 <template>
 	<aside
 		:class="[
-			'w-60 h-screen flex flex-col  sticky top-0 left-0 transition-all duration-200 ease-linear z-50',
+			'w-60 bg-background h-screen flex flex-col  sticky top-0 left-0 transition-all duration-200 ease-linear z-50',
 			appStore.isSmallSidebar ? '!w-20' : '',
 		]">
 		<div class="h-20 grid place-items-center">
@@ -17,7 +17,7 @@ const appStore = useAppStore();
 				<img
 					v-if="appStore.isSmallSidebar"
 					alt="Logo"
-					class="w-8 h-8"
+					class="w-8 h-8 fill-accent-foreground"
 					src="../../assets/logo.svg" />
 				<img v-else alt="Logo" src="../../assets/logo.svg" />
 			</RouterLink>
