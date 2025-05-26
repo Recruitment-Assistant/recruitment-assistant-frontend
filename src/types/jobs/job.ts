@@ -11,7 +11,6 @@ import { EMPLOYMENT_TYPE, type JOB_STATUS } from '@/constants/job.constant.ts';
 export interface IJobFilter extends IFilterRequest {}
 
 export interface Job extends IBaseResponse {
-	job_code: string;
 	title: string;
 	description: string;
 	requirements: string;
@@ -32,10 +31,8 @@ export interface Job extends IBaseResponse {
 		equity_offered: boolean;
 	};
 	department_id?: string;
-	position_id: string;
 	organization_id: string;
 	created_by: string;
-	position?: Position;
 	department?: Department;
 	creator?: BaseUser;
 }

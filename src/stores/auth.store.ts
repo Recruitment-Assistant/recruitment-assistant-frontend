@@ -1,13 +1,14 @@
 import axiosClient from '@/plugins';
-import type { ITokenResponse } from '@/types';
 import { defineStore } from 'pinia';
 import { computed, ref } from 'vue';
 import { Config } from '@/plugins/config.ts';
 import { AUTH_API } from '@/constants/api/auth.api';
-import type { IApiResponseV1 } from '@/types/api.ts';
 import type { User } from '@/types/user.ts';
-import { USER_API } from '@/constants/api/user.api.ts';
-import { getMyOrganization, switchOrganization } from '@/services/organization.service.ts';
+import { loginApi, loginGGApi } from '@/services/auth.service.ts';
+import { getUserApi } from '@/services/user.service.ts';
+import type { CreateOrganizationPayload } from '@/types';
+import { createOrganizationApi } from '@/services/organization.service.ts';
+import router from '@/routers';
 
 export const useAuthStore = defineStore('auth-store', () => {
 	/**
@@ -16,6 +17,7 @@ export const useAuthStore = defineStore('auth-store', () => {
 	const isLoading = ref(false);
 	const access_token = ref<string>(localStorage.getItem(Config.key.accessToken) || '');
 	const refresh_token = ref<string>(localStorage.getItem(Config.key.refreshToken) || '');
+	const organizationId = ref<string>(localStorage.getItem(Config.key.organizationId) || '');
 	const forgot_password_token = ref<string | undefined>();
 	const account = ref<User | null>(
 		localStorage.getItem(Config.key.account)
@@ -34,41 +36,45 @@ export const useAuthStore = defineStore('auth-store', () => {
 	 */
 	const login = async (payload: { email: string; password: string }, remember?: boolean) => {
 		isLoading.value = true;
-		const { data, status } = await axiosClient.post<IApiResponseV1<ITokenResponse>>(
-			AUTH_API.LOGIN,
-			payload,
-		);
-		if (status >= 400) {
+		const { data, status_code } = await loginApi(payload);
+		if (status_code >= 400) {
 			isLoading.value = false;
-			return status;
+			return status_code;
 		}
 
-		const token = data.data;
-		setToken(token.access_token, token.refresh_token);
-
-		await getUser();
-		await setupOrganization();
+		await setupAuth(data.access_token, data.refresh_token);
+		if (data.organization_id) {
+			setupOrg(data.organization_id);
+		}
 		isLoading.value = false;
-		return status;
+		return status_code;
 	};
 
-	const setupOrganization = async () => {
-		const organizations = await getMyOrganization();
-		if (organizations && organizations.length > 0) {
-			const token = await switchOrganization(organizations[0].id);
-			setToken(token.access_token, token.refresh_token);
-			setCurrenOrganization(organizations[0].id);
+	const loginGG = async (access_token: string) => {
+		isLoading.value = true;
+		const { data, status_code } = await loginGGApi(access_token);
+		if (status_code >= 400) {
+			isLoading.value = false;
+			return status_code;
 		}
+
+		await setupAuth(data.access_token, data.refresh_token);
+		if (data.organization_id) {
+			setupOrg(data.organization_id);
+		}
+		isLoading.value = false;
+
+		router.push('/');
+		return status_code;
 	};
 
 	const getUser = async () => {
-		const { data, status } = await axiosClient.get<IApiResponseV1<User>>(USER_API.CURRENT_USER);
-		if (status >= 400) {
+		const { data, status_code } = await getUserApi();
+		if (status_code >= 400) {
 			return;
 		}
-		const user = data.data;
-		account.value = user;
-		localStorage.setItem(Config.key.account, JSON.stringify(user));
+		account.value = data;
+		localStorage.setItem(Config.key.account, JSON.stringify(data));
 	};
 
 	const logout = async () => {
@@ -85,20 +91,26 @@ export const useAuthStore = defineStore('auth-store', () => {
 		localStorage.removeItem(Config.key.accessToken);
 		localStorage.removeItem(Config.key.refreshToken);
 		localStorage.removeItem(Config.key.account);
+		localStorage.removeItem(Config.key.organizationId);
 
 		access_token.value = '';
 		refresh_token.value = '';
+		organizationId.value = '';
+		account.value = null;
 	};
 
-	const setCurrenOrganization = (orgId: string) => {
-		localStorage.setItem('organization_id', orgId);
-	};
-
-	const setToken = (accessToken: string, refreshToken: string) => {
+	const setupAuth = async (accessToken: string, refreshToken: string) => {
 		access_token.value = accessToken;
 		refresh_token.value = refreshToken;
 		localStorage.setItem(Config.key.accessToken, accessToken);
 		localStorage.setItem(Config.key.refreshToken, refreshToken);
+
+		await getUser();
+	};
+
+	const setupOrg = (orgId: string) => {
+		localStorage.setItem(Config.key.organizationId, orgId);
+		organizationId.value = orgId;
 	};
 
 	const forgotPassword = async (email: string) => {
@@ -136,21 +148,33 @@ export const useAuthStore = defineStore('auth-store', () => {
 		return status;
 	};
 
+	const initOrganizationContext = async (payload: CreateOrganizationPayload) => {
+		const { data, status_code } = await createOrganizationApi(payload);
+		if (status_code >= 400) {
+			return status_code;
+		}
+
+		await setupAuth(data.access_token, data.refresh_token);
+		setupOrg(data.organization_id as string);
+		return status_code;
+	};
 	return {
 		isLoading,
 		isLoggedIn,
 		access_token,
 		refresh_token,
+		organizationId,
 		isForgotPassword,
 		forgot_password_token,
 		account,
 		login,
+		loginGG,
 		logout,
-		setToken,
+		setupAuth,
 		clearLocalStorage,
 		forgotPassword,
 		verifyCode,
 		resetPassword,
-		setupOrganization,
+		initOrganizationContext,
 	};
 });

@@ -1,4 +1,4 @@
-import type { IBaseResponse } from '@/types/index.ts';
+import type { IBaseResponse } from '@/types';
 import type { BaseUser } from '@/types/user.ts';
 
 export interface Organization extends IBaseResponse {
@@ -8,10 +8,4 @@ export interface Organization extends IBaseResponse {
 	joined_at: string;
 	is_owner: boolean;
 	created_by_user: BaseUser;
-}
-
-export interface CreateOrganizationPayload {
-	name: 'string';
-	address: 'string';
-	logo_url: 'string';
 }

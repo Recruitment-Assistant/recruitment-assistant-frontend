@@ -2,6 +2,7 @@ import { jobRoute } from '@/routers/modules/job.ts';
 import type { RouteRecordRaw } from 'vue-router';
 import { authRoute } from '@/routers/modules/auth.ts';
 import { landingRoute } from '@/routers/modules/landing.ts';
+import { organizationRoute } from '@/routers/modules/organization.ts';
 
 export const webRoutes: RouteRecordRaw[] = [
 	{
@@ -25,6 +26,12 @@ export const webRoutes: RouteRecordRaw[] = [
 		name: 'Jobs',
 		component: () => import('@/layouts/MainLayout.vue'),
 		children: jobRoute,
+	},
+	{
+		path: '/organization',
+		name: 'Organization',
+		component: () => import('@/layouts/PlainLayout.vue'),
+		children: organizationRoute,
 	},
 	{
 		path: '/',

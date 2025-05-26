@@ -7,6 +7,11 @@ export const jobRoute: RouteRecordRaw[] = [
 		component: () => import('@/pages/jobs/index.vue'),
 	},
 	{
+		path: 'create',
+		name: 'Create Job',
+		component: () => import('@/components/jobs/JobCreateView.vue'),
+	},
+	{
 		path: ':id',
 		name: 'Job Detail',
 		component: () => import('@/components/jobs/JobDetailView.vue'),

@@ -64,8 +64,7 @@ const refreshToken = async () => {
 	}
 
 	const token = data.data;
-	authStore.setToken(token.access_token, token.refresh_token);
-	await authStore.setupOrganization();
+	await authStore.setupAuth(token.access_token, token.refresh_token);
 	return true;
 };
 
@@ -89,12 +88,13 @@ axiosClient.interceptors.response.use(
 			}
 
 			authStore.clearLocalStorage();
-			router.push('/auth');
+			router.push('/auth/login');
 		}
 
 		const { showToast } = useCustomToast();
+		const data = error.response?.data as IApiResponseV1<any>;
 		showToast({
-			message: error.response.data.message,
+			message: data.error?.message || 'An error occurred',
 			type: 'error',
 		});
 

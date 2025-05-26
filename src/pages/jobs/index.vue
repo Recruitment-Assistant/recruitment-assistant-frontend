@@ -9,12 +9,10 @@ import InputWithIcon from '@/components/common/InputWithIcon.vue';
 import { Plus, Search } from 'lucide-vue-next';
 import { debounce } from '@/lib/utils.ts';
 import { Button } from '@/components/ui/button';
-import JobSheetForm from '@/components/jobs/JobSheetForm.vue';
 import JobCardItem from '@/components/jobs/JobCardItem.vue';
+import router from '@/routers';
 
 const jobStore = useJobStore();
-
-const isOpenModal = ref(false);
 
 const filters = ref<IJobFilter>({
 	page: DEFAULT_PAGE,
@@ -35,8 +33,9 @@ const fetchJobs = async () => {
 };
 
 const createJob = () => {
-	/* navigate to job creation */
+	router.push('/jobs/create');
 };
+
 const editJob = (id: string) => {
 	/* edit logic */
 };
@@ -51,14 +50,6 @@ const deleteJob = (id: string) => {
 };
 const onPageChange = (page: number) => {
 	currentPage.value = page;
-};
-
-const handleOpenModal = () => {
-	isOpenModal.value = true;
-};
-
-const handleCloseDialog = (open: boolean) => {
-	isOpenModal.value = open;
 };
 
 const handleSearch = (payload: string) => {
@@ -78,10 +69,7 @@ const debouncedFunction = debounce(fetchJobs, 300);
 				class="py-2 flex-1 max-w-2xl rounded-full"
 				placeholder="Search job"
 				@update:model-value="handleSearch" />
-			<Button
-				class="bg-blue-500 hover:bg-blue-600"
-				variant="default"
-				@click="handleOpenModal">
+			<Button class="bg-blue-500 hover:bg-blue-600" variant="default" @click="createJob">
 				<Plus :size="16" class="mr-2" />
 				Create a Job
 			</Button>
@@ -89,6 +77,5 @@ const debouncedFunction = debounce(fetchJobs, 300);
 		<ContentWrapper class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 			<JobCardItem v-for="job in jobStore.state.jobs" :key="job.id" :job="job" />
 		</ContentWrapper>
-		<JobSheetForm :model-value="isOpenModal" @update:open="handleCloseDialog" />
 	</ContentWrapper>
 </template>

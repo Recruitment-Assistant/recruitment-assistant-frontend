@@ -1,7 +1,6 @@
 import { z } from 'zod';
 
 export const jobSchema = z.object({
-	job_code: z.string().min(1, 'Job code is required'),
 	title: z.string().min(1, 'Title is required'),
 	description: z.string().min(1, 'Description is required'),
 	requirements: z.string().min(1, 'Requirements are required'),
@@ -21,8 +20,7 @@ export const jobSchema = z.object({
 		bonus_eligible: z.boolean().default(false),
 		equity_offered: z.boolean().default(false),
 	}),
-	department_id: z.string().nullable().optional(),
-	position_id: z.string().uuid('Invalid position ID format'),
+	department_id: z.string().optional(),
 });
 
 export type JobPayloadType = z.infer<typeof jobSchema>;

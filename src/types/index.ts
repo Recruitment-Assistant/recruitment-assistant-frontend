@@ -2,7 +2,7 @@ import type { HTMLAttributes } from 'vue';
 
 export * from './api.ts';
 export * from './exception.ts';
-export * from './organization.ts';
+export * from './organization';
 export * from './user.ts';
 export * from './jobs';
 export * from './department.ts';
@@ -22,6 +22,7 @@ export interface ITokenResponse {
 	refresh_token: string;
 	user_id: string;
 	token_expires: number;
+	organization_id?: string;
 }
 
 export interface RouteType {
@@ -45,7 +46,7 @@ export interface FormFieldCommon {
 	class?: HTMLAttributes['class'];
 	icon?: any;
 	required?: boolean;
-	modelValue?: string | number | string[];
+	modelValue?: string | number | string[] | File | boolean;
 	defaultValue?: string | number | string[];
 }
 

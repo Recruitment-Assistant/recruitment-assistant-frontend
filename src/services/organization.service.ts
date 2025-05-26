@@ -11,22 +11,12 @@ export const getMyOrganization = async (): Promise<Organization[]> => {
 	return data.data;
 };
 
-export const switchOrganization = async (organizationId: string): Promise<ITokenResponse> => {
-	const { data } = await axiosClient.post<IApiResponseV1<ITokenResponse>>(
-		`/auth/select-organization`,
-		{
-			organization_id: organizationId,
-		},
-	);
-	return data?.data;
-};
-
-export const createOrganization = async (
+export const createOrganizationApi = async (
 	payload: CreateOrganizationPayload,
-): Promise<Organization> => {
-	const { data } = await axiosClient.post<IApiResponseV1<Organization>>(
+): Promise<IApiResponseV1<ITokenResponse>> => {
+	const { data } = await axiosClient.post<IApiResponseV1<ITokenResponse>>(
 		'/organizations',
 		payload,
 	);
-	return data?.data;
+	return data;
 };

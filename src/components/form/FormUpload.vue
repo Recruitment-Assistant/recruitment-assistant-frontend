@@ -10,11 +10,22 @@ import Button from '../ui/button/Button.vue';
 import UserAvatar from '../common/UserAvatar.vue';
 import { CircleCheck, CircleX, RotateCcw, Upload, X } from 'lucide-vue-next';
 
-interface Prop extends FormFieldCommon {
-	type?: 'file' | 'photo';
+interface Props extends FormFieldCommon {
+	type?: 'document' | 'image';
+	allowedTypes?: string[];
+	maxFileSize?: number;
 }
 
-defineProps<Prop>();
+const props = withDefaults(defineProps<Props>(), {
+	type: 'image',
+	allowedTypes: ['.jpg', '.jpeg', '.png', '.gif', '.webp', '.svg'],
+	maxFileSize: 10 * 1024 * 1024,
+});
+
+const emits = defineEmits<{
+	(e: 'update:modelValue', value: string | File): void;
+	(e: 'delete'): void;
+}>();
 
 const { showToast } = useCustomToast();
 
@@ -24,62 +35,41 @@ const error = ref<any>();
 
 const handleFileUpload = (event: any) => {
 	error.value = undefined;
-	uploadProgress.value = 10;
 	const file = event.target.files[0];
 	processFile(file);
+	selectedFile.value = file;
+	emits('update:modelValue', selectedFile.value);
 };
 
-const processFile = (file: any) => {
-	if (!file) {
-		uploadProgress.value = 0;
-		return;
-	}
-	selectedFile.value = file;
-
-	const allowedTypes = [
-		'application/pdf',
-		'image/png',
-		'application/msword',
-		'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-	];
-	if (!allowedTypes.includes(file.type)) {
-		error.value = 1;
-		uploadProgress.value = 0;
-		showToast({
-			message: 'Invalid file type!',
-			type: 'error',
-		});
-		return;
-	}
-
-	if (file.size > 10 * 1024 * 1024) {
+const processFile = (file: File) => {
+	if (file.size > props.maxFileSize) {
 		error.value = 1;
 		uploadProgress.value = 0;
 		showToast({
 			message: 'File size exceeds 10MB.',
 			type: 'error',
 		});
-		return;
 	}
 
-	const interval = setInterval(() => {
-		uploadProgress.value += 20;
-		if (uploadProgress.value >= 100) {
-			uploadProgress.value = 0;
-			clearInterval(interval);
-		}
-	}, 300);
+	const fileExtension = '.' + file.name.split('.').pop().toLowerCase();
+	if (!props.allowedTypes.includes(fileExtension)) {
+		error.value = 1;
+		showToast({
+			message: 'Invalid file type!',
+			type: 'error',
+		});
+		return;
+	}
 };
 
 const handleRemoveFile = () => {
 	selectedFile.value = null;
-	uploadProgress.value = 0;
+	emits('delete');
 };
 
 const handleDrop = (event: DragEvent) => {
 	event.preventDefault();
 	error.value = undefined;
-	uploadProgress.value = 10;
 
 	const file = event.dataTransfer?.files[0];
 	processFile(file);

@@ -9,6 +9,10 @@ export const Config = {
 		accessToken: 'access_token',
 		refreshToken: 'refresh_token',
 		account: 'user',
+		organizationId: 'organization_id',
 	},
 	retryStatusCodes: [401],
+	oAuth: {
+		clientId: import.meta.env.VITE_GOOGLE_AUTH_CLIENT_ID,
+	},
 };

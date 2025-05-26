@@ -85,7 +85,6 @@ const viewDetail = () => {
 						<li v-if="job.closed_at">Closes: {{ formatDate(job.closed_at) }}</li>
 						<li>Remote: {{ job.remote_eligible ? 'Yes' : 'No' }}</li>
 						<li>Quantity: {{ job.quantity }}</li>
-						<li>Job Code: {{ job.job_code }}</li>
 					</ul>
 				</div>
 			</div>

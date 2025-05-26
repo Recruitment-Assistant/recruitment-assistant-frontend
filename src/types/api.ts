@@ -1,4 +1,4 @@
-import type { IPaging } from '@/types/index.ts';
+import type { ApiError, IPaging } from '@/types/index.ts';
 import { ORDER } from '@/constants';
 
 export interface IApiResponseV1<T> {
@@ -6,6 +6,7 @@ export interface IApiResponseV1<T> {
 	status_code: number;
 	data: T;
 	meta?: IPaging;
+	error?: ApiError;
 }
 
 export interface IFilterRequest {

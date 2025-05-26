@@ -13,6 +13,7 @@ import CallApiButton from '@/components/common/CallApiButton.vue';
 import { useAuthStore } from '@/stores/auth.store';
 import { ref } from 'vue';
 import { Lock, Mail } from 'lucide-vue-next';
+import { googleTokenLogin } from 'vue3-google-login';
 
 const authStore = useAuthStore();
 
@@ -34,6 +35,12 @@ const onSubmit = handleSubmit(async (values) => {
 		router.push('/');
 	}
 });
+
+const loginGoogle = () => {
+	googleTokenLogin().then((response) => {
+		authStore.loginGG(response.access_token);
+	});
+};
 </script>
 <template>
 	<div class="flex flex-col items-center gap-4">
@@ -87,6 +94,14 @@ const onSubmit = handleSubmit(async (values) => {
 				Login
 			</CallApiButton>
 		</form>
+
+		<Button
+			class="h-10 mt-8 w-full flex items-center gap-4 bg-slate-100"
+			variant="secondary"
+			@click="loginGoogle()">
+			<img alt="" class="w-5" src="@/assets/images/google-logo.png" />
+			Sign in with Google
+		</Button>
 
 		<div class="flex items-center gap-1 text-sm">
 			<p>Don't have an account.</p>

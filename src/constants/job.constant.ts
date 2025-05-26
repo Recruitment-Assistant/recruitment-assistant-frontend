@@ -33,3 +33,20 @@ export enum JOB_LEVEL {
 }
 
 export const ListJobLevel = convertEnumToComboboxType(JOB_LEVEL);
+
+export enum SALARY_INTERVAL {
+	HOURLY = 'HOURLY',
+	MONTHLY = 'MONTHLY',
+	YEARLY = 'YEARLY',
+}
+
+export const ListSalaryInterval = convertEnumToComboboxType(SALARY_INTERVAL);
+
+export enum SALARY_CURRENCY {
+	VND = 'VND',
+	USD = 'USD',
+	EUR = 'EUR',
+	GBP = 'GBP',
+}
+
+export const ListSalaryCurrency = convertEnumToComboboxType(SALARY_CURRENCY);
