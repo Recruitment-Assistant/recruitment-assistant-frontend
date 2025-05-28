@@ -1,42 +1,34 @@
 <script lang="ts" setup>
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form';
 import { Checkbox } from '@/components/ui/checkbox';
-import { cn } from '@/lib/utils';
 import type { FormFieldCommon } from '@/types';
 import FormErrorCustom from './FormErrorCustom.vue';
 
-interface Prop extends FormFieldCommon {
+interface Props extends FormFieldCommon {
 	checked?: boolean;
 	disabled?: boolean;
-	id?: string;
 	description?: string;
 }
 
-const props = defineProps<Prop>();
+defineProps<Props>();
 </script>
 
 <template>
-	<FormField v-slot="{ componentField }" :model-value="modelValue" :name="name">
-		<FormItem class="flex flex-row items-start space-x-3 space-y-0">
+	<FormField v-slot="{ value, handleChange }" :name="name" type="checkbox">
+		<FormItem class="flex flex-row items-start gap-x-3 space-y-0 rounded-md cursor-pointer">
 			<FormControl>
 				<Checkbox
-					:id="id || name"
-					:checked="checked"
-					:class="cn(props.class)"
 					:disabled="disabled"
-					v-bind="componentField" />
+					:model-value="value"
+					@update:model-value="handleChange" />
 			</FormControl>
-			<div class="space-y-1 leading-none">
-				<FormLabel v-if="label" :for="id || name" class="cursor-pointer">
-					{{ label }}
-				</FormLabel>
-				<FormDescription
-					v-if="$slots.description || description"
-					class="text-muted-foreground">
-					<slot name="description">{{ description }}</slot>
+			<div class="space-y-1 leading-none cursor-pointer">
+				<FormLabel>{{ label }}</FormLabel>
+				<FormDescription>
+					{{ description }}
 				</FormDescription>
+				<FormErrorCustom class="!mt-0" />
 			</div>
-			<FormErrorCustom class="!mt-0" />
 		</FormItem>
 	</FormField>
 </template>

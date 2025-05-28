@@ -1,54 +1,54 @@
 <script lang="ts" setup>
 import type { FormFieldCommon } from '@/types';
-import { FormControl, FormField, FormItem, FormLabel } from '../ui/form';
-import FormErrorCustom from './FormErrorCustom.vue';
-import { useVModel } from '@vueuse/core';
+import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import {
 	TagsInput,
+	TagsInputInput,
 	TagsInputItem,
 	TagsInputItemDelete,
 	TagsInputItemText,
-} from '@/components/ui/tags-input';
+} from '@/components/ui/tags-input/index.ts';
+import { cn } from '@/lib/utils.ts';
 
-interface Prop extends FormFieldCommon {
+interface Props extends FormFieldCommon {
 	maxTags?: number;
+	disabled?: boolean;
 }
 
-const props = withDefaults(defineProps<Prop>(), {
-	maxTags: 10,
-	placeholder: 'Type and press enter...',
-});
-
-const emits = defineEmits<{
-	(e: 'update:modelValue', payload: string[]): void;
-}>();
-
-const modelValue = useVModel(props, 'modelValue', emits, {
-	passive: true,
-	defaultValue: props.defaultValue || [],
-});
+defineProps<Props>();
 </script>
 
 <template>
-	<FormField v-slot="{ componentField }" :model-value="modelValue" :name="name">
-		<FormItem class="flex flex-col">
-			<FormLabel>{{ label }} <span v-if="!required">(optional)</span></FormLabel>
+	<FormField v-slot="{ componentField }" :name="name">
+		<FormItem>
+			<FormLabel v-if="label">{{ label }}</FormLabel>
 			<FormControl>
 				<TagsInput
+					:class="cn('min-h-10', inputClass)"
+					:disabled="disabled"
 					:model-value="componentField.modelValue"
 					@update:model-value="componentField['onUpdate:modelValue']">
-					<TagsInputItem
-						v-for="item in componentField.modelValue"
-						:key="item"
-						:value="item">
-						<TagsInputItemText />
-						<TagsInputItemDelete />
-					</TagsInputItem>
-
-					<TagsInput :placeholder="placeholder" />
+					<div class="flex gap-1 flex-wrap items-center">
+						<TagsInputItem
+							v-for="item in modelValue"
+							:key="item"
+							:value="item"
+							class="data-[state=active]:bg-muted">
+							<TagsInputItemText />
+							<TagsInputItemDelete />
+						</TagsInputItem>
+					</div>
+					<TagsInputInput
+						:class="
+							cn(
+								'flex-1 bg-transparent outline-none placeholder:text-muted-foreground',
+								inputClass,
+							)
+						"
+						:placeholder="placeholder" />
 				</TagsInput>
 			</FormControl>
-			<FormErrorCustom />
+			<FormMessage />
 		</FormItem>
 	</FormField>
 </template>

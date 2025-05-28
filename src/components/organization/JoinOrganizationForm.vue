@@ -28,7 +28,7 @@ const onSubmit = handleSubmit(async (values) => {
 	<form class="space-y-2" @submit="onSubmit">
 		<FormInput
 			:model-value="values.invite_code"
-			class="w-full"
+			inputClass="w-full"
 			label="Invite Code *"
 			name="invite_code"
 			placeholder="Enter your invite code" />

@@ -47,8 +47,10 @@ const viewDetail = () => {
 		<CardHeader>
 			<div class="flex justify-between items-start">
 				<div>
-					<CardTitle class="text-2xl font-bold text-gray-900">{{ job.title }}</CardTitle>
-					<CardDescription class="text-gray-600 mt-1"
+					<CardTitle class="text-2xl font-bold text-accent-foreground">{{
+						job.title
+					}}</CardTitle>
+					<CardDescription class="text-accent-foreground mt-1"
 						>{{ job.location }} •
 						{{ job.employment_type.replace('_', ' ').toLowerCase() }}
 					</CardDescription>
@@ -63,15 +65,15 @@ const viewDetail = () => {
 		<CardContent>
 			<div class="space-y-4">
 				<div>
-					<h3 class="text-lg font-semibold text-gray-800">Salary Range</h3>
-					<p class="text-gray-600">
+					<h3 class="text-lg font-semibold text-accent-foreground">Salary Range</h3>
+					<p class="text-accent-foreground">
 						{{ formatSalary(job.salary_range) }}
 						<span v-if="job?.salary_range?.bonus_eligible"> • Bonus Eligible</span>
 						<span v-if="job?.salary_range?.equity_offered"> • Equity Offered</span>
 					</p>
 				</div>
 				<div>
-					<h3 class="text-lg font-semibold text-gray-800">Tags</h3>
+					<h3 class="text-lg font-semibold text-accent-foreground">Tags</h3>
 					<div class="flex flex-wrap gap-2">
 						<Badge v-for="tag in job.tags" :key="tag" variant="outline">
 							{{ tag }}
@@ -79,8 +81,8 @@ const viewDetail = () => {
 					</div>
 				</div>
 				<div>
-					<h3 class="text-lg font-semibold text-gray-800">Details</h3>
-					<ul class="text-gray-600 space-y-1">
+					<h3 class="text-lg font-semibold text-accent-foreground">Details</h3>
+					<ul class="text-accent-foreground space-y-1">
 						<li>Published: {{ formatDate(job.published_at) }}</li>
 						<li v-if="job.closed_at">Closes: {{ formatDate(job.closed_at) }}</li>
 						<li>Remote: {{ job.remote_eligible ? 'Yes' : 'No' }}</li>
@@ -95,7 +97,6 @@ const viewDetail = () => {
 				class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors">
 				View details
 			</router-link>
-			<!--			<Button class="bg-blue-500 hover:bg-blue-600" @click="viewDetail">View details</Button>-->
 		</CardFooter>
 	</Card>
 </template>

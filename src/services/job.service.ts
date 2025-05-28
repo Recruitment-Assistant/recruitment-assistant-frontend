@@ -5,7 +5,7 @@ import { JOB_API } from '@/constants/api/job.api.ts';
 import { createApiEndpoint } from '@/lib/utils.ts';
 import type { JobPayloadType } from '@/types/jobs/job.schema.ts';
 
-export const getAllJobs = async (filter?: IJobFilter) => {
+export const getAllJobApi = async (filter?: IJobFilter) => {
 	const { data, status } = await axiosClient.get<IApiResponseV1<Job[]>>(JOB_API.BASE, {
 		params: filter,
 	});
@@ -15,7 +15,7 @@ export const getAllJobs = async (filter?: IJobFilter) => {
 	return data;
 };
 
-export const getJob = async (id: string) => {
+export const getJobApi = async (id: string) => {
 	const { data, status } = await axiosClient.get<IApiResponseV1<Job>>(`${JOB_API.BASE}/${id}`);
 	if (status >= 400) {
 		throw new Error();
@@ -23,7 +23,7 @@ export const getJob = async (id: string) => {
 	return data;
 };
 
-export const createJob = async (payload: JobPayloadType) => {
+export const createJobApi = async (payload: JobPayloadType) => {
 	const { data, status } = await axiosClient.post(JOB_API.BASE, payload);
 	if (status >= 400) {
 		throw new Error();

@@ -50,7 +50,7 @@ const navigateEnterOTP = () => {
 			<FormInput
 				:icon="Mail"
 				:required="true"
-				class="w-full"
+				inputClass="w-full"
 				label="Email"
 				name="email"
 				placeholder="Enter your email address" />

@@ -20,7 +20,7 @@ const props = defineProps<Prop>();
 		<FormItem class="flex flex-col">
 			<FormLabel>{{ label }} <span v-if="!required">(optional)</span></FormLabel>
 			<CommonCombobox
-				:class="cn(errors.length > 0 && 'border-destructive', props.class)"
+				:class="cn(errors.length > 0 && 'border-destructive', props.inputClass)"
 				:icon="icon"
 				:is-form="true"
 				:is-search="isSearch"

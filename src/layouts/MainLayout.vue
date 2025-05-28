@@ -18,7 +18,7 @@ router.beforeEach((to, from, next) => {
 });
 </script>
 <template>
-	<div class="bg-muted/80 min-h-screen flex transition-all duration-300 text-sm font-normal pr-5">
+	<div class="bg-muted/80 min-h-screen flex transition-all duration-100 text-sm font-normal pr-5">
 		<Sidebar />
 		<div class="flex-1">
 			<Header />

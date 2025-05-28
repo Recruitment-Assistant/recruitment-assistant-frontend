@@ -12,7 +12,7 @@ import FormErrorCustom from './FormErrorCustom.vue';
 import { Calendar, ChevronDown } from 'lucide-vue-next';
 
 interface Prop extends FormFieldCommon {
-	class?: HTMLAttributes['class'];
+	inputClass?: HTMLAttributes['class'];
 }
 
 const props = defineProps<Prop>();
@@ -47,7 +47,7 @@ const handleOpen = (open: boolean) => {
 									'w-[240px] gap-3 ps-3 p-3 h-auto text-start font-normal rounded-2xl border justify-start focus:border-blue-200',
 									!value && 'text-muted-foreground',
 									errors.length > 0 && 'border-destructive',
-									props.class,
+									props.inputClass,
 								)
 							"
 							variant="outline">

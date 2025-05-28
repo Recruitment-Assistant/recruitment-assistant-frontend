@@ -43,7 +43,7 @@ export interface FormFieldCommon {
 	name: string;
 	label: string;
 	placeholder?: string;
-	class?: HTMLAttributes['class'];
+	inputClass?: HTMLAttributes['class'];
 	icon?: any;
 	required?: boolean;
 	modelValue?: string | number | string[] | File | boolean;

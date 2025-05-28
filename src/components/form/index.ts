@@ -7,3 +7,5 @@ export { default as FormSelectArray } from './FormSelectArray.vue';
 export { default as FormTagsInput } from './FormTagsInput.vue';
 export { default as FormTextarea } from './FormTextarea.vue';
 export { default as FormUpload } from './FormUpload.vue';
+export { default as FormCheckbox } from './FormCheckbox.vue';
+export { default as FormCombobox } from './FormCombobox.vue';

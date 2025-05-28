@@ -55,7 +55,7 @@ const handleRemoveFile = () => {
 		<FormInput
 			:model-value="values.name"
 			:required="true"
-			class="w-full"
+			inputClass="w-full"
 			label="Organization Name *"
 			name="name"
 			placeholder="Enter organization name" />
@@ -63,7 +63,7 @@ const handleRemoveFile = () => {
 		<FormInput
 			:model-value="values.address"
 			:required="true"
-			class="w-full"
+			inputClass="w-full"
 			label="Address"
 			name="address"
 			placeholder="Enter organization address" />
@@ -71,7 +71,7 @@ const handleRemoveFile = () => {
 		<FormTextarea
 			:model-value="values.description"
 			:required="true"
-			class="w-full"
+			inputClass="w-full"
 			label="Description (Optional)"
 			name="description"
 			placeholder="Brief description of your organization" />

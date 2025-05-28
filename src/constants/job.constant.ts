@@ -2,11 +2,9 @@ import { convertEnumToComboboxType } from '@/helpers';
 
 export enum JOB_STATUS {
 	DRAFT = 'DRAFT',
-	PUBLISHED = 'PUBLISHED',
+	OPENING = 'OPENING',
 	CLOSED = 'CLOSED',
-	FILLED = 'FILLED',
-	CANCELLED = 'CANCELLED',
-	ARCHIVED = 'ARCHIVED',
+	CANCELED = 'CANCELED',
 }
 
 export const ListJobStatus = convertEnumToComboboxType(JOB_STATUS);
@@ -35,9 +33,11 @@ export enum JOB_LEVEL {
 export const ListJobLevel = convertEnumToComboboxType(JOB_LEVEL);
 
 export enum SALARY_INTERVAL {
-	HOURLY = 'HOURLY',
-	MONTHLY = 'MONTHLY',
-	YEARLY = 'YEARLY',
+	Hourly = 'hourly',
+	Daily = 'daily',
+	Weekly = 'weekly',
+	Monthly = 'monthly',
+	Yearly = 'yearly',
 }
 
 export const ListSalaryInterval = convertEnumToComboboxType(SALARY_INTERVAL);

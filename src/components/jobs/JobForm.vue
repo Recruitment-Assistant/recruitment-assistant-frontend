@@ -1,5 +1,11 @@
 <script lang="ts" setup>
-import { FormInput, FormMarkdown, FormTagsInput } from '@/components/form';
+import {
+	FormCheckbox,
+	FormCombobox,
+	FormInput,
+	FormMarkdown,
+	FormTagsInput,
+} from '@/components/form';
 import { useDepartment } from '@/composables/department';
 import {
 	ListEmploymentType,
@@ -15,11 +21,10 @@ import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
 import PageHeader from '@/components/common/PageHeader.vue';
 import ContentWrapper from '@/components/common/ContentWrapper.vue';
-import CallApiButton from '@/components/common/CallApiButton.vue';
-import FormCombobox from '@/components/form/FormCombobox.vue';
-import { BriefcaseBusiness, Building, MapPin, User } from 'lucide-vue-next';
+import { BriefcaseBusiness, Building, Loader2, MapPin, User } from 'lucide-vue-next';
 import { Label } from '@/components/ui/label';
-import FormCheckbox from '@/components/form/FormCheckbox.vue';
+import { Button } from '@/components/ui/button';
+import { createJobApi } from '@/services/job.service.ts';
 
 const { data: departments } = useDepartment();
 
@@ -40,7 +45,7 @@ const { handleSubmit, values } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values: JobPayloadType) => {
-	console.log(values);
+	await createJobApi(values);
 });
 </script>
 
@@ -54,7 +59,7 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 					<FormItem>
 						<FormControl>
 							<Input
-								class="focus-visible:ring-0 focus-visible:ring-offset-0 border-none text-[28px] text-black px-0 placeholder:text-gray-200 font-semibold p-2"
+								class="focus-visible:ring-0 focus-visible:ring-offset-0 border-none text-[28px] text-accent-foreground px-0 placeholder:text-gray-200 font-semibold p-2"
 								placeholder="Enter job title"
 								v-bind="componentField" />
 						</FormControl>
@@ -68,7 +73,7 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 						:icon="MapPin"
 						:modelValue="values.location"
 						:required="true"
-						class="w-full"
+						inputClass="w-full"
 						label="Location"
 						name="location"
 						placeholder="Da Nang" />
@@ -77,7 +82,7 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 						:icon="User"
 						:modelValue="values.quantity"
 						:required="true"
-						class="w-full"
+						inputClass="w-full"
 						label="Quantity"
 						name="quantity"
 						placeholder="Enter quantity"
@@ -103,14 +108,14 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 						name="department_id"
 						placeholder="Select department" />
 
-					<FormTagsInput
-						:modelValue="values.tags"
-						:required="true"
-						label="Tags"
-						name="tags"
-						placeholder="Tags" />
+					<div class="flex flex-col space-y-2">
+						<FormTagsInput
+							:modelValue="values.tags"
+							:required="true"
+							label="Tags"
+							name="tags"
+							placeholder="Tags" />
 
-					<div class="flex items-center space-x-2">
 						<FormCheckbox
 							:model-value="values.remote_eligible"
 							label="Remote Work Eligible"
@@ -125,7 +130,7 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 							<FormInput
 								:modelValue="values.salary_range?.min"
 								:required="true"
-								class="w-full"
+								inputClass="w-full"
 								label="Minimum"
 								name="salary_range.min"
 								placeholder="0"
@@ -133,7 +138,7 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 							<FormInput
 								:modelValue="values.salary_range?.max"
 								:required="true"
-								class="w-full"
+								inputClass="w-full"
 								label="Maximum"
 								name="salary_range.max"
 								placeholder="0"
@@ -145,7 +150,7 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 								:list="ListSalaryCurrency"
 								:modelValue="values.salary_range?.currency"
 								:required="true"
-								class="w-full"
+								inputClass="w-full"
 								label="Currency"
 								list-size="md"
 								name="salary_range.currency"
@@ -155,26 +160,22 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 								:list="ListSalaryInterval"
 								:modelValue="values.salary_range?.interval"
 								:required="true"
-								class="w-full"
+								inputClass="w-full"
 								label="Interval"
 								list-size="md"
 								name="salary_range.interval"
 								placeholder="Select interval" />
 						</div>
 
-						<div class="space-y-3">
-							<div class="flex items-center space-x-2">
-								<FormCheckbox
-									:model-value="values.salary_range?.bonus_eligible"
-									label="Bonus Eligible"
-									name="bonus_eligible" />
-							</div>
-							<div class="flex items-center space-x-2">
-								<FormCheckbox
-									:model-value="values.salary_range?.equity_offered"
-									label="Equity Offered"
-									name="equity_offered" />
-							</div>
+						<div class="grid grid-cols-2 gap-x-2 mt-2">
+							<FormCheckbox
+								:model-value="values.salary_range?.bonus_eligible"
+								label="Bonus Eligible"
+								name="bonus_eligible" />
+							<FormCheckbox
+								:model-value="values.salary_range?.equity_offered"
+								label="Equity Offered"
+								name="equity_offered" />
 						</div>
 					</div>
 				</div>
@@ -182,7 +183,7 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 				<div class="mt-6 grid gap-4">
 					<FormMarkdown
 						:model-value="values.description"
-						class="rounded-2xl focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-200 h-72"
+						inputClass="rounded-2xl focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-200 h-72"
 						label="Job description"
 						name="description"
 						placeholder="A detailed job description" />
@@ -196,19 +197,21 @@ const onSubmit = handleSubmit(async (values: JobPayloadType) => {
 				</div>
 
 				<div class="flex flex-row justify-end mt-4 gap-x-3">
-					<CallApiButton
-						:isLoading="isLoading"
-						class="bg-accent-foreground/40 hover:bg-gray-300 rounded-2xl h-auto py-3.5 px-10 text-white"
-						form="form">
-						Save as Draft
-					</CallApiButton>
+					<Button
+						class="bg-accent-foreground/40 hover:bg-gray-300 rounded-2xl h-auto py-3.5 px-10 text-white">
+						<Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+						<BriefcaseBusiness v-else class="w-4 h-4 mr-2" />
+						{{ isLoading ? 'Saving...' : 'Save as draft' }}
+					</Button>
 
-					<CallApiButton
-						:isLoading="isLoading"
-						class="bg-blue-500 hover:bg-blue-400 rounded-2xl h-auto py-3.5 px-10 text-white"
-						form="form">
-						Save
-					</CallApiButton>
+					<Button
+						:disabled="isLoading || !values.title"
+						class="h-11 font-medium hover:bg-blue-400"
+						type="submit">
+						<Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+						<BriefcaseBusiness v-else class="w-4 h-4 mr-2" />
+						{{ isLoading ? 'Creating...' : 'Create Job' }}
+					</Button>
 				</div>
 			</form>
 		</ScrollArea>

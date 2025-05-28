@@ -50,22 +50,28 @@ const refreshToken = async () => {
 	const authStore = useAuthStore();
 	const refresh_token = localStorage.getItem(Config.key.refreshToken);
 
-	const { data, status } = await axiosClient.post<IApiResponseV1<ITokenResponse>>(
-		Config.path.refreshToken,
-		{
-			refresh_token,
-		},
-	);
+	if (!refresh_token) {
+		authStore.clearLocalStorage();
+		router.push('/auth');
+		return false;
+	}
 
-	if (status >= 400) {
+	try {
+		const { data } = await axiosClient.post<IApiResponseV1<ITokenResponse>>(
+			Config.path.refreshToken,
+			{
+				refresh_token,
+			},
+		);
+
+		const token = data.data;
+		await authStore.setupAuth(token.access_token, token.refresh_token);
+		return true;
+	} catch (error) {
 		authStore.clearLocalStorage();
 		router.push('/auth/login');
 		return false;
 	}
-
-	const token = data.data;
-	await authStore.setupAuth(token.access_token, token.refresh_token);
-	return true;
 };
 
 axiosClient.interceptors.response.use(

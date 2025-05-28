@@ -33,7 +33,7 @@ const modelValue = useVModel(props, 'modelValue', emits, {
 				<InputWithIcon
 					:class="
 						cn(
-							props.class,
+							props.inputClass,
 							errors.length
 								? 'border-destructive focus-within:border-destructive'
 								: 'focus-within:border-blue-100 ',

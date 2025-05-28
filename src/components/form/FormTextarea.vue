@@ -16,7 +16,7 @@ const props = defineProps<Prop>();
 			<FormLabel>{{ label }}</FormLabel>
 			<FormControl>
 				<Textarea
-					:class="cn(props.class)"
+					:class="cn(props.inputClass)"
 					:placeholder="placeholder"
 					class="resize-none focus-visible:ring-0 focus-visible:ring-offset-0"
 					v-bind="componentField" />

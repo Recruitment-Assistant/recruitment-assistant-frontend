@@ -77,7 +77,7 @@ const handleOpen = (value: boolean) => {
 								:class="
 									cn(
 										'rounded-2xl p-3 h-auto !pl-10 focus:border-blue-100 focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-200 text-slate-600',
-										props.class,
+										props.inputClass,
 										errors.length > 0 && 'border-destructive',
 									)
 								"
@@ -99,7 +99,7 @@ const handleOpen = (value: boolean) => {
 								:class="[
 									cn(
 										'rounded-2xl p-3 w-full font-normal border justify-start h-auto focus:border-blue-100 text-gray-200 hover:text-gray-200',
-										props.class,
+										props.inputClass,
 									),
 									icon ? 'pl-10' : '',
 									comboboxInput !== '' && comboboxInput !== placeholder

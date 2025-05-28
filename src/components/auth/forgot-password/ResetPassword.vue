@@ -57,7 +57,7 @@ const navigateEnterOTP = () => {
 			<FormInput
 				:icon="LockKeyhole"
 				:required="true"
-				class="w-full"
+				inputClass="w-full"
 				label="Password"
 				name="password"
 				placeholder="Enter your password"
@@ -68,7 +68,7 @@ const navigateEnterOTP = () => {
 			<FormInput
 				:icon="LockKeyhole"
 				:required="true"
-				class="w-full"
+				inputClass="w-full"
 				label="Confirm password"
 				name="confirm_password"
 				placeholder="Enter your confirm password"
