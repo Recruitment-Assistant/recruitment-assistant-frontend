@@ -2,7 +2,7 @@
 import { ref } from 'vue';
 import { useJobStore } from '@/stores/job.store.ts';
 import JobDetailsPanel from './JobDetailsPanel.vue';
-import JobForm from './JobForm.vue';
+import MCreateJob from './MCreateJob.vue';
 
 const jobStore = useJobStore();
 const isResizing = ref(false);
@@ -47,7 +47,7 @@ const stopResize = () => {
 <template>
 	<div class="resizable-container flex h-[calc(100vh-6rem)]">
 		<!-- Left Panel: Job Form -->
-		<JobForm
+		<MCreateJob
 			:style="{ width: `${leftPanelWidth}%` }"
 			class="transition-width duration-75 ease-in-out relative overflow-y-auto" />
 

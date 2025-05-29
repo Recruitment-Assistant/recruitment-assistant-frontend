@@ -10,20 +10,27 @@ import { Plus, Search } from 'lucide-vue-next';
 import { debounce } from '@/lib/utils.ts';
 import { Button } from '@/components/ui/button';
 import JobCardItem from '@/components/jobs/JobCardItem.vue';
-import router from '@/routers';
+import MCreateJob from '@/components/jobs/MCreateJob.vue';
+import ServerPagination from '@/components/datatable/ServerPagination.vue';
 
 const jobStore = useJobStore();
+const meta = jobStore.state.jobMeta;
 
 const filters = ref<IJobFilter>({
 	page: DEFAULT_PAGE,
 	limit: DEFAULT_PAGE_SIZE,
 	keywords: '',
 });
-
-const currentPage = ref(1);
-const totalPages = 5;
+const isModalOpen = ref(false);
 
 onBeforeMount(() => {
+	if (meta?.limit) {
+		filters.value.limit = meta.limit;
+	}
+
+	if (meta?.current_page) {
+		filters.value.page = meta.current_page;
+	}
 	fetchJobs();
 });
 
@@ -32,8 +39,8 @@ const fetchJobs = async () => {
 	await jobStore.fetchJobs(filters.value);
 };
 
-const createJob = () => {
-	router.push('/jobs/create');
+const openModal = () => {
+	isModalOpen.value = true;
 };
 
 const editJob = (id: string) => {
@@ -47,9 +54,6 @@ const duplicateJob = (id: string) => {
 };
 const deleteJob = (id: string) => {
 	/* delete logic */
-};
-const onPageChange = (page: number) => {
-	currentPage.value = page;
 };
 
 const handleSearch = (payload: string) => {
@@ -69,13 +73,18 @@ const debouncedFunction = debounce(fetchJobs, 300);
 				class="py-2 flex-1 max-w-2xl rounded-full"
 				placeholder="Search job"
 				@update:model-value="handleSearch" />
-			<Button class="bg-blue-500 hover:bg-blue-600" variant="default" @click="createJob">
+			<Button class="bg-blue-500 hover:bg-blue-600" variant="default" @click="openModal">
 				<Plus :size="16" class="mr-2" />
 				Create a Job
 			</Button>
 		</div>
-		<ContentWrapper class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+		<ContentWrapper
+			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto">
 			<JobCardItem v-for="job in jobStore.state.jobs" :key="job.id" :job="job" />
 		</ContentWrapper>
+
+		<ServerPagination :meta="meta" />
+
+		<MCreateJob v-model:open="isModalOpen" class="w-full" />
 	</ContentWrapper>
 </template>

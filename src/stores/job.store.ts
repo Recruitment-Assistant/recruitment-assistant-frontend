@@ -13,7 +13,7 @@ export const useJobStore = defineStore('job-store', () => {
 		currentJob: null,
 		loading: false,
 		error: null,
-		jobMeta: null,
+		jobMeta: undefined,
 	});
 
 	/**
@@ -30,6 +30,7 @@ export const useJobStore = defineStore('job-store', () => {
 
 		const response = await getAllJobApi(filter);
 		state.value.jobs = response.data;
+		state.value.jobMeta = response.meta;
 		state.value.loading = false;
 	};
 

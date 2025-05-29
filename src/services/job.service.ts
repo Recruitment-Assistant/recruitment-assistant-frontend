@@ -23,7 +23,7 @@ export const getJobApi = async (id: string) => {
 	return data;
 };
 
-export const createJobApi = async (payload: JobPayloadType) => {
+export const createJobApi = async (payload: JobPayloadType): Promise<IApiResponseV1<Job>> => {
 	const { data, status } = await axiosClient.post(JOB_API.BASE, payload);
 	if (status >= 400) {
 		throw new Error();

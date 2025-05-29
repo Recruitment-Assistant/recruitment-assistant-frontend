@@ -1,11 +1,4 @@
-import type {
-	BaseUser,
-	Department,
-	IBaseResponse,
-	IFilterRequest,
-	IPaging,
-	Position,
-} from '@/types';
+import type { BaseUser, Department, IBaseResponse, IFilterRequest, IPaging } from '@/types';
 import { EMPLOYMENT_TYPE, type JOB_STATUS } from '@/constants/job.constant.ts';
 
 export interface IJobFilter extends IFilterRequest {}
@@ -42,7 +35,7 @@ export interface JobState {
 	currentJob: Job | null;
 	loading: boolean;
 	error: string | null;
-	jobMeta: IPaging | null;
+	jobMeta?: IPaging;
 }
 
 export interface Education {
