@@ -1,14 +1,25 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 import { useJobStore } from '@/stores/job.store.ts';
+import { useRoute } from 'vue-router';
 import JobDetailsPanel from './JobDetailsPanel.vue';
-import MCreateJob from './MCreateJob.vue';
+import JobApplicationPanel from '@/components/jobs/JobApplicationPanel.vue';
+
+const props = defineProps<{
+	id?: string;
+}>();
 
 const jobStore = useJobStore();
 const isResizing = ref(false);
 const leftPanelWidth = ref(66.666); // Default 2/3 width in percentage
 const startX = ref(0);
 const startLeftWidth = ref(0);
+
+onBeforeMount(() => {
+	const route = useRoute();
+	const jobId = props.id || (route.params.id as string);
+	jobStore.getJobById(jobId);
+});
 
 // Resize panel functionality
 const startResize = (e: MouseEvent) => {
@@ -46,10 +57,10 @@ const stopResize = () => {
 
 <template>
 	<div class="resizable-container flex h-[calc(100vh-6rem)]">
-		<!-- Left Panel: Job Form -->
-		<MCreateJob
+		<!-- Left Panel: Job Details -->
+		<JobDetailsPanel
 			:style="{ width: `${leftPanelWidth}%` }"
-			class="transition-width duration-75 ease-in-out relative overflow-y-auto" />
+			class="transition-width duration-75 ease-in-out" />
 
 		<!-- Resize Handle -->
 		<div
@@ -58,8 +69,8 @@ const stopResize = () => {
 			<div class="w-0.5 h-8 bg-border rounded-full"></div>
 		</div>
 
-		<!-- Right Panel: Job Preview -->
-		<JobDetailsPanel
+		<!-- Right Panel: Job Application -->
+		<JobApplicationPanel
 			:style="{ width: `${100 - leftPanelWidth}%` }"
 			class="transition-width duration-75 ease-in-out" />
 	</div>

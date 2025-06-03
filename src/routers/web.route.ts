@@ -13,19 +13,8 @@ export const webRoutes: RouteRecordRaw[] = [
 	},
 	{
 		path: '/auth',
-		component: () => import('@/layouts/PlainLayout.vue'),
-		children: authRoute,
-	},
-	{
-		path: '/auth',
 		component: () => import('@/pages/auth/index.vue'),
 		children: authRoute,
-	},
-	{
-		path: '/jobs',
-		name: 'Jobs',
-		component: () => import('@/layouts/MainLayout.vue'),
-		children: jobRoute,
 	},
 	{
 		path: '/organization',
@@ -34,7 +23,7 @@ export const webRoutes: RouteRecordRaw[] = [
 		children: organizationRoute,
 	},
 	{
-		path: '/',
+		path: '',
 		name: 'Home',
 		redirect: '/dashboard',
 		component: () => import('@/layouts/MainLayout.vue'),
@@ -48,22 +37,28 @@ export const webRoutes: RouteRecordRaw[] = [
 				component: () => import('@/pages/dashboard/index.vue'),
 			},
 			{
-				path: 'candidates',
+				path: '/jobs',
+				name: 'Jobs',
+				component: () => import('@/pages/jobs/index.vue'),
+				children: jobRoute,
+			},
+			{
+				path: '/candidates',
 				name: 'Candidates',
 				component: () => import('@/pages/candidates/index.vue'),
 			},
 			{
-				path: 'interviews',
+				path: '/interviews',
 				name: 'Interviews',
 				component: () => import('@/pages/interviews/index.vue'),
 			},
 			{
-				path: 'talent-pool',
+				path: '/talent-pool',
 				name: 'Talent Pool',
 				component: () => import('@/pages/talent-pool/index.vue'),
 			},
 			{
-				path: 'settings',
+				path: '/settings',
 				name: 'Settings',
 				component: () => import('@/pages/settings/index.vue'),
 			},

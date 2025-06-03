@@ -1,6 +1,6 @@
 import type { RouteRecordRaw } from 'vue-router';
 
-export const organizationRoute: RouteRecordRaw = [
+export const organizationRoute: RouteRecordRaw[] = [
 	{
 		path: 'create',
 		name: 'Landing Page',

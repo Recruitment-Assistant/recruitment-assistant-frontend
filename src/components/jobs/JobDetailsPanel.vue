@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
 import { useJobStore } from '@/stores/job.store.ts';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { BriefcaseBusiness, Calendar, MapPin, NotebookPen, Tag } from 'lucide-vue-next';
@@ -43,9 +43,6 @@ const getStatusVariant = (status: string) => {
 			<div class="flex justify-between items-start">
 				<div>
 					<CardTitle class="text-2xl font-bold">{{ job?.title }}</CardTitle>
-					<CardDescription class="text-primary font-medium">
-						{{ job?.job_code }}
-					</CardDescription>
 				</div>
 				<Badge :variant="getStatusVariant(job?.status as string) as any">
 					{{ job?.status?.toLowerCase() }}
