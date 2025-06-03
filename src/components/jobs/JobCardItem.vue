@@ -1,12 +1,5 @@
 <script lang="ts" setup>
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { defineProps } from 'vue';
 import type { Job } from '@/types';
@@ -48,10 +41,11 @@ const viewDetail = () => {
 			<div class="flex justify-between items-start">
 				<div>
 					<CardTitle class="text-2xl font-bold text-accent-foreground">{{
-						job.title
-					}}</CardTitle>
+							job.title
+						}}
+					</CardTitle>
 					<CardDescription class="text-accent-foreground mt-1"
-						>{{ job.location }} •
+					>{{ job.location }} •
 						{{ job.employment_type.replace('_', ' ').toLowerCase() }}
 					</CardDescription>
 				</div>
@@ -93,7 +87,7 @@ const viewDetail = () => {
 		</CardContent>
 		<CardFooter class="flex justify-end">
 			<router-link
-				:to="`/jobs/${job.id}`"
+				:to="`/recruiter/jobs/${job.id}`"
 				class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors">
 				View details
 			</router-link>

@@ -64,7 +64,7 @@ export const useAuthStore = defineStore('auth-store', () => {
 		}
 		isLoading.value = false;
 
-		router.push('/');
+		router.push('/recruiter');
 		return status_code;
 	};
 

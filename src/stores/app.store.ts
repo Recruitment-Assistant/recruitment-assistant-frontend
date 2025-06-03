@@ -16,21 +16,21 @@ export const useAppStore = defineStore('app-store', () => {
 	const routeList = ref<RouteType[]>([
 		{
 			id: '10000',
-			path: '/dashboard',
+			path: '/recruiter/dashboard',
 			name: 'Dashboard',
 			icon: LayoutDashboard,
 			activeIcon: LayoutDashboard,
 		},
 		{
 			id: '20000',
-			path: '/jobs',
+			path: '/recruiter/jobs',
 			name: 'Jobs',
 			icon: BriefcaseBusiness,
 			activeIcon: BriefcaseBusiness,
 		},
 		{
 			id: '30000',
-			path: '/candidates',
+			path: '/recruiter/candidates',
 			name: 'Candidates',
 			icon: Users,
 			activeIcon: Users,
@@ -38,13 +38,13 @@ export const useAppStore = defineStore('app-store', () => {
 		{
 			id: '40000',
 			name: 'Interviews',
-			path: '/interviews',
+			path: '/recruiter/interviews',
 			icon: Calendar,
 			activeIcon: Calendar,
 		},
 		{
 			id: '50000',
-			path: '/talent-pool',
+			path: '/recruiter/talent-pool',
 			name: 'Talent pool',
 			icon: Search,
 			activeIcon: Search,
@@ -52,7 +52,7 @@ export const useAppStore = defineStore('app-store', () => {
 		{
 			id: '60000',
 			name: 'Settings',
-			path: '/settings',
+			path: '/recruiter/settings',
 			icon: Settings,
 			activeIcon: Settings,
 		},

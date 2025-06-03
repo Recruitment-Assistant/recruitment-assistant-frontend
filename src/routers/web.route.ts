@@ -1,15 +1,20 @@
-import { jobRoute } from '@/routers/modules/job.ts';
 import type { RouteRecordRaw } from 'vue-router';
 import { authRoute } from '@/routers/modules/auth.ts';
-import { landingRoute } from '@/routers/modules/landing.ts';
 import { organizationRoute } from '@/routers/modules/organization.ts';
+import { publicJobRoute } from '@/routers/modules/public-job.ts';
+import { recruiterRoute } from '@/routers/modules/recruiter';
 
 export const webRoutes: RouteRecordRaw[] = [
 	{
 		path: '/landing',
-		name: 'Landing',
+		name: 'Landing Page',
+		component: () => import('@/pages/LandingPage.vue'),
+	},
+	{
+		path: '/jobs',
+		name: 'Public Job Pages',
 		component: () => import('@/layouts/PlainLayout.vue'),
-		children: landingRoute,
+		children: publicJobRoute,
 	},
 	{
 		path: '/auth',
@@ -23,50 +28,13 @@ export const webRoutes: RouteRecordRaw[] = [
 		children: organizationRoute,
 	},
 	{
-		path: '',
+		path: '/recruiter',
 		name: 'Home',
-		redirect: '/dashboard',
+		redirect: '/recruiter/dashboard',
 		component: () => import('@/layouts/MainLayout.vue'),
 		meta: {
 			requiresAuth: true,
 		},
-		children: [
-			{
-				path: '/dashboard',
-				name: 'Dashboard',
-				component: () => import('@/pages/dashboard/index.vue'),
-			},
-			{
-				path: '/jobs',
-				name: 'Jobs',
-				component: () => import('@/pages/jobs/index.vue'),
-				children: jobRoute,
-			},
-			{
-				path: '/candidates',
-				name: 'Candidates',
-				component: () => import('@/pages/candidates/index.vue'),
-			},
-			{
-				path: '/interviews',
-				name: 'Interviews',
-				component: () => import('@/pages/interviews/index.vue'),
-			},
-			{
-				path: '/talent-pool',
-				name: 'Talent Pool',
-				component: () => import('@/pages/talent-pool/index.vue'),
-			},
-			{
-				path: '/settings',
-				name: 'Settings',
-				component: () => import('@/pages/settings/index.vue'),
-			},
-			{
-				path: '/test',
-				name: 'Test',
-				component: () => import('@/pages/test/index.vue'),
-			},
-		],
+		children: recruiterRoute,
 	},
 ];

@@ -32,7 +32,7 @@ const { handleSubmit, values } = useForm({
 const onSubmit = handleSubmit(async (values) => {
 	const status = await authStore.login(values, remember.value);
 	if (status === 200) {
-		router.push('/');
+		router.push('/recruiter');
 	}
 });
 

@@ -6,23 +6,4 @@ export const landingRoute: RouteRecordRaw[] = [
 		name: 'Landing Page',
 		component: () => import('@/pages/LandingPage.vue'),
 	},
-	{
-		path: ':id',
-		name: 'Job Detail',
-		component: () => import('@/components/jobs/JobDetailView.vue'),
-		props: (route: any): { id: string } => ({
-			id: route.params.id,
-		}),
-	},
-	{
-		path: ':id/apply',
-		name: 'Apply job',
-		meta: {
-			layout: () => import('@/layouts/PlainLayout.vue'),
-		},
-		component: () => import('@/components/jobs/JobDetailView.vue'),
-		props: (route: any): { id: string } => ({
-			id: route.params.id,
-		}),
-	},
 ];

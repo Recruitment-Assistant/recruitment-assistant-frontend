@@ -35,7 +35,7 @@ router.beforeEach(async (to, from, next) => {
 	const isAuthForgotPassword = to.matched.some((record) => record.meta.requiresForgotPassword);
 	const isCreateOrganizationRoute = to.path === '/organization/create';
 	const isJoinOrganizationRoute = to.path === '/organization/join';
-	const isLandingPage = to.path === '/landing';
+	const isLandingPage = to.path === '/landing' || to.path === '/';
 
 	if (isAuthForgotPassword && !authStore.isForgotPassword) {
 		next('/auth/forgot-password');
@@ -53,12 +53,13 @@ router.beforeEach(async (to, from, next) => {
 	}
 
 	if (isLoggedIn && hasOrganization && (isCreateOrganizationRoute || isJoinOrganizationRoute)) {
-		return next('/');
+		return next('/recruiter');
 	}
 
 	if (isLoggedIn && isLandingPage) {
-		return next('/');
+		return next('/recruiter');
 	}
+	console.log(to.path);
 
 	next();
 });
