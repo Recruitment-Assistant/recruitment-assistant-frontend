@@ -1,10 +1,12 @@
-import type { BaseUser, Department, IBaseResponse, IFilterRequest, IPaging } from '@/types';
+import type { BaseUser, Department, IBaseResponse, IFilterRequest, IPaging, Pipeline } from '@/types';
 import { EMPLOYMENT_TYPE, type JOB_STATUS } from '@/constants/job.constant.ts';
 
-export interface IJobFilter extends IFilterRequest {}
+export interface IJobFilter extends IFilterRequest {
+}
 
 export interface Job extends IBaseResponse {
 	title: string;
+	pipeline_id: string;
 	description: string;
 	requirements: string;
 	tags: string[];
@@ -28,6 +30,7 @@ export interface Job extends IBaseResponse {
 	created_by: string;
 	department?: Department;
 	creator?: BaseUser;
+	pipeline?: Pipeline;
 }
 
 export interface JobState {

@@ -21,6 +21,7 @@ export const jobSchema = z.object({
 		equity_offered: z.boolean().default(false),
 	}),
 	department_id: z.string().optional(),
+	pipeline_id: z.string(),
 });
 
 export type JobPayloadType = z.infer<typeof jobSchema>;

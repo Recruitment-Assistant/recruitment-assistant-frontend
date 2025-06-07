@@ -1,20 +1,36 @@
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref } from 'vue';
 import ContentWrapper from '@/components/common/ContentWrapper.vue';
 import Title from '@/components/common/Title.vue';
 import { useJobStore } from '@/stores/job.store.ts';
 import type { IJobFilter } from '@/types/jobs/job.ts';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/constants';
-import InputWithIcon from '@/components/common/InputWithIcon.vue';
-import { Plus, Search } from 'lucide-vue-next';
-import { debounce } from '@/lib/utils.ts';
+import { Plus } from 'lucide-vue-next';
+import { debounce, valueUpdater } from '@/lib/utils.ts';
 import { Button } from '@/components/ui/button';
-import JobCardItem from '@/components/jobs/JobCardItem.vue';
 import MCreateJob from '@/components/jobs/MCreateJob.vue';
-import ServerPagination from '@/components/datatable/ServerPagination.vue';
+import {
+	getCoreRowModel,
+	getFacetedMinMaxValues,
+	getFacetedRowModel,
+	getFacetedUniqueValues,
+	getFilteredRowModel,
+	getPaginationRowModel,
+	getSortedRowModel,
+	type PaginationState,
+	useVueTable,
+	type VisibilityState,
+} from '@tanstack/vue-table';
+import { jobColumn } from '@/components/jobs/job.column.ts';
+import type { IPaging } from '@/types';
+import { useRoute } from 'vue-router';
+import DataTable from '@/components/datatable/DataTable.vue';
+import DataTablePagination from '@/components/datatable/DataTablePagination.vue';
+import { Separator } from '@/components/ui/separator';
+import JobToolBar from '@/components/jobs/JobToolBar.vue';
 
 const jobStore = useJobStore();
-const meta = jobStore.state.jobMeta;
+const route = useRoute();
 
 const filters = ref<IJobFilter>({
 	page: DEFAULT_PAGE,
@@ -24,17 +40,102 @@ const filters = ref<IJobFilter>({
 const isModalOpen = ref(false);
 
 onBeforeMount(() => {
-	if (meta?.limit) {
-		filters.value.limit = meta.limit;
-	}
-
-	if (meta?.current_page) {
-		filters.value.page = meta.current_page;
-	}
 	fetchJobs();
 });
 
-// Actions
+const isLoading = ref(false);
+const rowSelection = ref({});
+const columnVisibility = ref<VisibilityState>({});
+const sorting = ref([]);
+const columnFilters = ref([]);
+const globalFilter = ref('');
+const query = computed(() => route.query);
+const pageIndex = ref(
+	query.value.page ? Number(query.value.page) - 1 : DEFAULT_PAGE - 1,
+);
+
+const pageSize = ref(
+	query.value.limit ? Number(query.value.limit) : DEFAULT_PAGE_SIZE,
+);
+
+const meta = computed<IPaging | undefined>(() => jobStore.state.jobMeta);
+const pageCount = computed(() => meta.value?.total_pages);
+
+const setPageSize = (newSize: number) => (pageSize.value = newSize);
+const setPageIndex = (newIndex: number) => (pageIndex.value = newIndex);
+
+const setPagination = ({ pageIndex, pageSize }: PaginationState): PaginationState => {
+	setPageIndex(pageIndex);
+	setPageSize(pageSize);
+
+	return { pageIndex, pageSize };
+};
+
+const pagination = computed<PaginationState>(() => ({
+	pageIndex: pageIndex.value,
+	pageSize: pageSize.value,
+}));
+
+const table = useVueTable({
+	get data() {
+		return jobStore.state.jobs;
+	},
+	get pageCount() {
+		return pageCount.value ?? 0;
+	},
+	get rowCount() {
+		return meta.value?.total_records ?? 0;
+	},
+	columns: jobColumn,
+	filterFns: {},
+	enableGlobalFilter: true,
+	state: {
+		get rowSelection() {
+			return rowSelection.value;
+		},
+		get columnVisibility() {
+			return columnVisibility.value;
+		},
+		get sorting() {
+			return sorting.value;
+		},
+		get columnFilters() {
+			return columnFilters.value;
+		},
+		get globalFilter() {
+			return globalFilter.value;
+		},
+	},
+	initialState: {
+		pagination: pagination.value,
+	},
+	manualPagination: true,
+	manualFiltering: true,
+	getCoreRowModel: getCoreRowModel(),
+	onPaginationChange: (updater) => {
+		if (typeof updater === 'function') {
+			setPagination(updater(pagination.value));
+		} else {
+			setPagination(updater);
+		}
+	},
+	onRowSelectionChange: (updaterOrValue) => valueUpdater(updaterOrValue, rowSelection),
+	onColumnVisibilityChange: (updaterOrValue) => valueUpdater(updaterOrValue, columnVisibility),
+	enableRowSelection: true,
+	getPaginationRowModel: getPaginationRowModel(),
+	getSortedRowModel: getSortedRowModel(),
+	getFilteredRowModel: getFilteredRowModel(),
+	onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
+	onColumnFiltersChange: (updaterOrValue) => {
+		// isLoading.value = true;
+		valueUpdater(updaterOrValue, columnFilters);
+	},
+	onGlobalFilterChange: (updaterOrValue) => valueUpdater(updaterOrValue, globalFilter),
+	getFacetedRowModel: getFacetedRowModel(),
+	getFacetedUniqueValues: getFacetedUniqueValues(),
+	getFacetedMinMaxValues: getFacetedMinMaxValues(),
+});
+
 const fetchJobs = async () => {
 	await jobStore.fetchJobs(filters.value);
 };
@@ -43,47 +144,32 @@ const openModal = () => {
 	isModalOpen.value = true;
 };
 
-const editJob = (id: string) => {
-	/* edit logic */
-};
-const viewApplicants = (id: string) => {
-	/* navigate to applicant list */
-};
-const duplicateJob = (id: string) => {
-	/* duplicate logic */
-};
-const deleteJob = (id: string) => {
-	/* delete logic */
-};
+const debouncedFunction = debounce(fetchJobs, 300);
 
 const handleSearch = (payload: string) => {
 	filters.value.keywords = payload;
 	debouncedFunction(filters.value);
 };
-const debouncedFunction = debounce(fetchJobs, 300);
 </script>
 
 <template>
 	<ContentWrapper class="p-6 space-y-6">
 		<Title>Jobs</Title>
-		<div class="flex flex-wrap gap-2 justify-between">
-			<InputWithIcon
-				:icon="Search"
-				:model-value="filters.keywords as string"
-				class="py-2 flex-1 max-w-2xl rounded-full"
-				placeholder="Search job"
-				@update:model-value="handleSearch" />
+		<div class="flex justify-between">
+			<JobToolBar :table="table" />
 			<Button class="bg-blue-500 hover:bg-blue-600" variant="default" @click="openModal">
 				<Plus :size="16" class="mr-2" />
 				Create a Job
 			</Button>
 		</div>
-		<ContentWrapper
-			class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 max-h-[60vh] overflow-y-auto">
-			<JobCardItem v-for="job in jobStore.state.jobs" :key="job.id" :job="job" />
-		</ContentWrapper>
 
-		<ServerPagination :meta="meta" />
+		<ContentWrapper>
+			<DataTable
+				:is-loading="isLoading"
+				:table="table" />
+			<Separator class="mb-4" />
+			<DataTablePagination :meta="meta" :table="table" />
+		</ContentWrapper>
 
 		<MCreateJob v-model:open="isModalOpen" class="w-full" />
 	</ContentWrapper>

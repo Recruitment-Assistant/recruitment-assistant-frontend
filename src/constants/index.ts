@@ -7,7 +7,7 @@ export const STATUS_STYLE: Record<string, string> = {
 
 export const DEFAULT_PAGE = 1;
 export const DEFAULT_PAGE_SIZE = 20;
-export const ROWS_PER_PAGE = [20, 50, 70, 120, 190];
+export const ROWS_PER_PAGE = [10, 20, 50, 70, 120, 190];
 
 export enum ORDER {
 	DESC = 'DESC',

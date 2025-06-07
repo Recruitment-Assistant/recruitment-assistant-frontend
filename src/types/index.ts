@@ -9,6 +9,7 @@ export * from './department.ts';
 export * from './position.ts';
 export * from './file.ts';
 export * from './applications';
+export * from './pipeline.ts';
 
 export interface IBaseResponse {
 	id: string;

@@ -1,18 +1,7 @@
 <script lang="ts" setup>
-import {
-	FormCheckbox,
-	FormCombobox,
-	FormInput,
-	FormMarkdown,
-	FormTagsInput,
-} from '@/components/form';
+import { FormCheckbox, FormCombobox, FormInput, FormMarkdown, FormTagsInput } from '@/components/form';
 import { useDepartment } from '@/composables/department';
-import {
-	JOB_STATUS,
-	ListEmploymentType,
-	ListSalaryCurrency,
-	ListSalaryInterval,
-} from '@/constants/job.constant';
+import { JOB_STATUS, ListEmploymentType, ListSalaryCurrency, ListSalaryInterval } from '@/constants/job.constant';
 import { type ComboboxType, type JobPayloadType, jobSchema } from '@/types';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
@@ -25,13 +14,8 @@ import { BriefcaseBusiness, Building, Loader2, MapPin, User } from 'lucide-vue-n
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { createJobApi } from '@/services/job.service.ts';
-import {
-	Dialog,
-	DialogContent,
-	DialogFooter,
-	DialogHeader,
-	DialogTitle,
-} from '@/components/ui/dialog';
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { usePipeline } from '@/composables/pipeline.ts';
 
 interface Props {
 	open: boolean;
@@ -43,12 +27,21 @@ const emit = defineEmits<{
 }>();
 
 const { data: departments } = useDepartment();
+const { data: pipelines } = usePipeline();
 
 const isLoading = ref(false);
 
 const listDepartment = computed<ComboboxType[]>(
 	() =>
 		departments.value?.map((item) => ({
+			label: item.name,
+			value: item.id,
+		})) || [],
+);
+
+const listPipeline = computed<ComboboxType[]>(
+	() =>
+		pipelines?.value?.data?.map((item) => ({
 			label: item.name,
 			value: item.id,
 		})) || [],
@@ -147,6 +140,16 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 								list-size="md"
 								name="department_id"
 								placeholder="Select department" />
+
+							<FormCombobox
+								:icon="Building"
+								:list="listPipeline"
+								:modelValue="values.pipeline_id"
+								:required="true"
+								label="Pipeline"
+								list-size="md"
+								name="pipeline_id"
+								placeholder="Select pipeline" />
 
 							<div class="flex flex-col space-y-2">
 								<FormTagsInput

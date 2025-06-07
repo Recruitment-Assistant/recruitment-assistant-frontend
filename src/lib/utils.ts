@@ -12,10 +12,6 @@ export function valueUpdater<T extends Updater<any>>(updaterOrValue: T, ref: Ref
 	ref.value = typeof updaterOrValue === 'function' ? updaterOrValue(ref.value) : updaterOrValue;
 }
 
-export const formatCurrency = (amount: number) => {
-	return `đ${amount.toLocaleString('vi-VN')}`;
-};
-
 export const formatDateValueToLocalDate = (value: DateValue) => {
 	const day = String(value.day).padStart(2, '0');
 	const month = String(value.month).padStart(2, '0');
@@ -61,7 +57,7 @@ export const formatFileSize = (bytes: number, decimals = 2): string => {
 
 export function debounce(func: Function, delay = 500) {
 	let timer: any;
-	return function (...args: any) {
+	return function(...args: any) {
 		clearTimeout(timer);
 
 		// @ts-ignore
