@@ -6,7 +6,7 @@ export interface Pipeline extends IBaseResponse {
 	description?: string;
 	is_default: boolean;
 	stages?: Stage[];
-};
+}
 
 export interface Stage extends IBaseResponse {
 	pipeline_id: string;

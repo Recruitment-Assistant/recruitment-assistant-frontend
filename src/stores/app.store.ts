@@ -23,14 +23,14 @@ export const useAppStore = defineStore('app-store', () => {
 		},
 		{
 			id: '20000',
-			path: '/recruiter/jobs',
+			path: '/recruiter/job',
 			name: 'Jobs',
 			icon: BriefcaseBusiness,
 			activeIcon: BriefcaseBusiness,
 		},
 		{
 			id: '30000',
-			path: '/recruiter/candidates',
+			path: '/recruiter/candidate',
 			name: 'Candidates',
 			icon: Users,
 			activeIcon: Users,
@@ -38,7 +38,7 @@ export const useAppStore = defineStore('app-store', () => {
 		{
 			id: '40000',
 			name: 'Interviews',
-			path: '/recruiter/interviews',
+			path: '/recruiter/interview',
 			icon: Calendar,
 			activeIcon: Calendar,
 		},
@@ -52,7 +52,7 @@ export const useAppStore = defineStore('app-store', () => {
 		{
 			id: '60000',
 			name: 'Settings',
-			path: '/recruiter/settings',
+			path: '/recruiter/setting',
 			icon: Settings,
 			activeIcon: Settings,
 		},

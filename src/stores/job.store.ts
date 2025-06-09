@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia';
 import type { IJobFilter, JobState } from '@/types/jobs/job.ts';
 import { ref } from 'vue';
-import { getAllJobApi, getJobApi } from '@/services/job.service.ts';
+import { getAllJobApi, getAllJobPublicApi, getJobApi } from '@/services/job.service.ts';
 
 export const useJobStore = defineStore('job-store', () => {
 	/**
@@ -34,6 +34,16 @@ export const useJobStore = defineStore('job-store', () => {
 		state.value.loading = false;
 	};
 
+	const fetchPublicJobs = async (filter?: IJobFilter) => {
+		state.value.loading = true;
+		state.value.error = null;
+
+		const response = await getAllJobPublicApi(filter);
+		state.value.jobs = response.data;
+		state.value.jobMeta = response.meta;
+		state.value.loading = false;
+	};
+
 	const getJobById = async (jobId: string) => {
 		state.value.loading = true;
 
@@ -44,6 +54,7 @@ export const useJobStore = defineStore('job-store', () => {
 	return {
 		state,
 		fetchJobs,
+		fetchPublicJobs,
 		getJobById,
 	};
 });

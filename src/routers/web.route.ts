@@ -11,9 +11,9 @@ export const webRoutes: RouteRecordRaw[] = [
 		component: () => import('@/pages/LandingPage.vue'),
 	},
 	{
-		path: '/jobs',
+		path: '/job',
 		name: 'Public Job Pages',
-		component: () => import('@/layouts/PlainLayout.vue'),
+		component: () => import('@/layouts/GuestLayout.vue'),
 		children: publicJobRoute,
 	},
 	{

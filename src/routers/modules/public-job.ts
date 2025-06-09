@@ -4,7 +4,7 @@ export const publicJobRoute: RouteRecordRaw[] = [
 	{
 		path: '',
 		name: 'Public Job List',
-		component: () => import('@/pages/jobs/index.vue'),
+		component: () => import('@/components/jobs/guest/JobHub.vue'),
 	},
 	{
 		path: ':id',
@@ -20,7 +20,7 @@ export const publicJobRoute: RouteRecordRaw[] = [
 		meta: {
 			layout: () => import('@/layouts/PlainLayout.vue'),
 		},
-		component: () => import('@/components/jobs/JobDetailView.vue'),
+		component: () => import('@/components/jobs/JobApply.vue'),
 		props: (route: any): { id: string } => ({
 			id: route.params.id,
 		}),

@@ -47,7 +47,9 @@ const facets = computed(() => {
 });
 
 const selectedValues = computed(() => new Set(props.column?.getFilterValue() as string[]));
-const originalList = computed(() => options.value.flatMap((item) => item.options).map((item) => item.value));
+const originalList = computed(() =>
+	options.value.flatMap((item) => item.options).map((item) => item.value),
+);
 const valueExcept = ref<any>(new Set());
 
 const options = computed(() => {
@@ -109,12 +111,11 @@ const handleSelectExcept = () => {
 						<template v-else>
 							<Badge
 								v-for="option in options
-                  .flatMap((item) => item.options)
-                  .filter((option) => selectedValues.has(option.value))"
+									.flatMap((item) => item.options)
+									.filter((option) => selectedValues.has(option.value))"
 								:key="option.value"
 								class="rounded-sm px-1 font-normal"
-								variant="secondary"
-							>
+								variant="secondary">
 								{{ option.label }}
 							</Badge>
 						</template>
@@ -123,40 +124,40 @@ const handleSelectExcept = () => {
 			</Button>
 		</PopoverTrigger>
 		<PopoverContent align="start" class="m-w-max p-0">
-			<Command :filter-function="(val: any, term:any) => handleSearch(val, term)">
+			<Command :filter-function="(val: any, term: any) => handleSearch(val, term)">
 				<CommandInput :placeholder="title" />
 				<CommandList>
 					<CommandEmpty>No results found.</CommandEmpty>
 					<template v-for="(option, index) in options" :key="`item_${index}`">
-						<CommandGroup :heading="option.heading != 'default' ? option.heading : null">
+						<CommandGroup
+							:heading="option.heading != 'default' ? option.heading : null">
 							<CommandItem
 								v-for="item in option.options"
 								:key="item.value"
 								:value="item"
 								class="text-xs sm:text-sm"
-								@select="(event) => onSelect(event, item)"
-							>
+								@select="(event) => onSelect(event, item)">
 								<div
 									:class="
-                    cn(
-                      'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
-                      selectedValues.has(item.value)
-                        ? 'bg-primary text-primary-foreground'
-                        : 'opacity-50 [&_svg]:invisible'
-                    )
-                  "
-								>
+										cn(
+											'mr-2 flex h-4 w-4 items-center justify-center rounded-sm border border-primary',
+											selectedValues.has(item.value)
+												? 'bg-primary text-primary-foreground'
+												: 'opacity-50 [&_svg]:invisible',
+										)
+									">
 									<Check />
 								</div>
-								<component :is="item.icon" v-if="item.icon"
-										   class="mr-2 h-4 w-4 text-muted-foreground" />
+								<component
+									:is="item.icon"
+									v-if="item.icon"
+									class="mr-2 h-4 w-4 text-muted-foreground" />
 								<span class="inline-block break-all">{{ item.label }}</span>
 								<span
 									v-if="facets?.get(item.value)"
-									class="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs"
-								>
-                  {{ facets.get(item.value) }}
-                </span>
+									class="ml-auto flex h-4 w-4 items-center justify-center font-mono text-xs">
+									{{ facets.get(item.value) }}
+								</span>
 							</CommandItem>
 						</CommandGroup>
 					</template>
@@ -166,15 +167,17 @@ const handleSelectExcept = () => {
 							<CommandItem
 								:value="{ label: 'Clear filters' }"
 								class="justify-center text-center"
-								@select="column?.setFilterValue(undefined)"
-							>
+								@select="column?.setFilterValue(undefined)">
 								Clear filters
 							</CommandItem>
 						</CommandGroup>
 					</template>
 				</CommandList>
 			</Command>
-			<Button v-if="enableSelectExcept" class="justify-center text-sm !ml-0 w-full" @click="handleSelectExcept">
+			<Button
+				v-if="enableSelectExcept"
+				class="justify-center text-sm !ml-0 w-full"
+				@click="handleSelectExcept">
 				Select all except
 			</Button>
 		</PopoverContent>

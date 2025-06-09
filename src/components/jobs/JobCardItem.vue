@@ -1,5 +1,12 @@
 <script lang="ts" setup>
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+	Card,
+	CardContent,
+	CardDescription,
+	CardFooter,
+	CardHeader,
+	CardTitle,
+} from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { defineProps } from 'vue';
 import type { Job } from '@/types';
@@ -40,18 +47,17 @@ const viewDetail = () => {
 		<CardHeader>
 			<div class="flex justify-between items-start">
 				<div>
-					<CardTitle class="text-2xl font-bold text-accent-foreground">{{
-							job.title
-						}}
+					<CardTitle class="text-2xl font-bold text-accent-foreground"
+						>{{ job.title }}
 					</CardTitle>
 					<CardDescription class="text-accent-foreground mt-1"
-					>{{ job.location }} •
+						>{{ job.location }} •
 						{{ job.employment_type.replace('_', ' ').toLowerCase() }}
 					</CardDescription>
 				</div>
 				<Badge
 					:variant="job.status === 'DRAFT' ? 'secondary' : 'default'"
-					class="capitalize">
+					class="capitalize hover:bg-blue-400">
 					{{ job.status.toLowerCase() }}
 				</Badge>
 			</div>
@@ -87,9 +93,9 @@ const viewDetail = () => {
 		</CardContent>
 		<CardFooter class="flex justify-end">
 			<router-link
-				:to="`/recruiter/jobs/${job.id}`"
+				:to="`/job/${job.id}/apply`"
 				class="inline-flex items-center px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-md transition-colors">
-				View details
+				Apply now
 			</router-link>
 		</CardFooter>
 	</Card>

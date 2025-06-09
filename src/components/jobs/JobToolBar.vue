@@ -8,7 +8,6 @@ import DataTableFacetedFilter from '@/components/datatable/DataTableFacetedFilte
 import { JOB_STATUS } from '@/constants/job.constant.ts';
 import { Input } from '@/components/ui/input';
 
-
 interface ToolBarProps {
 	table: Table<Job>;
 }
@@ -42,26 +41,23 @@ const onSearch = (event: any) => {
 			<DataTableFacetedFilter
 				:column="table.getColumn('status')"
 				:options="
-								  Object.keys(JOB_STATUS).map((item:string) => {
-									return {
-									  label: item,
-									  value: JOB_STATUS[item as keyof typeof JOB_STATUS],
-									};
-								  })
-        				"
-				title="Status"
-			/>
+					Object.keys(JOB_STATUS).map((item: string) => {
+						return {
+							label: item,
+							value: JOB_STATUS[item as keyof typeof JOB_STATUS],
+						};
+					})
+				"
+				title="Status" />
 		</div>
 		<Button
 			v-if="isFiltered"
 			class="h-8 flex flex-row text-foreground p-3 bg-muted-foreground/1.5"
 			size="sm"
 			variant="outline"
-			@click.prevent="reset"
-		>
+			@click.prevent="reset">
 			Reset
 			<X class="ml-2 h-4 w-4" />
 		</Button>
-
 	</div>
 </template>

@@ -4,13 +4,14 @@ import { h } from 'vue';
 import { Checkbox } from '@/components/ui/checkbox';
 import { formatCurrency } from '@/utils';
 
-
 export const jobColumn: ColumnDef<Job>[] = [
 	{
 		id: 'select',
 		header: ({ table }) =>
 			h(Checkbox, {
-				checked: table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && 'indeterminate'),
+				checked:
+					table.getIsAllPageRowsSelected() ||
+					(table.getIsSomePageRowsSelected() && 'indeterminate'),
 				'onUpdate:checked': (value: any) => table.toggleAllPageRowsSelected(!!value),
 				ariaLabel: 'Select all',
 				class: 'translate-y-0.5',
@@ -53,14 +54,24 @@ export const jobColumn: ColumnDef<Job>[] = [
 	{
 		accessorKey: 'salary_min',
 		header: 'Minimum Salary',
-		cell: ({ row }) => row.original.salary_range?.min ?
-			(formatCurrency(row.original.salary_range?.min, row.original.salary_range?.currency)) : 'Negotiable',
+		cell: ({ row }) =>
+			row.original.salary_range?.min
+				? formatCurrency(
+						row.original.salary_range?.min,
+						row.original.salary_range?.currency,
+					)
+				: 'Negotiable',
 	},
 	{
 		accessorKey: 'salary_max',
 		header: 'Maximum Salary',
-		cell: ({ row }) => row.original.salary_range?.max ?
-			(formatCurrency(row.original.salary_range?.max, row.original.salary_range?.currency)) : 'Negotiable',
+		cell: ({ row }) =>
+			row.original.salary_range?.max
+				? formatCurrency(
+						row.original.salary_range?.max,
+						row.original.salary_range?.currency,
+					)
+				: 'Negotiable',
 	},
 	{
 		accessorKey: 'creator',
@@ -75,13 +86,14 @@ export const jobColumn: ColumnDef<Job>[] = [
 	{
 		accessorKey: 'created_at',
 		header: 'Created date',
-		cell: ({ row }) => new Intl.DateTimeFormat('en-US', {
-			day: '2-digit',
-			month: '2-digit',
-			year: 'numeric',
-			hour: '2-digit',
-			minute: '2-digit',
-			second: '2-digit',
-		}).format(new Date(row.original.created_at)),
+		cell: ({ row }) =>
+			new Intl.DateTimeFormat('en-US', {
+				day: '2-digit',
+				month: '2-digit',
+				year: 'numeric',
+				hour: '2-digit',
+				minute: '2-digit',
+				second: '2-digit',
+			}).format(new Date(row.original.created_at)),
 	},
 ];

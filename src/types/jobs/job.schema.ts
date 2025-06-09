@@ -25,3 +25,17 @@ export const jobSchema = z.object({
 });
 
 export type JobPayloadType = z.infer<typeof jobSchema>;
+
+export const applyJobSchema = z.object({
+	full_name: z.string().min(1, 'Title is required'),
+	email: z.string().email(),
+	phone_number: z.string().min(1, 'Phone number is required'),
+	expected_salary: z.object({
+		salary: z.number().min(0, 'Minimum salary must be positive').default(500),
+		currency: z.enum(['VND', 'USD', 'EUR', 'GBP']).default('USD'),
+		interval: z.enum(['hourly', 'daily', 'weekly', 'monthly', 'yearly']).default('monthly'),
+	}),
+	cover_letter: z.string().max(500).optional(),
+});
+
+export type ApplyJobPayloadType = z.infer<typeof applyJobSchema>;

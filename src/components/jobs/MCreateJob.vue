@@ -1,7 +1,18 @@
 <script lang="ts" setup>
-import { FormCheckbox, FormCombobox, FormInput, FormMarkdown, FormTagsInput } from '@/components/form';
+import {
+	FormCheckbox,
+	FormCombobox,
+	FormInput,
+	FormMarkdown,
+	FormTagsInput,
+} from '@/components/form';
 import { useDepartment } from '@/composables/department';
-import { JOB_STATUS, ListEmploymentType, ListSalaryCurrency, ListSalaryInterval } from '@/constants/job.constant';
+import {
+	JOB_STATUS,
+	ListEmploymentType,
+	ListSalaryCurrency,
+	ListSalaryInterval,
+} from '@/constants/job.constant';
 import { type ComboboxType, type JobPayloadType, jobSchema } from '@/types';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
@@ -14,7 +25,13 @@ import { BriefcaseBusiness, Building, Loader2, MapPin, User } from 'lucide-vue-n
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { createJobApi } from '@/services/job.service.ts';
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import {
+	Dialog,
+	DialogContent,
+	DialogFooter,
+	DialogHeader,
+	DialogTitle,
+} from '@/components/ui/dialog';
 import { usePipeline } from '@/composables/pipeline.ts';
 
 interface Props {

@@ -50,13 +50,9 @@ const sorting = ref([]);
 const columnFilters = ref([]);
 const globalFilter = ref('');
 const query = computed(() => route.query);
-const pageIndex = ref(
-	query.value.page ? Number(query.value.page) - 1 : DEFAULT_PAGE - 1,
-);
+const pageIndex = ref(query.value.page ? Number(query.value.page) - 1 : DEFAULT_PAGE - 1);
 
-const pageSize = ref(
-	query.value.limit ? Number(query.value.limit) : DEFAULT_PAGE_SIZE,
-);
+const pageSize = ref(query.value.limit ? Number(query.value.limit) : DEFAULT_PAGE_SIZE);
 
 const meta = computed<IPaging | undefined>(() => jobStore.state.jobMeta);
 const pageCount = computed(() => meta.value?.total_pages);
@@ -164,9 +160,7 @@ const handleSearch = (payload: string) => {
 		</div>
 
 		<ContentWrapper>
-			<DataTable
-				:is-loading="isLoading"
-				:table="table" />
+			<DataTable :is-loading="isLoading" :table="table" />
 			<Separator class="mb-4" />
 			<DataTablePagination :meta="meta" :table="table" />
 		</ContentWrapper>

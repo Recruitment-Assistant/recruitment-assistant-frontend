@@ -36,7 +36,6 @@ const handleShowPassword = () => {
 			v-model="modelValue"
 			:placeholder="placeholder"
 			:type="showPassword ? 'text' : type"
-			autocomplete="off"
 			class="focus:outline-none placeholder:text-sm placeholder:text-gray-200 w-full text-sm bg-[--backgorund]" />
 		<button
 			v-if="type === 'password'"

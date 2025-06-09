@@ -8,18 +8,18 @@ export const recruiterRoute: RouteRecordRaw[] = [
 		component: () => import('@/pages/dashboard/index.vue'),
 	},
 	{
-		path: '/recruiter/jobs',
+		path: '/recruiter/job',
 		name: 'Jobs',
 		component: () => import('@/pages/jobs/index.vue'),
 		children: jobRoute,
 	},
 	{
-		path: '/recruiter/candidates',
+		path: '/recruiter/candidate',
 		name: 'Candidates',
 		component: () => import('@/pages/candidates/index.vue'),
 	},
 	{
-		path: '/recruiter/interviews',
+		path: '/recruiter/interview',
 		name: 'Interviews',
 		component: () => import('@/pages/interviews/index.vue'),
 	},
@@ -29,7 +29,7 @@ export const recruiterRoute: RouteRecordRaw[] = [
 		component: () => import('@/pages/talent-pool/index.vue'),
 	},
 	{
-		path: '/recruiter/settings',
+		path: '/recruiter/setting',
 		name: 'Settings',
 		component: () => import('@/pages/settings/index.vue'),
 	},

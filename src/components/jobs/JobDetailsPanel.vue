@@ -7,9 +7,21 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { BriefcaseBusiness, Calendar, MapPin, NotebookPen, Tag } from 'lucide-vue-next';
 import { Separator } from '@/components/ui/separator';
 import type { Job } from '@/types';
+import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 
 const jobStore = useJobStore();
 const job = computed<Job | null>(() => jobStore.state.currentJob);
+const jobDescriptionHtml = computed(() => {
+	const delta = JSON.parse((job.value?.description as string) || '{}');
+	const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
+	return converter.convert();
+});
+
+const jobRequirementHtml = computed(() => {
+	const delta = JSON.parse((job.value?.requirements as string) || '{}');
+	const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
+	return converter.convert();
+});
 
 const formatSalary = (min: number, max: number, currency: string) => {
 	return `${min.toLocaleString()} - ${max.toLocaleString()} ${currency}`;
@@ -44,7 +56,9 @@ const getStatusVariant = (status: string) => {
 				<div>
 					<CardTitle class="text-2xl font-bold">{{ job?.title }}</CardTitle>
 				</div>
-				<Badge :variant="getStatusVariant(job?.status as string) as any">
+				<Badge
+					:variant="getStatusVariant(job?.status as string) as any"
+					class="hover:bg-blue-400">
 					{{ job?.status?.toLowerCase() }}
 				</Badge>
 			</div>
@@ -138,17 +152,17 @@ const getStatusVariant = (status: string) => {
 			<!-- Description -->
 			<div>
 				<h3 class="text-sm font-semibold mb-2">Description</h3>
-				<div class="text-sm space-y-4 leading-relaxed">
-					<li v-for="item in job?.description.split('\n')">{{ item }}</li>
-				</div>
+				<div
+					class="prose prose-sm max-w-none text-gray-800 dark:text-gray-100"
+					v-html="jobDescriptionHtml" />
 			</div>
 
 			<!-- Requirements -->
 			<div>
 				<h3 class="text-sm font-semibold mb-2">Requirements</h3>
-				<div class="text-sm space-y-4 leading-relaxed">
-					<li v-for="item in job?.requirements.split('\n')">{{ item }}</li>
-				</div>
+				<div
+					class="prose prose-sm max-w-none text-gray-800 dark:text-gray-100"
+					v-html="jobRequirementHtml" />
 			</div>
 
 			<!-- Tags -->

@@ -57,7 +57,7 @@ export const formatFileSize = (bytes: number, decimals = 2): string => {
 
 export function debounce(func: Function, delay = 500) {
 	let timer: any;
-	return function(...args: any) {
+	return function (...args: any) {
 		clearTimeout(timer);
 
 		// @ts-ignore

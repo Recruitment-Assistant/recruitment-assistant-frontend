@@ -59,7 +59,10 @@ router.beforeEach(async (to, from, next) => {
 	if (isLoggedIn && isLandingPage) {
 		return next('/recruiter');
 	}
-	console.log(to.path);
+
+	if (isLandingPage) {
+		return next('/job');
+	}
 
 	next();
 });
