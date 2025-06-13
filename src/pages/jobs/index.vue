@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import ContentWrapper from '@/components/common/ContentWrapper.vue';
 import Title from '@/components/common/Title.vue';
 import { useJobStore } from '@/stores/job.store.ts';
@@ -32,11 +32,15 @@ import JobToolBar from '@/components/jobs/JobToolBar.vue';
 const jobStore = useJobStore();
 const route = useRoute();
 
-const filters = ref<IJobFilter>({
-	page: DEFAULT_PAGE,
-	limit: DEFAULT_PAGE_SIZE,
-	keywords: '',
+const filters = computed<IJobFilter>(() => {
+	console.log(columnFilters.value);
+	return {
+		page: DEFAULT_PAGE,
+		limit: DEFAULT_PAGE_SIZE,
+		keywords: '',
+	};
 });
+
 const isModalOpen = ref(false);
 
 onBeforeMount(() => {
@@ -123,10 +127,12 @@ const table = useVueTable({
 	getFilteredRowModel: getFilteredRowModel(),
 	onSortingChange: (updaterOrValue) => valueUpdater(updaterOrValue, sorting),
 	onColumnFiltersChange: (updaterOrValue) => {
-		// isLoading.value = true;
 		valueUpdater(updaterOrValue, columnFilters);
 	},
-	onGlobalFilterChange: (updaterOrValue) => valueUpdater(updaterOrValue, globalFilter),
+	onGlobalFilterChange: (value) => {
+		globalFilter.value = value;
+		pagination.value.pageIndex = 0;
+	},
 	getFacetedRowModel: getFacetedRowModel(),
 	getFacetedUniqueValues: getFacetedUniqueValues(),
 	getFacetedMinMaxValues: getFacetedMinMaxValues(),
@@ -142,10 +148,15 @@ const openModal = () => {
 
 const debouncedFunction = debounce(fetchJobs, 300);
 
-const handleSearch = (payload: string) => {
-	filters.value.keywords = payload;
-	debouncedFunction(filters.value);
-};
+watch(
+	() => [pageSize.value, pageIndex.value, globalFilter.value],
+	() => {
+		filters.value.page = pageIndex.value + 1;
+		filters.value.limit = pageSize.value;
+		filters.value.keywords = globalFilter.value;
+		debouncedFunction(filters.value);
+	},
+);
 </script>
 
 <template>

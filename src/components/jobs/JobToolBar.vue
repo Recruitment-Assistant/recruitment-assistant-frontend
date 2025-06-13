@@ -22,9 +22,9 @@ const reset = () => {
 	props.table.resetColumnFilters();
 };
 
-const onSearch = (event: any) => {
-	searchTerm.value = event.target.value;
-	props.table.setGlobalFilter(searchTerm);
+const onSearch = (value: string) => {
+	searchTerm.value = value;
+	props.table.setGlobalFilter(value);
 };
 </script>
 

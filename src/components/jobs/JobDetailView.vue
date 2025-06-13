@@ -18,8 +18,10 @@ onBeforeMount(() => {
 </script>
 
 <template>
-	<div class="flex h-[calc(100vh-6rem)]">
-		<JobDetailsPanel class="transition-width duration-75 ease-in-out" />
+	<div>
+		<JobDetailsPanel
+			:job="jobStore?.state?.currentJob"
+			class="transition-width duration-75 ease-in-out" />
 	</div>
 </template>
 

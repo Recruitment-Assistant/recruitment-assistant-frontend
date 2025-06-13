@@ -12,11 +12,13 @@ import { ListSalaryCurrency, ListSalaryInterval } from '@/constants/job.constant
 import { FormCombobox, FormTextarea } from '@/components/form';
 import { Label } from '@/components/ui/label';
 import { applyJobApi } from '@/services/job.service.ts';
+import { useRouter } from 'vue-router';
 
 const props = defineProps<{
 	id?: string;
 }>();
 
+const router = useRouter();
 const isLoading = ref(false);
 const { showToast } = useCustomToast();
 const resumeFile = ref<File | null>(null);
@@ -41,9 +43,7 @@ const onSubmit = handleSubmit(async (values: ApplyJobPayloadType) => {
 		return;
 	}
 
-	console.log(values);
-
-	const response = await applyJobApi(props?.id as string, values, resumeFile.value);
+	await applyJobApi(props?.id as string, values, resumeFile.value);
 });
 
 const handleFileUpload = (files: any) => {
@@ -53,13 +53,25 @@ const handleFileUpload = (files: any) => {
 const handleFileRemove = (fileId: number) => {
 	console.log('File removed:', fileId);
 };
+
+const goback = () => {
+	if (window.history.length > 1) {
+		router.back();
+	} else {
+		router.push('/');
+	}
+};
 </script>
 
 <template>
 	<div>
 		<div class="flex pb-3">
-			<ChevronLeft />
-			<Button :size="'icon'" :variant="'link'" class="!p-0">Back</Button>
+			<div class="flex items-center gap-2 pb-3">
+				<Button class="bg-gray-300 hover:bg-gray-200" @click="goback">
+					<ChevronLeft class="w-5 h-5 mr-1" />
+					Back
+				</Button>
+			</div>
 		</div>
 
 		<form class="max-w-[500px] items-center space-y-2 mx-auto" @submit="onSubmit">

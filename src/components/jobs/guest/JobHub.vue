@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import { onBeforeMount, ref } from 'vue';
+import { computed, onBeforeMount, ref, watch } from 'vue';
 import ContentWrapper from '@/components/common/ContentWrapper.vue';
 import Title from '@/components/common/Title.vue';
 import { useJobStore } from '@/stores/job.store.ts';
-import type { IJobFilter } from '@/types/jobs/job.ts';
+import type { IJobFilter, Job } from '@/types/jobs/job.ts';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/constants';
 import InputWithIcon from '@/components/common/InputWithIcon.vue';
 import { Search } from 'lucide-vue-next';
@@ -13,7 +13,7 @@ import ServerPagination from '@/components/datatable/ServerPagination.vue';
 import JobDetailsPanel from '@/components/jobs/JobDetailsPanel.vue';
 
 const jobStore = useJobStore();
-const meta = jobStore.state.jobMeta;
+const meta = computed(() => jobStore.state.jobMeta);
 
 const filters = ref<IJobFilter>({
 	page: DEFAULT_PAGE,
@@ -24,14 +24,15 @@ const isResizing = ref(false);
 const leftPanelWidth = ref(33.333); // Default 1/3 width in percentage
 const startX = ref(0);
 const startLeftWidth = ref(0);
+const jobSelected = ref<Job>();
 
 onBeforeMount(() => {
-	if (meta?.limit) {
-		filters.value.limit = meta.limit;
+	if (meta?.value?.limit) {
+		filters.value.limit = meta.value.limit;
 	}
 
-	if (meta?.current_page) {
-		filters.value.page = meta.current_page;
+	if (meta?.value?.current_page) {
+		filters.value.page = meta.value.current_page;
 	}
 	fetchJobs();
 });
@@ -79,6 +80,18 @@ const stopResize = () => {
 	document.body.style.cursor = '';
 	document.body.style.userSelect = '';
 };
+
+const handleSelectJob = (job: Job) => {
+	console.log(job);
+	jobSelected.value = job;
+};
+
+watch(
+	() => jobStore.state.jobs,
+	() => {
+		jobSelected.value = jobStore.state.jobs[0];
+	},
+);
 </script>
 
 <template>
@@ -96,8 +109,13 @@ const stopResize = () => {
 			<!-- Left Panel: Job Details -->
 			<ContentWrapper
 				:style="{ width: `${leftPanelWidth}%` }"
-				class="grid grid-cols-1 gap-4 overflow-y-auto transition-width duration-75 ease-in-out">
-				<JobCardItem v-for="job in jobStore.state.jobs" :key="job.id" :job="job" />
+				class="grid grid-cols-1 gap-4 overflow-y-auto transition-width duration-75 ease-in-out pr-2">
+				<JobCardItem
+					v-for="job in jobStore.state.jobs"
+					:key="job.id"
+					:class="{ 'border-red-500 border-2': jobSelected?.id === job.id }"
+					:job="job"
+					@click="handleSelectJob(job)" />
 			</ContentWrapper>
 
 			<!-- Resize Handle -->
@@ -108,6 +126,7 @@ const stopResize = () => {
 			</div>
 
 			<JobDetailsPanel
+				:job="jobSelected"
 				:style="{ width: `${100 - leftPanelWidth}%` }"
 				class="transition-width duration-75 ease-in-out" />
 		</div>

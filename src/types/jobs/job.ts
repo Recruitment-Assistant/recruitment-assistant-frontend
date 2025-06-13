@@ -9,7 +9,9 @@ import type {
 import { EMPLOYMENT_TYPE, type JOB_STATUS } from '@/constants/job.constant.ts';
 
 // request
-export interface IJobFilter extends IFilterRequest {}
+export interface IJobFilter extends IFilterRequest {
+	status?: JOB_STATUS[];
+}
 
 // response
 

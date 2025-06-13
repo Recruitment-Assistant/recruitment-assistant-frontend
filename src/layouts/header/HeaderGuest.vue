@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 			<div class="container mx-auto px-4">
 				<div class="flex h-16 items-center justify-between">
 					<!-- Logo -->
-					<div class="flex items-center space-x-4 pr-4">
+					<router-link class="flex items-center space-x-4 pr-4" to="/">
 						<div class="flex items-center space-x-2">
 							<div
 								class="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
@@ -17,30 +17,30 @@ import { Button } from '@/components/ui/button';
 							</div>
 							<span class="font-semibold text-lg">JobHub</span>
 						</div>
-					</div>
+					</router-link>
 
 					<!-- Navigation Items -->
 					<div class="hidden md:flex items-center space-x-6">
-						<a
+						<router-link
 							class="text-sm font-medium hover:text-primary transition-colors"
-							href="#">
+							to="/">
 							Home
-						</a>
-						<a
+						</router-link>
+						<router-link
 							class="text-sm font-medium hover:text-primary transition-colors"
-							href="#">
+							to="/">
 							Jobs
-						</a>
-						<a
+						</router-link>
+						<router-link
 							class="text-sm font-medium hover:text-primary transition-colors"
-							href="#">
+							to="/">
 							Companies
-						</a>
-						<a
+						</router-link>
+						<router-link
 							class="text-sm font-medium hover:text-primary transition-colors"
-							href="#">
+							to="/">
 							About
-						</a>
+						</router-link>
 					</div>
 				</div>
 			</div>

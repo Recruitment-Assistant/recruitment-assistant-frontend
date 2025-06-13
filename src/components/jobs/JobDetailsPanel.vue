@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { computed } from 'vue';
-import { useJobStore } from '@/stores/job.store.ts';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
@@ -9,16 +8,19 @@ import { Separator } from '@/components/ui/separator';
 import type { Job } from '@/types';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 
-const jobStore = useJobStore();
-const job = computed<Job | null>(() => jobStore.state.currentJob);
+interface Props {
+	job?: Job;
+}
+
+const props = defineProps<Props>();
 const jobDescriptionHtml = computed(() => {
-	const delta = JSON.parse((job.value?.description as string) || '{}');
+	const delta = JSON.parse((props.job?.description as string) || '{}');
 	const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
 	return converter.convert();
 });
 
 const jobRequirementHtml = computed(() => {
-	const delta = JSON.parse((job.value?.requirements as string) || '{}');
+	const delta = JSON.parse((props.job?.requirements as string) || '{}');
 	const converter = new QuillDeltaToHtmlConverter(delta.ops, {});
 	return converter.convert();
 });
@@ -119,6 +121,11 @@ const getStatusVariant = (status: string) => {
 					</div>
 				</div>
 			</div>
+			<router-link
+				:to="`/job/${job?.id}/apply`"
+				class="inline-flex items-center justify-center text-white w-full px-4 py-2 bg-blue-500 hover:bg-blue-600 rounded-md transition-colors">
+				Apply now
+			</router-link>
 
 			<Separator />
 
