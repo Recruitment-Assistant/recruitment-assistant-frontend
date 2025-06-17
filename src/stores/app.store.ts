@@ -2,8 +2,10 @@ import { defineStore } from 'pinia';
 import { ref } from 'vue';
 import {
 	BriefcaseBusiness,
+	Building,
 	Calendar,
 	LayoutDashboard,
+	LockKeyhole,
 	Search,
 	Settings,
 	Users,
@@ -23,38 +25,52 @@ export const useAppStore = defineStore('app-store', () => {
 		},
 		{
 			id: '20000',
+			path: '/recruiter/department',
+			name: 'Department',
+			icon: Building,
+			activeIcon: Building,
+		},
+		{
+			id: '30000',
 			path: '/recruiter/job',
 			name: 'Jobs',
 			icon: BriefcaseBusiness,
 			activeIcon: BriefcaseBusiness,
 		},
 		{
-			id: '30000',
+			id: '40000',
 			path: '/recruiter/candidate',
 			name: 'Candidates',
 			icon: Users,
 			activeIcon: Users,
 		},
 		{
-			id: '40000',
+			id: '50000',
 			name: 'Interviews',
 			path: '/recruiter/interview',
 			icon: Calendar,
 			activeIcon: Calendar,
 		},
 		{
-			id: '50000',
+			id: '60000',
 			path: '/recruiter/talent-pool',
 			name: 'Talent pool',
 			icon: Search,
 			activeIcon: Search,
 		},
 		{
-			id: '60000',
+			id: '70000',
 			name: 'Settings',
 			path: '/recruiter/setting',
 			icon: Settings,
 			activeIcon: Settings,
+		},
+		{
+			id: '80000',
+			name: 'Administration',
+			path: '/recruiter/administration',
+			icon: LockKeyhole,
+			activeIcon: LockKeyhole,
 		},
 	]);
 	const isSmallSidebar = ref(

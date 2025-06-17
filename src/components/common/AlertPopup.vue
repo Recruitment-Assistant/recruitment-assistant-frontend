@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import {
 	AlertDialog,
-	AlertDialogAction,
 	AlertDialogCancel,
 	AlertDialogContent,
 	AlertDialogDescription,
@@ -9,12 +8,15 @@ import {
 	AlertDialogHeader,
 	AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
+import img from '@/assets/images/delete_img.png';
+import CallApiButton from './CallApiButton.vue';
 
 defineProps<{
 	open: boolean;
 	title?: string;
 	description?: string;
-	img?: string;
+	buttonLabel?: string;
+	isLoading?: boolean;
 }>();
 
 const emit = defineEmits<{
@@ -34,15 +36,15 @@ const handleConfirm = () => {
 <template>
 	<AlertDialog :open="open" @update:open="handleOpen">
 		<AlertDialogContent class="flex flex-col gap-2 items-center w-[450px]">
-			<div v-if="img" class="w-36">
+			<div class="w-36">
 				<img :src="img" alt="" class="w-full" />
 			</div>
 			<AlertDialogHeader class="flex flex-col gap-1 items-center">
 				<AlertDialogTitle class="text-base text-center"
-					>{{ title ? title : 'Are you sure you want to delete?' }}
+					>{{ title ?? 'Are you sure you want to delete?' }}
 				</AlertDialogTitle>
 				<AlertDialogDescription class="text-sm text-slate-600">
-					{{ description || '' }}
+					"{{ description ?? '' }}"
 				</AlertDialogDescription>
 			</AlertDialogHeader>
 			<AlertDialogFooter class="w-full flex mt-4">
@@ -51,11 +53,12 @@ const handleConfirm = () => {
 					@click="() => handleOpen(false)">
 					Cancel
 				</AlertDialogCancel>
-				<AlertDialogAction
+				<CallApiButton
+					:is-loading="isLoading"
 					class="w-full rounded-2xl h-auto p-3 bg-red-500 hover:bg-red-600 text-white"
-					@click="handleConfirm">
-					Continue
-				</AlertDialogAction>
+					@click="handleConfirm"
+					>{{ buttonLabel ?? 'Delete' }}
+				</CallApiButton>
 			</AlertDialogFooter>
 		</AlertDialogContent>
 	</AlertDialog>

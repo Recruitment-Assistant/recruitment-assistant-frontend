@@ -4,6 +4,7 @@ import type {
 	IBaseResponse,
 	IFilterRequest,
 	IPaging,
+	Organization,
 	Pipeline,
 } from '@/types';
 import { EMPLOYMENT_TYPE, type JOB_STATUS } from '@/constants/job.constant.ts';
@@ -42,6 +43,15 @@ export interface Job extends IBaseResponse {
 	department?: Department;
 	creator?: BaseUser;
 	pipeline?: Pipeline;
+	organization?: Organization;
+}
+
+export interface JobSummary {
+	id?: string;
+	active_candidates?: number;
+	dropped_candidates?: number;
+	total_candidates?: number;
+	candidate_score?: number;
 }
 
 export interface JobState {

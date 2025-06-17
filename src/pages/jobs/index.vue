@@ -3,7 +3,7 @@ import { computed, onBeforeMount, ref, watch } from 'vue';
 import ContentWrapper from '@/components/common/ContentWrapper.vue';
 import Title from '@/components/common/Title.vue';
 import { useJobStore } from '@/stores/job.store.ts';
-import type { IJobFilter } from '@/types/jobs/job.ts';
+import type { IJobFilter, Job } from '@/types/jobs/job.ts';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/constants';
 import { Plus } from 'lucide-vue-next';
 import { debounce, valueUpdater } from '@/lib/utils.ts';
@@ -21,19 +21,20 @@ import {
 	useVueTable,
 	type VisibilityState,
 } from '@tanstack/vue-table';
-import { jobColumn } from '@/components/jobs/job.column.ts';
+import { jobColumn } from '@/components/jobs/job.column';
 import type { IPaging } from '@/types';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import DataTable from '@/components/datatable/DataTable.vue';
 import DataTablePagination from '@/components/datatable/DataTablePagination.vue';
 import { Separator } from '@/components/ui/separator';
 import JobToolBar from '@/components/jobs/JobToolBar.vue';
+import AlertPopup from '@/components/common/AlertPopup.vue';
 
 const jobStore = useJobStore();
 const route = useRoute();
+const router = useRouter();
 
 const filters = computed<IJobFilter>(() => {
-	console.log(columnFilters.value);
 	return {
 		page: DEFAULT_PAGE,
 		limit: DEFAULT_PAGE_SIZE,
@@ -53,6 +54,7 @@ const columnVisibility = ref<VisibilityState>({});
 const sorting = ref([]);
 const columnFilters = ref([]);
 const globalFilter = ref('');
+const isOpenAlert = ref(false);
 const query = computed(() => route.query);
 const pageIndex = ref(query.value.page ? Number(query.value.page) - 1 : DEFAULT_PAGE - 1);
 
@@ -146,6 +148,16 @@ const openModal = () => {
 	isModalOpen.value = true;
 };
 
+const handleCloseAlert = () => {
+	isOpenAlert.value = false;
+};
+
+const handleDeleteJob = () => {};
+
+const handleViewJob = (data: Job) => {
+	router.push({ name: 'Job Overview', params: { id: data.id } });
+};
+
 const debouncedFunction = debounce(fetchJobs, 300);
 
 watch(
@@ -166,16 +178,21 @@ watch(
 			<JobToolBar :table="table" />
 			<Button class="bg-blue-500 hover:bg-blue-600" variant="default" @click="openModal">
 				<Plus :size="16" class="mr-2" />
-				Create a Job
+				Create new job
 			</Button>
 		</div>
 
 		<ContentWrapper>
-			<DataTable :is-loading="isLoading" :table="table" />
+			<DataTable :is-loading="isLoading" :table="table" @row:click="handleViewJob" />
 			<Separator class="mb-4" />
 			<DataTablePagination :meta="meta" :table="table" />
 		</ContentWrapper>
 
 		<MCreateJob v-model:open="isModalOpen" class="w-full" />
+		<AlertPopup
+			:open="isOpenAlert"
+			title="Are  you sure you want to delete this request?"
+			@confirm="handleDeleteJob"
+			@update:open="handleCloseAlert" />
 	</ContentWrapper>
 </template>

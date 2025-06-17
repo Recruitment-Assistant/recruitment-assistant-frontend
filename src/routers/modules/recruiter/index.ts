@@ -1,5 +1,4 @@
 import type { RouteRecordRaw } from 'vue-router';
-import { jobRoute } from '@/routers/modules/recruiter/job.ts';
 
 export const recruiterRoute: RouteRecordRaw[] = [
 	{
@@ -8,10 +7,22 @@ export const recruiterRoute: RouteRecordRaw[] = [
 		component: () => import('@/pages/dashboard/index.vue'),
 	},
 	{
+		path: '/recruiter/department',
+		name: 'Department',
+		component: () => import('@/pages/department/index.vue'),
+	},
+	{
 		path: '/recruiter/job',
 		name: 'Jobs',
 		component: () => import('@/pages/jobs/index.vue'),
-		children: jobRoute,
+	},
+	{
+		path: '/recruiter/job/:id',
+		name: 'Job Overview',
+		component: () => import('@/components/jobs/JobOverview.vue'),
+		props: (route: any): { id: string } => ({
+			id: route.params.id,
+		}),
 	},
 	{
 		path: '/recruiter/candidate',
@@ -32,6 +43,11 @@ export const recruiterRoute: RouteRecordRaw[] = [
 		path: '/recruiter/setting',
 		name: 'Settings',
 		component: () => import('@/pages/settings/index.vue'),
+	},
+	{
+		path: '/recruiter/administration',
+		name: 'Administration',
+		component: () => import('@/pages/administration/index.vue'),
 	},
 	{
 		path: '/recruiter/test',

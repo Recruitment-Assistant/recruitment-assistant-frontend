@@ -1,8 +1,12 @@
-import type { Job } from '@/types';
+import type { ActionGroupType, Job } from '@/types';
 import type { ColumnDef } from '@tanstack/vue-table';
 import { h } from 'vue';
 import { Checkbox } from '@/components/ui/checkbox';
 import { formatCurrency } from '@/utils';
+import { JOB_STATUS_STYLE } from '@/constants';
+import StatusTag from '@/components/common/StatusTag.vue';
+import ActionGroupCommon from '@/components/common/ActionGroupCommon.vue';
+import { Pencil, Trash } from 'lucide-vue-next';
 
 export const jobColumn: ColumnDef<Job>[] = [
 	{
@@ -30,13 +34,13 @@ export const jobColumn: ColumnDef<Job>[] = [
 	},
 	{
 		accessorKey: 'position',
-		header: 'Position name',
+		header: 'Position',
 		cell: ({ row }) => row.original.title,
 		enableHiding: false,
 	},
 	{
 		accessorKey: 'department',
-		header: 'Department name',
+		header: 'Department',
 		cell: ({ row }) => row.original.department?.name || 'UNKNOWN',
 		enableHiding: false,
 	},
@@ -81,7 +85,11 @@ export const jobColumn: ColumnDef<Job>[] = [
 	{
 		accessorKey: 'status',
 		header: 'Job Status',
-		cell: ({ row }) => row.original.status || 'UNKNOWN',
+		cell: ({ row }) =>
+			h(StatusTag, {
+				class: [JOB_STATUS_STYLE[row.original.status]],
+				status: row.original.status,
+			}),
 	},
 	{
 		accessorKey: 'created_at',
@@ -95,5 +103,35 @@ export const jobColumn: ColumnDef<Job>[] = [
 				minute: '2-digit',
 				second: '2-digit',
 			}).format(new Date(row.original.created_at)),
+	},
+	{
+		accessorKey: 'action',
+		header: 'Action',
+		cell: ({ row }) => {
+			const actions: ActionGroupType[] = [
+				{
+					label: 'Edit',
+					icon: Pencil,
+				},
+				{
+					label: 'Delete',
+					icon: Trash,
+				},
+			];
+
+			const onEdit = () => {
+				console.log('edit', row.original.id);
+			};
+
+			const onDelete = () => {
+				console.log('edit', row.original.id);
+			};
+
+			return h(ActionGroupCommon, {
+				actions,
+				onEdit,
+				onDelete,
+			});
+		},
 	},
 ];
