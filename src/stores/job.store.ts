@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia';
-import type { IJobFilter, JobState } from '@/types/jobs/job.ts';
+import type { IJobFilter, JobState } from '@/types/jobs';
 import { ref } from 'vue';
 import { getAllJobApi, getAllJobPublicApi, getJobApi } from '@/services/job.service.ts';
 

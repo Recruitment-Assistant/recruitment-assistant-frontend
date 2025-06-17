@@ -5,11 +5,11 @@ import { Badge } from '@/components/ui/badge';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { BriefcaseBusiness, Calendar, MapPin, NotebookPen, Tag } from 'lucide-vue-next';
 import { Separator } from '@/components/ui/separator';
-import type { Job } from '@/types';
+import type { Index } from '@/types';
 import { QuillDeltaToHtmlConverter } from 'quill-delta-to-html';
 
 interface Props {
-	job?: Job;
+	job?: Index;
 }
 
 const props = defineProps<Props>();

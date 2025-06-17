@@ -1,11 +1,12 @@
 <script lang="ts" setup>
-import UserAvatar from '@/components/common/UserAvatar.vue';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import draggable from 'vuedraggable';
 import { Skeleton } from '@/components/ui/skeleton';
+import type { IBaseCandidate } from '@/types/candidate.ts';
+import CandidateCard from '@/components/candidate/partials/CandidateCard.vue';
 
-defineProps<{
-	list: any[];
+const props = defineProps<{
+	list?: IBaseCandidate[];
 	label: string;
 	group: string;
 	columnName: string;
@@ -30,7 +31,7 @@ const handleClickItem = (id: string) => {
 		<h3 class="text-base font-semibold">{{ label }} ({{ list?.length ?? 0 }})</h3>
 		<ScrollArea class="mt-2 h-[calc(100vh-390px)] pr-3">
 			<div v-if="isLoading" class="flex flex-col gap-2">
-				<div class="bg-white flex flex-col gap-2 rounded-2xl p-3">
+				<div class="bg-background flex flex-col gap-2 rounded-2xl p-3">
 					<div class="flex items-center gap-2">
 						<Skeleton class="h-10 w-10 rounded-full" />
 						<div class="flex flex-col gap-1">
@@ -41,7 +42,7 @@ const handleClickItem = (id: string) => {
 					<Skeleton class="h-5 w-[284px]" />
 					<Skeleton class="h-5 w-[284px]" />
 				</div>
-				<div class="bg-white flex flex-col gap-2 rounded-2xl p-3">
+				<div class="bg-background flex flex-col gap-2 rounded-2xl p-3">
 					<div class="flex items-center gap-2">
 						<Skeleton class="h-10 w-10 rounded-full" />
 						<div class="flex flex-col gap-1">
@@ -52,7 +53,7 @@ const handleClickItem = (id: string) => {
 					<Skeleton class="h-5 w-[284px]" />
 					<Skeleton class="h-5 w-[284px]" />
 				</div>
-				<div class="bg-white flex flex-col gap-2 rounded-2xl p-3">
+				<div class="bg-background flex flex-col gap-2 rounded-2xl p-3">
 					<div class="flex items-center gap-2">
 						<Skeleton class="h-10 w-10 rounded-full" />
 						<div class="flex flex-col gap-1">
@@ -63,7 +64,7 @@ const handleClickItem = (id: string) => {
 					<Skeleton class="h-5 w-[284px]" />
 					<Skeleton class="h-5 w-[284px]" />
 				</div>
-				<div class="bg-white flex flex-col gap-2 rounded-2xl p-3">
+				<div class="bg-background flex flex-col gap-2 rounded-2xl p-3">
 					<div class="flex items-center gap-2">
 						<Skeleton class="h-10 w-10 rounded-full" />
 						<div class="flex flex-col gap-1">
@@ -74,7 +75,7 @@ const handleClickItem = (id: string) => {
 					<Skeleton class="h-5 w-[284px]" />
 					<Skeleton class="h-5 w-[284px]" />
 				</div>
-				<div class="bg-white flex flex-col gap-2 rounded-2xl p-3">
+				<div class="bg-background flex flex-col gap-2 rounded-2xl p-3">
 					<div class="flex items-center gap-2">
 						<Skeleton class="h-10 w-10 rounded-full" />
 						<div class="flex flex-col gap-1">
@@ -97,19 +98,9 @@ const handleClickItem = (id: string) => {
 				item-key="id"
 				@add="onAdd">
 				<template #item="{ element }">
-					<div
-						class="bg-white flex flex-col gap-2 rounded-2xl p-3 hover:cursor-pointer"
-						@click="handleClickItem(element.id)">
-						<div class="flex items-center gap-2">
-							<UserAvatar class="w-8 h-8" />
-							<div>
-								<p class="font-medium">{{ element.name }}</p>
-								<span class="text-xs">{{ element.email }}</span>
-							</div>
-						</div>
-						<div class="text-base font-medium">{{ element.position }}</div>
-						<span class="text-xs text-slate-400">{{ element.applied_at }}</span>
-					</div>
+					<CandidateCard
+						:candidate="element"
+						@click="handleClickItem(element.application_id)" />
 				</template>
 			</draggable>
 		</ScrollArea>

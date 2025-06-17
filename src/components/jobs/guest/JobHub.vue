@@ -3,7 +3,7 @@ import { computed, onBeforeMount, ref, watch } from 'vue';
 import ContentWrapper from '@/components/common/ContentWrapper.vue';
 import Title from '@/components/common/Title.vue';
 import { useJobStore } from '@/stores/job.store.ts';
-import type { IJobFilter, Job } from '@/types/jobs/job.ts';
+import type { IJob, IJobFilter } from '@/types/jobs';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/constants';
 import InputWithIcon from '@/components/common/InputWithIcon.vue';
 import { Search } from 'lucide-vue-next';
@@ -24,7 +24,7 @@ const isResizing = ref(false);
 const leftPanelWidth = ref(33.333); // Default 1/3 width in percentage
 const startX = ref(0);
 const startLeftWidth = ref(0);
-const jobSelected = ref<Job>();
+const jobSelected = ref<IJob>();
 
 onBeforeMount(() => {
 	if (meta?.value?.limit) {
@@ -81,7 +81,7 @@ const stopResize = () => {
 	document.body.style.userSelect = '';
 };
 
-const handleSelectJob = (job: Job) => {
+const handleSelectJob = (job: IJob) => {
 	console.log(job);
 	jobSelected.value = job;
 };

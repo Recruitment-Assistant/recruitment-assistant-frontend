@@ -14,11 +14,11 @@ import {
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import type { Job, JobSummary } from '@/types';
+import type { Index, JobSummary } from '@/types';
 import { JOB_STATUS } from '@/constants/job.constant.ts';
 
 interface Props {
-	job: Job;
+	job: Index;
 	jobSummary: JobSummary;
 }
 

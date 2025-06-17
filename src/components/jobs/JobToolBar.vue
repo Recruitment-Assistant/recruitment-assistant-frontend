@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { Button } from '@/components/ui/button';
 import { X } from 'lucide-vue-next';
-import type { Job } from '@/types';
+import type { Index } from '@/types';
 import type { Table } from '@tanstack/vue-table';
 import { computed, ref } from 'vue';
 import DataTableFacetedFilter from '@/components/datatable/DataTableFacetedFilter.vue';
@@ -9,7 +9,7 @@ import { JOB_STATUS } from '@/constants/job.constant.ts';
 import { Input } from '@/components/ui/input';
 
 interface ToolBarProps {
-	table: Table<Job>;
+	table: Table<Index>;
 }
 
 const props = defineProps<ToolBarProps>();

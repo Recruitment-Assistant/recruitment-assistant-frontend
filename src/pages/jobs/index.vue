@@ -1,12 +1,11 @@
 <script lang="ts" setup>
-import { computed, onBeforeMount, ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import ContentWrapper from '@/components/common/ContentWrapper.vue';
 import Title from '@/components/common/Title.vue';
-import { useJobStore } from '@/stores/job.store.ts';
-import type { IJobFilter, Job } from '@/types/jobs/job.ts';
+import type { IJob, IJobFilter } from '@/types/jobs';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE } from '@/constants';
 import { Plus } from 'lucide-vue-next';
-import { debounce, valueUpdater } from '@/lib/utils.ts';
+import { valueUpdater } from '@/lib/utils.ts';
 import { Button } from '@/components/ui/button';
 import MCreateJob from '@/components/jobs/MCreateJob.vue';
 import {
@@ -29,8 +28,8 @@ import DataTablePagination from '@/components/datatable/DataTablePagination.vue'
 import { Separator } from '@/components/ui/separator';
 import JobToolBar from '@/components/jobs/JobToolBar.vue';
 import AlertPopup from '@/components/common/AlertPopup.vue';
+import { useJob, useUpdateJobStatus } from '@/composables/useJob.ts';
 
-const jobStore = useJobStore();
 const route = useRoute();
 const router = useRouter();
 
@@ -43,12 +42,7 @@ const filters = computed<IJobFilter>(() => {
 });
 
 const isModalOpen = ref(false);
-
-onBeforeMount(() => {
-	fetchJobs();
-});
-
-const isLoading = ref(false);
+const jobTemp = ref<IJob | undefined>();
 const rowSelection = ref({});
 const columnVisibility = ref<VisibilityState>({});
 const sorting = ref([]);
@@ -60,8 +54,17 @@ const pageIndex = ref(query.value.page ? Number(query.value.page) - 1 : DEFAULT_
 
 const pageSize = ref(query.value.limit ? Number(query.value.limit) : DEFAULT_PAGE_SIZE);
 
-const meta = computed<IPaging | undefined>(() => jobStore.state.jobMeta);
 const pageCount = computed(() => meta.value?.total_pages);
+const jobs = computed<IJob[]>(() => data.value?.data || []);
+const meta = computed<IPaging | undefined>(() => data.value?.meta);
+
+const { data, isLoading } = useJob(filters);
+const { mutate: updateStatus, isPending: isUpdatingStatus } = useUpdateJobStatus(filters);
+
+const pagination = computed<PaginationState>(() => ({
+	pageIndex: pageIndex.value,
+	pageSize: pageSize.value,
+}));
 
 const setPageSize = (newSize: number) => (pageSize.value = newSize);
 const setPageIndex = (newIndex: number) => (pageIndex.value = newIndex);
@@ -73,14 +76,23 @@ const setPagination = ({ pageIndex, pageSize }: PaginationState): PaginationStat
 	return { pageIndex, pageSize };
 };
 
-const pagination = computed<PaginationState>(() => ({
-	pageIndex: pageIndex.value,
-	pageSize: pageSize.value,
-}));
+const handleDeleteJob = (payload: IJob) => {};
+
+const handleEditJob = (data: IJob) => {
+	jobTemp.value = data;
+	isModalOpen.value = true;
+};
+
+const handleUpdateStatusJob = (id: string, status: string) => {
+	updateStatus({
+		id,
+		status,
+	});
+};
 
 const table = useVueTable({
 	get data() {
-		return jobStore.state.jobs;
+		return jobs;
 	},
 	get pageCount() {
 		return pageCount.value ?? 0;
@@ -88,7 +100,7 @@ const table = useVueTable({
 	get rowCount() {
 		return meta.value?.total_records ?? 0;
 	},
-	columns: jobColumn,
+	columns: jobColumn(handleEditJob, handleUpdateStatusJob, handleDeleteJob),
 	filterFns: {},
 	enableGlobalFilter: true,
 	state: {
@@ -140,10 +152,6 @@ const table = useVueTable({
 	getFacetedMinMaxValues: getFacetedMinMaxValues(),
 });
 
-const fetchJobs = async () => {
-	await jobStore.fetchJobs(filters.value);
-};
-
 const openModal = () => {
 	isModalOpen.value = true;
 };
@@ -152,13 +160,9 @@ const handleCloseAlert = () => {
 	isOpenAlert.value = false;
 };
 
-const handleDeleteJob = () => {};
-
-const handleViewJob = (data: Job) => {
+const handleViewJob = (data: IJob) => {
 	router.push({ name: 'Job Overview', params: { id: data.id } });
 };
-
-const debouncedFunction = debounce(fetchJobs, 300);
 
 watch(
 	() => [pageSize.value, pageIndex.value, globalFilter.value],
@@ -166,7 +170,15 @@ watch(
 		filters.value.page = pageIndex.value + 1;
 		filters.value.limit = pageSize.value;
 		filters.value.keywords = globalFilter.value;
-		debouncedFunction(filters.value);
+	},
+);
+
+watch(
+	() => isModalOpen.value,
+	() => {
+		if (isModalOpen.value === false) {
+			jobTemp.value = undefined;
+		}
 	},
 );
 </script>
@@ -188,7 +200,7 @@ watch(
 			<DataTablePagination :meta="meta" :table="table" />
 		</ContentWrapper>
 
-		<MCreateJob v-model:open="isModalOpen" class="w-full" />
+		<MCreateJob v-model:open="isModalOpen" :data="jobTemp" :filter="filters" class="w-full" />
 		<AlertPopup
 			:open="isOpenAlert"
 			title="Are  you sure you want to delete this request?"

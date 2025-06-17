@@ -1,13 +1,14 @@
 import type { ApplyJobPayloadType, IApiResponseV1 } from '@/types';
 import axiosClient from '@/plugins';
-import type { IJobFilter, Job } from '@/types/jobs/job.ts';
+import type { IJob, IJobFilter } from '@/types/jobs';
 import { JOB_API } from '@/constants/api/job.api.ts';
 import { createApiEndpoint } from '@/lib/utils.ts';
 import type { JobPayloadType } from '@/types/jobs/job.schema.ts';
 import { PUBLIC_JOB_API } from '@/constants/api/public-job.api.ts';
+import type { JOB_STATUS } from '@/constants/job.constant.ts';
 
 export const getAllJobApi = async (filter?: IJobFilter) => {
-	const { data, status } = await axiosClient.get<IApiResponseV1<Job[]>>(JOB_API.BASE, {
+	const { data, status } = await axiosClient.get<IApiResponseV1<IJob[]>>(JOB_API.BASE, {
 		params: filter,
 	});
 	if (status >= 400) {
@@ -17,14 +18,14 @@ export const getAllJobApi = async (filter?: IJobFilter) => {
 };
 
 export const getJobApi = async (id: string) => {
-	const { data, status } = await axiosClient.get<IApiResponseV1<Job>>(`${JOB_API.BASE}/${id}`);
+	const { data, status } = await axiosClient.get<IApiResponseV1<IJob>>(`${JOB_API.BASE}/${id}`);
 	if (status >= 400) {
 		throw new Error();
 	}
 	return data;
 };
 
-export const createJobApi = async (payload: JobPayloadType): Promise<IApiResponseV1<Job>> => {
+export const createJobApi = async (payload: JobPayloadType): Promise<IApiResponseV1<IJob>> => {
 	const { data, status } = await axiosClient.post(JOB_API.BASE, payload);
 	if (status >= 400) {
 		throw new Error();
@@ -32,7 +33,7 @@ export const createJobApi = async (payload: JobPayloadType): Promise<IApiRespons
 	return data;
 };
 
-export const updateJob = async (id: string, payload: JobPayloadType) => {
+export const updateJobApi = async (id: string, payload: JobPayloadType) => {
 	const { data, status } = await axiosClient.put(createApiEndpoint(JOB_API.BY_ID, id), payload);
 	if (status >= 400) {
 		throw new Error();
@@ -40,7 +41,17 @@ export const updateJob = async (id: string, payload: JobPayloadType) => {
 	return data;
 };
 
-export const deleteJob = async (id: string) => {
+export const updateJobStatusApi = async (id: string, jobStatus: JOB_STATUS) => {
+	const { data, status } = await axiosClient.put(createApiEndpoint(JOB_API.UPDATE_STATUS, id), {
+		status: jobStatus,
+	});
+	if (status >= 400) {
+		throw new Error();
+	}
+	return data;
+};
+
+export const deleteJobApi = async (id: string) => {
 	const { data, status } = await axiosClient.delete(createApiEndpoint(JOB_API.BY_ID, id));
 	if (status >= 400) {
 		throw new Error();
@@ -71,7 +82,7 @@ export const uploadApplicantForJob = async (job_id: string, file: File, id: stri
 };
 
 export const getAllJobPublicApi = async (filter?: IJobFilter) => {
-	const { data, status } = await axiosClient.get<IApiResponseV1<Job[]>>(PUBLIC_JOB_API.BASE, {
+	const { data, status } = await axiosClient.get<IApiResponseV1<IJob[]>>(PUBLIC_JOB_API.BASE, {
 		params: filter,
 	});
 	if (status >= 400) {

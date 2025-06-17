@@ -6,17 +6,23 @@ import {
 	FormMarkdown,
 	FormTagsInput,
 } from '@/components/form';
-import { useDepartment } from '@/composables/department';
+import { useDepartment } from '@/composables/useDepartment.ts';
 import {
 	JOB_STATUS,
 	ListEmploymentType,
 	ListSalaryCurrency,
 	ListSalaryInterval,
 } from '@/constants/job.constant';
-import { type ComboboxType, type JobPayloadType, jobSchema } from '@/types';
+import {
+	type ComboboxType,
+	type IJob,
+	type IJobFilter,
+	type JobPayloadType,
+	jobSchema,
+} from '@/types';
 import { toTypedSchema } from '@vee-validate/zod';
 import { useForm } from 'vee-validate';
-import { computed, ref } from 'vue';
+import { computed } from 'vue';
 import { FormControl, FormDescription, FormField, FormItem, FormMessage } from '../ui/form';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Input } from '@/components/ui/input';
@@ -24,7 +30,6 @@ import ContentWrapper from '@/components/common/ContentWrapper.vue';
 import { BriefcaseBusiness, Building, Loader2, MapPin, User } from 'lucide-vue-next';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
-import { createJobApi } from '@/services/job.service.ts';
 import {
 	Dialog,
 	DialogContent,
@@ -32,10 +37,13 @@ import {
 	DialogHeader,
 	DialogTitle,
 } from '@/components/ui/dialog';
-import { usePipeline } from '@/composables/pipeline.ts';
+import { usePipeline } from '@/composables/usePipeline.ts';
+import { useCreateJob, useUpdateJob } from '@/composables/useJob.ts';
 
 interface Props {
 	open: boolean;
+	data?: IJob;
+	filter: IJobFilter;
 }
 
 const props = defineProps<Props>();
@@ -46,7 +54,7 @@ const emit = defineEmits<{
 const { data: departments } = useDepartment();
 const { data: pipelines } = usePipeline();
 
-const isLoading = ref(false);
+const filter = computed(() => props.filter);
 
 const listDepartment = computed<ComboboxType[]>(
 	() =>
@@ -69,6 +77,9 @@ const isOpen = computed({
 	set: (value) => emit('update:open', value),
 });
 
+const { mutateAsync: createJob, isPending: isPendingCreate } = useCreateJob(filter);
+const { mutateAsync: updateJob, isPending: isPendingUpdate } = useUpdateJob(filter);
+
 const formSchema = toTypedSchema(jobSchema);
 
 const { handleSubmit, values } = useForm({
@@ -76,23 +87,41 @@ const { handleSubmit, values } = useForm({
 });
 
 const onSubmit = handleSubmit(async (values: JobPayloadType) => {
-	values.status = JOB_STATUS.OPENING;
-	const { status_code } = await createJobApi(values);
-	if (status_code >= 400) {
-		return;
-	}
+	try {
+		if (!props.data) {
+			values.status = JOB_STATUS.OPENING;
+		} else {
+			values.status = props.data.status;
+		}
 
-	isOpen.value = false;
+		const { status_code } = !props.data
+			? await createJob(values)
+			: await updateJob({ id: props.data.id, payload: values });
+
+		if ([200, 201].includes(status_code)) {
+			isOpen.value = false;
+		}
+	} catch (error) {
+		return error;
+	}
 });
 
 const saveDraft = handleSubmit(async (values: JobPayloadType) => {
-	const { status_code } = await createJobApi(values);
-	if (status_code >= 400) {
-		return;
-	}
+	values.status = JOB_STATUS.DRAFT;
+	try {
+		const { status_code } = await createJob(values);
 
-	isOpen.value = false;
+		if ([200, 201].includes(status_code)) {
+			isOpen.value = false;
+		}
+	} catch (error) {
+		return error;
+	}
 });
+
+const cancel = () => {
+	isOpen.value = false;
+};
 </script>
 
 <template>
@@ -104,7 +133,10 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 				</DialogHeader>
 
 				<form @submit="onSubmit">
-					<FormField v-slot="{ componentField }" :modelValue="values.title" name="title">
+					<FormField
+						v-slot="{ componentField }"
+						:modelValue="data?.title ?? values.title"
+						name="title">
 						<FormItem>
 							<FormControl>
 								<Input
@@ -121,7 +153,7 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 						<div class="grid grid-cols-2 gap-6">
 							<FormInput
 								:icon="MapPin"
-								:modelValue="values.location"
+								:modelValue="data?.location ?? values.location"
 								:required="true"
 								inputClass="w-full"
 								label="Location"
@@ -130,7 +162,7 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 
 							<FormInput
 								:icon="User"
-								:modelValue="values.quantity"
+								:modelValue="data?.quantity ?? values.quantity"
 								:required="true"
 								inputClass="w-full"
 								label="Quantity"
@@ -141,7 +173,7 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 							<FormCombobox
 								:icon="BriefcaseBusiness"
 								:list="ListEmploymentType"
-								:modelValue="values.employment_type"
+								:modelValue="data?.employment_type ?? values.employment_type"
 								:required="true"
 								label="Employment type"
 								list-size="md"
@@ -151,7 +183,7 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 							<FormCombobox
 								:icon="Building"
 								:list="listDepartment"
-								:modelValue="values.department_id"
+								:modelValue="data?.department_id ?? values.department_id"
 								:required="true"
 								label="Department"
 								list-size="md"
@@ -161,7 +193,7 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 							<FormCombobox
 								:icon="Building"
 								:list="listPipeline"
-								:modelValue="values.pipeline_id"
+								:modelValue="data?.pipeline_id ?? values.pipeline_id"
 								:required="true"
 								label="Pipeline"
 								list-size="md"
@@ -170,14 +202,14 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 
 							<div class="flex flex-col space-y-2">
 								<FormTagsInput
-									:modelValue="values.tags"
+									:modelValue="data?.tags ?? values.tags"
 									:required="true"
 									label="Tags"
 									name="tags"
 									placeholder="Tags" />
 
 								<FormCheckbox
-									:model-value="values.remote_eligible"
+									:model-value="data?.remote_eligible ?? values.remote_eligible"
 									label="Remote Work Eligible"
 									name="remote_eligible" />
 							</div>
@@ -188,7 +220,9 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 
 								<div class="grid grid-cols-2 gap-4">
 									<FormInput
-										:modelValue="values.salary_range?.min"
+										:modelValue="
+											data?.salary_range?.min ?? values.salary_range?.min
+										"
 										:required="true"
 										inputClass="w-full"
 										label="Minimum"
@@ -196,7 +230,9 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 										placeholder="0"
 										type="number" />
 									<FormInput
-										:modelValue="values.salary_range?.max"
+										:modelValue="
+											data?.salary_range?.max ?? values.salary_range?.max
+										"
 										:required="true"
 										inputClass="w-full"
 										label="Maximum"
@@ -208,7 +244,10 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 								<div class="grid grid-cols-2 gap-4">
 									<FormCombobox
 										:list="ListSalaryCurrency"
-										:modelValue="values.salary_range?.currency"
+										:modelValue="
+											data?.salary_range?.currency ??
+											values.salary_range?.currency
+										"
 										:required="true"
 										inputClass="w-full"
 										label="Currency"
@@ -218,7 +257,10 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 
 									<FormCombobox
 										:list="ListSalaryInterval"
-										:modelValue="values.salary_range?.interval"
+										:modelValue="
+											data?.salary_range?.interval ??
+											values.salary_range?.interval
+										"
 										:required="true"
 										inputClass="w-full"
 										label="Interval"
@@ -229,11 +271,17 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 
 								<div class="grid grid-cols-2 gap-x-2 mt-2">
 									<FormCheckbox
-										:model-value="values.salary_range?.bonus_eligible"
+										:model-value="
+											data?.salary_range?.bonus_eligible ??
+											values.salary_range?.bonus_eligible
+										"
 										label="Bonus Eligible"
 										name="bonus_eligible" />
 									<FormCheckbox
-										:model-value="values.salary_range?.equity_offered"
+										:model-value="
+											data?.salary_range?.equity_offered ??
+											values.salary_range?.equity_offered
+										"
 										label="Equity Offered"
 										name="equity_offered" />
 								</div>
@@ -242,14 +290,14 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 
 						<div class="mt-6 grid gap-4">
 							<FormMarkdown
-								:model-value="values.description"
+								:model-value="data?.description ?? values.description"
 								inputClass="rounded-2xl focus-visible:ring-0 focus-visible:ring-offset-0 placeholder:text-gray-200 h-72"
 								label="Job description"
 								name="description"
 								placeholder="A detailed job description" />
 
 							<FormMarkdown
-								:model-value="values.requirements"
+								:model-value="data?.requirements ?? values.requirements"
 								:required="true"
 								label="Requirements"
 								name="requirements"
@@ -258,24 +306,41 @@ const saveDraft = handleSubmit(async (values: JobPayloadType) => {
 					</ScrollArea>
 
 					<DialogFooter>
-						<div class="flex flex-row justify-end mt-4 gap-x-3">
+						<div v-if="!data" class="flex flex-row justify-end mt-4 gap-x-3">
 							<Button
-								:disabled="isLoading || !values.title"
+								:disabled="isPendingCreate || !values.title"
 								class="bg-accent-foreground/40 hover:bg-gray-300 rounded-2xl h-auto py-3.5 px-10 text-white"
 								type="button"
 								@click="saveDraft">
-								<Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+								<Loader2 v-if="isPendingCreate" class="w-4 h-4 mr-2 animate-spin" />
 								<BriefcaseBusiness v-else class="w-4 h-4 mr-2" />
-								{{ isLoading ? 'Saving...' : 'Save as draft' }}
+								{{ isPendingCreate ? 'Saving...' : 'Save as draft' }}
 							</Button>
 
 							<Button
-								:disabled="isLoading || !values.title"
+								:disabled="isPendingCreate || !values.title"
 								class="h-11 font-medium hover:bg-blue-400"
 								type="submit">
-								<Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
+								<Loader2 v-if="isPendingCreate" class="w-4 h-4 mr-2 animate-spin" />
 								<BriefcaseBusiness v-else class="w-4 h-4 mr-2" />
-								{{ isLoading ? 'Creating...' : 'Create Job' }}
+								{{ isPendingCreate ? 'Creating...' : 'Create Job' }}
+							</Button>
+						</div>
+						<div v-else class="flex flex-row justify-end mt-4 gap-x-3">
+							<Button
+								class="bg-accent-foreground/40 hover:bg-gray-300 rounded-2xl h-auto py-3.5 px-10 text-white"
+								type="button"
+								@click="cancel">
+								Cancel
+							</Button>
+
+							<Button
+								:disabled="isPendingUpdate || !values.title"
+								class="h-11 font-medium hover:bg-blue-400"
+								type="submit">
+								<Loader2 v-if="isPendingUpdate" class="w-4 h-4 mr-2 animate-spin" />
+								<BriefcaseBusiness v-else class="w-4 h-4 mr-2" />
+								{{ isPendingUpdate ? 'Submitting...' : 'Submit' }}
 							</Button>
 						</div>
 					</DialogFooter>

@@ -4,12 +4,12 @@ export * from './api.ts';
 export * from './exception.ts';
 export * from './organization';
 export * from './user.ts';
-export * from './jobs';
 export * from './department.ts';
 export * from './position.ts';
 export * from './file.ts';
 export * from './applications';
 export * from './pipeline.ts';
+export * from './jobs';
 
 export interface IBaseResponse {
 	id: string;

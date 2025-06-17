@@ -28,6 +28,17 @@ onMounted(() => {
 		},
 	});
 
+	if (props.modelValue) {
+		try {
+			const delta = JSON.parse(
+				typeof props.modelValue === 'string' ? props.modelValue : props.modelValue[0],
+			);
+			quill.setContents(delta);
+		} catch (error) {
+			console.error('Failed to parse initial content for Quill:', error);
+		}
+	}
+
 	quill.on('text-change', () => {
 		const delta = quill.getContents();
 		const data = JSON.stringify(delta);

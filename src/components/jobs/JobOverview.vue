@@ -3,16 +3,17 @@ import { computed, onBeforeMount, ref } from 'vue';
 import { Activity, List, Users } from 'lucide-vue-next';
 import { useJobStore } from '@/stores/job.store.ts';
 import { useRoute } from 'vue-router';
-import type { Job, JobSummary } from '@/types';
+import type { IJob, JobSummary } from '@/types';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import JobHeader from '@/components/jobs/JobHeader.vue';
+import KanbanCandidateTab from '@/components/candidate/kanban-view/KanbanCandidateTab.vue';
 
 const props = defineProps<{
 	id?: string;
 }>();
 
 const jobStore = useJobStore();
-const jobData = computed<Job>(() => jobStore.state.currentJob);
+const jobData = computed<IJob>(() => jobStore.state.currentJob);
 const jobSummary = ref<JobSummary>({
 	active_candidates: 0,
 	dropped_candidates: 0,
@@ -24,27 +25,6 @@ onBeforeMount(() => {
 	const jobId = props.id || (route.params.id as string);
 	jobStore.getJobById(jobId);
 });
-
-interface Candidate {
-	id: string;
-	name: string;
-	email: string;
-	stage: string;
-	score: number;
-	visibleToGuests: boolean;
-}
-
-interface PipelineStage {
-	name: string;
-	count: number;
-	percentage: number;
-}
-
-interface Activity {
-	id: string;
-	description: string;
-	time: string;
-}
 
 const activeTab = ref('candidates');
 
@@ -68,12 +48,12 @@ const handleUpdateTab = (value: string): any => {
 
 		<!-- Main Content Tabs -->
 		<div>
-			<div class="border-b">
+			<div class="p-2">
 				<Tabs
 					:model-value="activeTab"
-					class="flex space-x-8 px-6"
+					class="flex flex-col"
 					@update:model-value="handleUpdateTab">
-					<TabsList class="flex space-x-8 px-6">
+					<TabsList class="flex space-x-8 px-6 items-start">
 						<TabsTrigger
 							v-for="tab in tabs"
 							:class="[
@@ -88,9 +68,13 @@ const handleUpdateTab = (value: string): any => {
 						</TabsTrigger>
 					</TabsList>
 
-					<TabsContent value="candidates"> Candidate </TabsContent>
-					<TabsContent value="summary"> Summary </TabsContent>
-					<TabsContent value="analysis"> Analysis </TabsContent>
+					<div>
+						<TabsContent value="candidates">
+							<KanbanCandidateTab :stages="jobData?.pipeline?.stages" />
+						</TabsContent>
+						<TabsContent value="summary"> Summary</TabsContent>
+						<TabsContent value="analytics"> Analytics</TabsContent>
+					</div>
 				</Tabs>
 			</div>
 		</div>

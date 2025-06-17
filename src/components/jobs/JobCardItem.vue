@@ -9,11 +9,11 @@ import {
 } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { defineProps } from 'vue';
-import type { Job } from '@/types';
+import type { Index } from '@/types';
 import { SquareArrowOutUpRight } from 'lucide-vue-next';
 
 interface Props {
-	job?: Job;
+	job?: Index;
 }
 
 defineProps<Props>();

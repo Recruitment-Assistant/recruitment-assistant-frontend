@@ -10,13 +10,13 @@ import {
 } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useJobStore } from '@/stores/job.store.ts';
-import type { Job } from '@/types';
+import type { Index } from '@/types';
 import { useCustomToast } from '@/lib/customToast.ts';
 import UploadField from '@/components/common/UploadField.vue';
 
 const { showToast } = useCustomToast();
 const jobStore = useJobStore();
-const job = computed<Job | null>(() => jobStore.state.currentJob);
+const job = computed<Index | null>(() => jobStore.state.currentJob);
 
 const isUploading = ref(false);
 const resumeFile = ref<File | null>(null);
