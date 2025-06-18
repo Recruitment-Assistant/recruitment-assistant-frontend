@@ -1,19 +1,12 @@
 <script lang="ts" setup>
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { defineProps } from 'vue';
-import type { Index } from '@/types';
+import type { IJob } from '@/types';
 import { SquareArrowOutUpRight } from 'lucide-vue-next';
 
 interface Props {
-	job?: Index;
+	job?: IJob;
 }
 
 defineProps<Props>();
@@ -42,10 +35,10 @@ const formatDate = (dateString: string) => {
 			<div class="flex justify-between items-start">
 				<div>
 					<CardTitle class="text-2xl font-bold text-accent-foreground"
-						>{{ job?.title }}
+					>{{ job?.title }}
 					</CardTitle>
 					<CardDescription class="text-accent-foreground mt-1"
-						>{{ job?.location }} •
+					>{{ job?.location }} •
 						{{ job?.employment_type.replace('_', ' ').toLowerCase() }}
 					</CardDescription>
 				</div>

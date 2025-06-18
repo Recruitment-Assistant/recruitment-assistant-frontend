@@ -11,6 +11,7 @@ import { debounce } from '@/lib/utils.ts';
 import JobCardItem from '@/components/jobs/JobCardItem.vue';
 import ServerPagination from '@/components/datatable/ServerPagination.vue';
 import JobDetailsPanel from '@/components/jobs/JobDetailsPanel.vue';
+import type { IPaging } from '@/types';
 
 const jobStore = useJobStore();
 const meta = computed(() => jobStore.state.jobMeta);
@@ -131,7 +132,7 @@ watch(
 				class="transition-width duration-75 ease-in-out" />
 		</div>
 
-		<ServerPagination :meta="meta" />
+		<ServerPagination :meta="meta as IPaging" />
 	</ContentWrapper>
 </template>
 

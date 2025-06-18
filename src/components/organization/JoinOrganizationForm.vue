@@ -34,7 +34,7 @@ const onSubmit = handleSubmit(async (values) => {
 			placeholder="Enter your invite code" />
 
 		<Button
-			:disabled="isLoading || !values.inviteCode"
+			:disabled="isLoading || !values?.invite_code"
 			class="w-full h-11 font-medium hover:bg-blue-500">
 			<Loader2 v-if="isLoading" class="w-4 h-4 mr-2 animate-spin" />
 			<UserCheck v-else class="w-4 h-4 mr-2" />

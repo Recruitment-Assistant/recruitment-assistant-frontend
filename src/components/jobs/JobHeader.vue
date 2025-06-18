@@ -1,24 +1,13 @@
 <script lang="ts" setup>
-import {
-	BarChart3,
-	Building2,
-	Edit,
-	Globe,
-	Settings,
-	Star,
-	TrendingUp,
-	User,
-	Users,
-	UserX,
-} from 'lucide-vue-next';
+import { BarChart3, Building2, Edit, Globe, Settings, Star, TrendingUp, User, Users, UserX } from 'lucide-vue-next';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
-import type { Index, JobSummary } from '@/types';
+import type { IJob, JobSummary } from '@/types';
 import { JOB_STATUS } from '@/constants/job.constant.ts';
 
 interface Props {
-	job: Index;
+	job: IJob;
 	jobSummary: JobSummary;
 }
 
@@ -52,7 +41,7 @@ const getJobStatusVariant = (status: string) => {
 			</div>
 			<div class="flex items-center gap-3">
 				<Badge :variant="getJobStatusVariant(job?.status) as any" class="text-sm hover:"
-					>{{ job?.status }}
+				>{{ job?.status }}
 				</Badge>
 				<div class="flex items-center gap-2">
 					<Globe class="w-4 h-4 text-gray-500" />

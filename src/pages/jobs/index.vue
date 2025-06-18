@@ -76,7 +76,8 @@ const setPagination = ({ pageIndex, pageSize }: PaginationState): PaginationStat
 	return { pageIndex, pageSize };
 };
 
-const handleDeleteJob = (payload: IJob) => {};
+const handleDeleteJob = () => {
+};
 
 const handleEditJob = (data: IJob) => {
 	jobTemp.value = data;

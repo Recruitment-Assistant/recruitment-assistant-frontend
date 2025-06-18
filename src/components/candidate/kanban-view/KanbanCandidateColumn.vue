@@ -10,6 +10,7 @@ const props = defineProps<{
 	label: string;
 	group: string;
 	columnName: string;
+	colounmId: string;
 	isLoading?: boolean;
 }>();
 
@@ -91,6 +92,7 @@ const handleClickItem = (id: string) => {
 				v-else
 				:animation="200"
 				:data-name="columnName"
+				:data-id="colounmId"
 				:disabled="isLoading"
 				:group="group"
 				:list="list"

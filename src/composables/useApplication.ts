@@ -1,5 +1,6 @@
+import { uppdateApplicationStageApi } from './../services/application.service';
 import type { IFilterApplication } from '@/types';
-import { useQuery } from '@tanstack/vue-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/vue-query';
 import { getApplicationApi, getApplicationByIdApi } from '@/services/application.service.ts';
 import { DATA_TIME } from '@/constants';
 import { computed, type Ref } from 'vue';
@@ -22,5 +23,18 @@ export const useGetApplicationById = (id: Ref<string | undefined>) => {
 		retry: false,
 		enabled: computed(() => !!id.value),
 		gcTime: DATA_TIME.DELETE,
+	});
+};
+
+export const useUpdateApplicationStage = () => {
+	const queryClient = useQueryClient();
+	return useMutation({
+		mutationFn: async (payload: { id: string; stageId: string }) =>
+			await uppdateApplicationStageApi(payload.id, payload.stageId),
+		onSuccess: () => {
+			queryClient.invalidateQueries({
+				queryKey: ['application'],
+			});
+		},
 	});
 };

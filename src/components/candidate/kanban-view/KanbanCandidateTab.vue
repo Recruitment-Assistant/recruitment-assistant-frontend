@@ -6,7 +6,7 @@ import type { IFilterApplication, Stage } from '@/types';
 import { computed, onBeforeMount, ref } from 'vue';
 import { useCustomToast } from '@/lib/customToast.ts';
 import KanbanCandidateColumn from '@/components/candidate/kanban-view/KanbanCandidateColumn.vue';
-import { useApplication } from '@/composables/useApplication.ts';
+import { useApplication, useUpdateApplicationStage } from '@/composables/useApplication.ts';
 import { DEFAULT_PAGE, DEFAULT_PAGE_SIZE, ORDER } from '@/constants';
 import { useRoute } from 'vue-router';
 import type { IBaseCandidate } from '@/types/candidate.ts';
@@ -34,6 +34,7 @@ const {
 	refetch: refetchListApplication,
 	isLoading,
 } = useApplication(filter.value);
+const { mutate: updateStage } = useUpdateApplicationStage();
 
 const list = computed<Record<string, IBaseCandidate[]>>(() =>
 	listApplication?.value?.data.reduce(
@@ -65,8 +66,26 @@ onBeforeMount(() => {
 });
 
 const onAdd = (event: any) => {
-	const targetColumnName = event.to.dataset.name as string;
+	const targetColumnId = event.to.dataset.id as string;
 	const movedItem = event.item.__draggable_context.element;
+
+	updateStage(
+		{
+			id: movedItem.application_id,
+			stageId: targetColumnId,
+		},
+		{
+			onError: () => {
+				refetchListApplication();
+			},
+			onSuccess: () => {
+				showToast({
+					message: 'Success!',
+					type: 'success',
+				});
+			},
+		},
+	);
 };
 
 const handleOpenSheet = (id: string) => {
@@ -91,6 +110,7 @@ const handleCloseSheet = (open: boolean) => {
 			<KanbanCandidateColumn
 				v-for="stage in stages"
 				:column-name="stage.name"
+				:colounm-id="stage.id"
 				:is-loading="isLoading"
 				:label="stage.name"
 				:list="list[stage.id] ? list[stage.id] : []"

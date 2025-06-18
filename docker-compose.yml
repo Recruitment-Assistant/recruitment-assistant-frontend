@@ -1,0 +1,16 @@
+services:
+  ra-frontend:
+    image: ra-frontend
+    container_name: ra-frontend
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8081:80"
+    restart: always
+    networks:
+      - ra-frontend
+
+networks:
+  ra-frontend:
+    driver: bridge

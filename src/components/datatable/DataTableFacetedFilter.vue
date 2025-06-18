@@ -81,7 +81,7 @@ const handleSearch = (val: any, term: string) => {
 	const dataFilter = val.filter((item: FacetedItem) =>
 		item.label.toLocaleLowerCase().includes(term.toLocaleLowerCase()),
 	);
-	valueExcept.value = new Set(dataFilter.map((item) => item.value));
+	valueExcept.value = new Set(dataFilter.map((item: any) => item.value));
 	return dataFilter;
 };
 

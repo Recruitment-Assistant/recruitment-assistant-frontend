@@ -31,3 +31,15 @@ export const getApplicationByIdApi = async (
 
 	return data;
 };
+
+export const uppdateApplicationStageApi = async (applicationId: string, stageId: string) => {
+	const { data, status } = await axiosClient.patch(
+		createApiEndpoint(APPLICATION_API.UPDATE_STAGE, applicationId),
+		{ stage_id: stageId },
+	);
+
+	if (status >= 400) {
+		throw new Error();
+	}
+	return data;
+};

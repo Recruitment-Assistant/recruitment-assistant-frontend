@@ -1,22 +1,15 @@
 <script lang="ts" setup>
 import { computed, reactive, ref } from 'vue';
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useJobStore } from '@/stores/job.store.ts';
-import type { Index } from '@/types';
+import type { IJob } from '@/types';
 import { useCustomToast } from '@/lib/customToast.ts';
 import UploadField from '@/components/common/UploadField.vue';
 
 const { showToast } = useCustomToast();
 const jobStore = useJobStore();
-const job = computed<Index | null>(() => jobStore.state.currentJob);
+const job = computed<IJob | null>(() => jobStore.state.currentJob);
 
 const isUploading = ref(false);
 const resumeFile = ref<File | null>(null);

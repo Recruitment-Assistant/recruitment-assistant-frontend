@@ -1,13 +1,6 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import {
-	Card,
-	CardContent,
-	CardDescription,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Building2, Plus, UserPlus } from 'lucide-vue-next';
 import CreateOrganizationForm from '@/components/organization/CreateOrganizationForm.vue';
@@ -18,7 +11,7 @@ const selectedAction = ref('');
 const isLoading = ref(false);
 
 // Methods
-const selectAction = (action) => {
+const selectAction = (action: any) => {
 	selectedAction.value = action;
 };
 </script>

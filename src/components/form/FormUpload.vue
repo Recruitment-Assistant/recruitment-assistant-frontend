@@ -72,7 +72,7 @@ const handleDrop = (event: DragEvent) => {
 	error.value = undefined;
 
 	const file = event.dataTransfer?.files[0];
-	processFile(file);
+	processFile(file as File);
 };
 
 const handleDragOver = (event: DragEvent) => {

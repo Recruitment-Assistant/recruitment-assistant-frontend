@@ -6,6 +6,10 @@ import SheetContentCustom from '../custom/SheetContentCustom.vue';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useGetApplicationById } from '@/composables/useApplication.ts';
 import CandidateOverview from '@/components/candidate/CandidateOverview.vue';
+import type { ICandidate } from '@/types/candidate';
+import CandidateSummary from './partials/CandidateSummary.vue';
+import ResumeTab from './partials/ResumeTab.vue';
+import ExperienceTab from './partials/ExperienceTab.vue';
 
 const props = defineProps<{
 	open: boolean;
@@ -20,7 +24,7 @@ const applicationId = computed(() => props.applicantId);
 
 const { data: application } = useGetApplicationById(applicationId);
 
-const activeTab = ref('candidates');
+const activeTab = ref('summary');
 const tabs = [
 	{ id: 'summary', name: 'Summary', icon: User },
 	{ id: 'resume', name: 'Resume', icon: FileText },
@@ -44,7 +48,7 @@ const handleOpen = (isOpen: boolean) => {
 	<Sheet :open="open" @update:open="handleOpen">
 		<SheetContentCustom
 			class="rounded-l-3xl sm:max-w-[1200px] p-8 flex flex-col text-slate-600">
-			<CandidateOverview :candidate="application?.data?.candidate" />
+			<CandidateOverview :candidate="application?.data?.candidate as ICandidate" />
 
 			<div class="flex items-start p-2 w-full">
 				<Tabs
@@ -67,9 +71,19 @@ const handleOpen = (isOpen: boolean) => {
 					</TabsList>
 
 					<div>
-						<TabsContent value="summary">Summary</TabsContent>
-						<TabsContent value="resume">Resume</TabsContent>
-						<TabsContent value="experience">Experience</TabsContent>
+						<TabsContent value="summary">
+							<CandidateSummary
+								:candidate="application?.data?.candidate as ICandidate" />
+						</TabsContent>
+
+						<TabsContent value="resume">
+							<ResumeTab />
+						</TabsContent>
+
+						<TabsContent value="experience">
+							<ExperienceTab
+								:experience="application?.data?.candidate?.work_experience" />
+						</TabsContent>
 						<TabsContent value="education">Education</TabsContent>
 						<TabsContent value="notes">notes</TabsContent>
 						<TabsContent value="activity">activity</TabsContent>

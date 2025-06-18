@@ -45,11 +45,11 @@ const getStatusColor = (status: string) => {
 						</div>
 						<div class="flex items-center gap-2 text-gray-600">
 							<MapPin class="w-4 h-4" />
-							<span>{{ candidate.address }}</span>
+							<span>{{ candidate?.address }}</span>
 						</div>
 						<div class="flex items-center gap-2 text-gray-600">
 							<Calendar class="w-4 h-4" />
-							<span>Applied {{ candidate.date_of_birth }}</span>
+							<span>Applied {{ candidate?.date_of_birth }}</span>
 						</div>
 					</div>
 				</div>
@@ -61,11 +61,11 @@ const getStatusColor = (status: string) => {
 					<span
 						:class="getStatusColor('')"
 						class="px-3 py-1 rounded-full text-sm font-medium border">
-						{{ candidate.source }}
+						{{ candidate?.source }}
 					</span>
 					<span
 						class="px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800 border border-gray-200">
-						ID: {{ candidate.id }}
+						ID: {{ candidate?.id }}
 					</span>
 				</div>
 
